@@ -1,0 +1,77 @@
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+canvas {
+    display: block;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+#toolbar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+#loadMeshButton {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#sceneExplorer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 280px;
+    max-height: calc(100vh - 40px);
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 8px;
+    color: white;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#sceneExplorerHeader {
+    padding: 12px 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+}
+
+#sceneTree {
+    padding: 8px;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}
+
+.scene-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.scene-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.scene-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
