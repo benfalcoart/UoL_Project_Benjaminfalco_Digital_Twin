@@ -21,13 +21,23 @@ canvas {
     top: 20px;
     left: 20px;
     z-index: 10;
+    width: 240px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(25, 25, 25, 0.95);
+    border-radius: 8px;
+    color: white;
 }
 
 #loadMeshButton {
-    padding: 10px 18px;
+    padding: 10px 16px;
+    width: 100%;
     border: none;
     border-radius: 6px;
     font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -54,6 +64,25 @@ canvas {
     padding: 8px;
     overflow-y: auto;
     max-height: calc(100vh - 100px);
+}
+
+#voxelControls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#voxelControls label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 14px;
+}
+
+#voxelControls input[type="range"] {
+    width: 100%;
+    margin: 0 0 8px 0;
 }
 
 .scene-item {

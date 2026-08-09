@@ -11,15 +11,43 @@
 
 <body>
     <!-- UI -->
-    <div id="toolbar">
+   <div id="toolbar">
         <button id="loadMeshButton">Load Mesh</button>
 
         <input
             type="file"
             id="meshFileInput"
             accept=".glb,.gltf,.obj,.ply"
-            hidden
+            hidden>     
+        
+    <div id="voxelControls">
+        <label for="minVoxelSize">
+            Min Voxel Size:
+            <span id="minVoxelValue">0.01</span>
+        </label>
+
+        <input
+            type="range"
+            id="minVoxelSize"
+            min="0.005"
+            max="0.25"
+            step="0.005"
+            value="0.01">
+
+        <label for="maxVoxelSize">
+            Max Voxel Size:
+            <span id="maxVoxelValue">0.10</span>
+        </label>
+
+        <input
+            type="range"
+            id="maxVoxelSize"
+            min="0.005"
+            max="0.25"
+            step="0.005"
+            value="0.10"
         >
+    </div>    
     </div>
     <div id="sceneExplorer">
         <div id="sceneExplorerHeader">

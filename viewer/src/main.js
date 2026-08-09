@@ -14,6 +14,16 @@ scene.background = new THREE.Color(0x202020) //Nice Grey background.
 const loadMeshButton = document.querySelector('#loadMeshButton')
 const meshFileInput = document.querySelector('#meshFileInput')
 
+const minVoxelSlider = document.querySelector('#minVoxelSize')
+const maxVoxelSlider = document.querySelector('#maxVoxelSize')
+
+const minVoxelValue = document.querySelector('#minVoxelValue')
+const maxVoxelValue = document.querySelector('#maxVoxelValue')
+
+let minVoxelSize = Number(minVoxelSlider.value)
+let maxVoxelSize = Number(maxVoxelSlider.value)
+
+
 const camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
@@ -43,9 +53,17 @@ directionalLight.position.set(5, 10, 5)
 scene.add(directionalLight);
 
 //Grid:
-const grid = new THREE.GridHelper(20, 20)
-grid.name = 'Grid Helper'
-scene.add(grid);
+//const grid = new THREE.GridHelper(20, 20)
+//grid.name = 'Grid Helper'
+//scene.add(grid);
+
+//Voxel Grid visualizer idea test:
+let voxelGrids = [];
+//voxel grid colors:
+const minVoxelColor = 0x2255aa //dark blue
+const maxVoxelColor = 0x66ccff //light blue
+let voxelSize = maxVoxelSize;
+
 
 //Test Cube (TODO: remove later?)
 const geometry = new THREE.BoxGeometry(2, 2, 2)
@@ -59,6 +77,7 @@ cube.position.y = 1
 
 scene.add(cube);
 
+//Keep renderer at the size of the window.
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
@@ -66,8 +85,9 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
 })
 
-//Update the Scene Explorer list after the initial obejcts have been added:
+//Update the Voxel grids (and scene explorer) after the initial obejcts have been added:
 updateSceneExplorer();
+updateVoxelGrids();
 
 function animate() {
     controls.update()
@@ -103,7 +123,7 @@ meshFileInput.addEventListener('change', () => {
             (gltf) => {
                 gltf.scene.name = file.name
                 scene.add(gltf.scene);
-                updateSceneExplorer();
+                updateVoxelGrids();
                 URL.revokeObjectURL(url);
             },
             undefined,
@@ -118,7 +138,7 @@ meshFileInput.addEventListener('change', () => {
             (object) => {
                 object.name = file.name;
                 scene.add(object);
-                updateSceneExplorer();
+                updateVoxelGrids();
                 URL.revokeObjectURL(url)
             },
             undefined,
@@ -131,19 +151,19 @@ meshFileInput.addEventListener('change', () => {
         loader.load(
             url,
             (geometry) => {
-                geometry.computeVertexNormals()
+                geometry.computeVertexNormals();
 
                 const material = new THREE.MeshStandardMaterial({
                     color: 0xcccccc
-                })
+                });
 
                 const mesh = new THREE.Mesh(
                     geometry,
                     material
-                )
+                );
                 mesh.name = file.name;
                 scene.add(mesh);
-                updateSceneExplorer();
+                updateVoxelGrids();
                 URL.revokeObjectURL(url)
             },
             undefined,
@@ -155,6 +175,37 @@ meshFileInput.addEventListener('change', () => {
 //Model Errors:
 function handleLoadError(error) {
     console.error('Failed to load model:', error)
+}
+
+//Voxel slider:
+minVoxelSlider.addEventListener('input', () => {
+    minVoxelSize = Number(minVoxelSlider.value)
+
+    if (minVoxelSize > maxVoxelSize) {
+        minVoxelSize = maxVoxelSize
+        minVoxelSlider.value = maxVoxelSize
+    }
+
+    minVoxelValue.textContent = minVoxelSize.toFixed(3)
+
+    updateVoxelization()
+})
+
+maxVoxelSlider.addEventListener('input', () => {
+    maxVoxelSize = Number(maxVoxelSlider.value)
+
+    if (maxVoxelSize < minVoxelSize) {
+        maxVoxelSize = minVoxelSize
+        maxVoxelSlider.value = minVoxelSize
+    }
+
+    maxVoxelValue.textContent = maxVoxelSize.toFixed(3)
+
+    updateVoxelization()
+})
+//TODO: Voxelize here? (either in browser or in a python script if too slow.)
+function updateVoxelization() {
+    updateVoxelGrids();
 }
 
 //Update the Scene explorer. This should be called anytime a mesh is added.
@@ -191,5 +242,171 @@ function createSceneItem(object) {
 
     return item
 }
+function createVoxelGrid(sizeA, sizeB, cellsA, cellsB, plane, color) {
+    const vertices = []
+
+    //Extents (half the dimensions of the grid so its centered arround the origin.):
+    const extentsA = sizeA / 2
+    const extentsB = sizeB / 2
+
+    //The distance between each grid line along the two dimensions
+    const stepA = sizeA / cellsA
+    const stepB = sizeB / cellsB
+
+    //Create a set of parallel grid lines:
+    for (let i = 0; i <= cellsA; i++) {
+        const a = -extentsA + i * stepA
+
+        //Floor Grid
+        if (plane === 'XZ') {
+            vertices.push(
+                a, 0, -extentsB,
+                a, 0, extentsB
+            )
+        }
+        //Back Grid
+        else if (plane === 'XY') {
+            vertices.push(
+                a, -extentsB, 0,
+                a, extentsB, 0
+            )
+        }
+        //Side Grid
+        else if (plane === 'YZ') {
+            vertices.push(
+                0, -extentsB, a,
+                0, extentsB, a
+            )
+        }
+    }
+    ///Create a second set of parallel lines perpendicular to the first set above to form a grid.
+    for (let i = 0; i <= cellsB; i++) {
+        const b = -extentsB + i * stepB
+
+        //Floor grid
+        if (plane === 'XZ') {
+            vertices.push(
+                -extentsA, 0, b,
+                extentsA, 0, b
+            )
+        }
+        //Back grid
+        else if (plane === 'XY') {
+            vertices.push(
+                -extentsA, b, 0,
+                extentsA, b, 0
+            )
+        }
+        //Side Grid.
+        else if (plane === 'YZ') {
+            vertices.push(
+                0, b, -extentsA,
+                0, b, extentsA
+            )
+        }
+    }
+    //Convert the generated Vertex positions into geo that three.js can render:
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+    //Material Used to render the lines. Use the passed in color:
+    const material = new THREE.LineBasicMaterial({
+        color: color
+    })
+
+    return new THREE.LineSegments(geometry, material);
+}
+
+function updateVoxelGrids() {
+    //Remove old grids:
+    voxelGrids.forEach(grid => scene.remove(grid));
+    
+    voxelGrids = [];
+    const meshes = [];
+
+    //Get all meshes in scene:
+    scene.traverse((object) => {
+        if (object.isMesh) {
+            meshes.push(object)
+        }
+    });
+
+    //If no meshes, abort:
+    if (meshes.length === 0) {
+        return
+    }
+
+    //Create a bounding box that will contain all meshes:
+    const bounds = new THREE.Box3();
+
+    //Expand the bounding box to include each mesh:
+    meshes.forEach((mesh) => {
+        bounds.expandByObject(mesh)
+    });
+
+    //Get the bounds of all the combined meshes:
+    meshes.forEach((mesh) => {
+        bounds.expandByObject(mesh)
+    });
+    //Create both voxel resolution grids:
+    createVoxelGridBox(bounds, minVoxelSize,maxVoxelSize, maxVoxelSize *2, minVoxelColor, 'Min Voxel');
+    createVoxelGridBox(bounds, maxVoxelSize,maxVoxelSize, maxVoxelSize *2, maxVoxelColor, 'Max Voxel');
+
+    updateSceneExplorer();
+}
+
+function createVoxelGridBox(bounds, voxelSize, maxVoxelSize, padding, color, name) {   
+
+    const size = new THREE.Vector3()
+    bounds.getSize(size)
+
+    //Round each dimension up to the nearest voxel boundary. (use the max so we can clamp the minimum to the max grid)
+    const width = Math.ceil((size.x + padding * 2) / maxVoxelSize) * maxVoxelSize
+    const height = Math.ceil((size.y + padding * 2) / maxVoxelSize) * maxVoxelSize
+    const depth = Math.ceil((size.z + padding * 2) / maxVoxelSize) * maxVoxelSize
+
+    //Calculate the number of cells required along each axis.
+    const xCells = Math.max(1, Math.round(width / voxelSize))
+    const yCells = Math.max(1, Math.round(height / voxelSize))
+    const zCells = Math.max(1, Math.round(depth / voxelSize))
+
+    //Bottom-left-back corner of the voxel grid.
+    const corner = new THREE.Vector3(
+        bounds.min.x - padding,
+        bounds.min.y - padding,
+        bounds.min.z - padding
+    )
+
+    //Floor:
+    const floorGrid = createVoxelGrid(width, depth, xCells, zCells, 'XZ', color);
+    floorGrid.name = `${name} Grid Floor`
+    floorGrid.position.set(
+        corner.x + width / 2,
+        corner.y,
+        corner.z + depth / 2
+    )
+
+    //Back:
+    const backGrid = createVoxelGrid(width, height, xCells, yCells, 'XY', color);
+    backGrid.name = `${name} Grid Back`
+    backGrid.position.set(
+        corner.x + width / 2,
+        corner.y + height / 2,
+        corner.z
+    )
+
+    //Side:
+    const sideGrid = createVoxelGrid(depth, height, zCells, yCells, 'YZ', color);
+    sideGrid.name = `${name} Grid Side`
+    sideGrid.position.set(
+        corner.x,
+        corner.y + height / 2,
+        corner.z + depth / 2
+    )
+
+    voxelGrids.push(floorGrid, backGrid, sideGrid);
+    scene.add(floorGrid, backGrid, sideGrid);
+}
+
 //THREE.js render loop:
 renderer.setAnimationLoop(animate)
