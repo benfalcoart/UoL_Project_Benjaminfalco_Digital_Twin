@@ -16,6 +16,7 @@ class Camera:
 class CaptureAttempt:
     attempt: int
     success: bool
+    return_code: int
     error: str | None = None
 
 """
@@ -32,7 +33,7 @@ class CameraManager:
     def __init__(self):
         self.cameras = [
             Camera(1, "/dev/video0", "Camera 1"),
-            Camera(2, "/dev/video1", "Camera 2"),
+            Camera(2, "/dev/video2", "Camera 2"),
             Camera(3, "/dev/video4", "Camera 3"),
             Camera(4, "/dev/video6", "Camera 4"),
             Camera(5, "/dev/video8", "Camera 5"),
@@ -49,6 +50,7 @@ class CameraManager:
                 output_path.unlink()
 
             command = [
+                "v4l2-ctl",
                 f"--device={camera.device}",
                 "--set-fmt-video=width=1920,height=1080,pixelformat=MJPG",
                 "--stream-mmap",
@@ -58,7 +60,7 @@ class CameraManager:
 
             result = subprocess.run(command, capture_output=True, text=True)
             success = (result.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0)
-            attempts.append(CaptureAttempt(attempt=attempt, success=success, error=None if success else result.stderr.strip()))
+            attempts.append(CaptureAttempt(attempt=attempt, success=success, return_code=result.returncode, error=None if success else result.stderr.strip()))
 
             #if success, return the result.
             if success:
