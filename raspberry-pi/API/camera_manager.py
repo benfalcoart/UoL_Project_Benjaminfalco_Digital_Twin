@@ -1,18 +1,51 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
+from enum import Enum
 import subprocess
 import time
+
 
 """
 Class representing the USB Camera on the Raspberry Pi.
 """
+
+class CameraSlot(Enum):
+    UNASSIGNED = "unassigned"
+
+    TOP = "T1"
+
+    UPPER_1 = "U1"
+    UPPER_2 = "U2"
+    UPPER_3 = "U3"
+    UPPER_4 = "U4"
+    UPPER_5 = "U5"
+
+    MIDDLE_1 = "M1"
+    MIDDLE_2 = "M2"
+    MIDDLE_3 = "M3"
+    MIDDLE_4 = "M4"
+    MIDDLE_5 = "M5"
+    MIDDLE_6 = "M6"
+    MIDDLE_7 = "M7"
+    MIDDLE_8 = "M8"
+    MIDDLE_9 = "M9"
+
+    LOWER_1 = "L1"
+    LOWER_2 = "L2"
+    LOWER_3 = "L3"
+    LOWER_4 = "L4"
+    LOWER_5 = "L5"
+
+    BOTTOM = "B1"
+
 @dataclass
 class Camera:
     id: int
     device: str
     name: str
     active: bool = True
+    slot: CameraSlot = CameraSlot.UNASSIGNED
 
 @dataclass
 class CaptureAttempt:
@@ -171,17 +204,20 @@ class CameraManager:
     def get_number_active_cameras(self) -> int:        
         return len(self.get_active_cameras())
 
-    def set_camera_active(self, camera_id: int, active: bool) -> bool:
-        for camera in self.cameras:
-            if camera.id == camera_id:
-                camera.active = active
+    def set_camera_active(self, camera_id_or_slot: int | CameraSlot, active: bool) -> bool:
+        for current_camera in self.cameras:
+            if isinstance(camera_id_or_slot, int) and current_camera.id == camera_id_or_slot:
+                current_camera.active = active
+                return True
+
+            if isinstance(camera_id_or_slot, CameraSlot) and current_camera.slot == camera_id_or_slot:
+                current_camera.active = active
                 return True
 
         return False
+    
+    def enable_camera(self, camera_id_or_slot: int | CameraSlot) -> bool:
+        return self.set_camera_active(camera_id_or_slot, True)
 
-    def enable_camera(self, camera_id: int) -> bool:
-        return self.set_camera_active(camera_id, True)
-
-
-    def disable_camera(self, camera_id: int) -> bool:
-        return self.set_camera_active(camera_id, False)
+    def disable_camera(self, camera_id_or_slot: int | CameraSlot) -> bool:
+        return self.set_camera_active(camera_id_or_slot, False)
