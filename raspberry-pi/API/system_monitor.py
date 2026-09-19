@@ -1,6 +1,15 @@
 from pathlib import Path
 from datetime import datetime
 import shutil
+from API.hardware.ina219 import INA219, BatteryReading
+from API.camera_manager import CameraManager
+
+try:
+    battery_monitor = INA219()
+except OSError:
+    battery_monitor = None
+
+cameera_manager = CameraManager()
 
 #TODO: Most of these functions are stubs. They need to be integrated with Pi and Hardware and tested.
 
@@ -15,23 +24,32 @@ def get_storage_free_gb():
     total, used, free = shutil.disk_usage("/")
     return round(free / (1024 ** 3), 2)
 
-#Counts detected Linux video device nodes. This may not correspond one-to-one with physical cameras.
+#Counts detected Linux video devices from the Camera Manager
 def get_camera_count():
-    return len(list(Path("/dev").glob("video*")))
+    return 
 
 
 def get_timestamp():
     return datetime.now().isoformat()
 
-#TODO: stubs: Some of these may not be needed but might be good to know for debugging hardware.
-def get_battery_percentage():
-    ...
+def get_battery_status() -> BatteryReading | None:
+    #Check if we have a Battery Monitor.
+    if battery_monitor is None:
+        return None
 
-def get_battery_voltage():
-    ...
+    try:
+        return battery_monitor.read_battery()
+    except OSError:
+        return None
 
-def get_battery_current():
-    ...
+def get_battery_percentage() -> float:
+    return get_battery_status().percentage
 
-def get_battery_power():
-    ...
+def get_battery_voltage() -> float:
+    return get_battery_status().voltage
+
+def get_battery_current() -> float:
+    return get_battery_status().current
+
+def get_battery_power() -> float:
+    return get_battery_status().power

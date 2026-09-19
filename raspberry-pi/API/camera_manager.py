@@ -12,6 +12,7 @@ class Camera:
     id: int
     device: str
     name: str
+    active: bool = True
 
 @dataclass
 class CaptureAttempt:
@@ -73,7 +74,8 @@ class CameraManager:
                 Camera(
                     id=camera_id,
                     device=str(device),
-                    name=f"Camera {camera_id}"
+                    name=f"Camera {camera_id}",
+                    active=True
                 )
             )
 
@@ -154,3 +156,10 @@ class CameraManager:
             output_path.unlink()
 
         return CaptureResult(camera=camera, success=False, output_path=output_path, attempts=attempts)
+
+    def get_number_cameras(self) -> int:
+        count = 0
+        for camera in self.cameras:
+            if camera.active:
+                count += 1
+        return count
