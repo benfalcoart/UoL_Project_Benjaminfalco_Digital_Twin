@@ -25,8 +25,8 @@ def get_storage_free_gb():
     return round(free / (1024 ** 3), 2)
 
 #Counts detected Linux video devices from the Camera Manager
-def get_camera_count():
-    return 
+def get_camera_count() -> int:
+    return cameera_manager.get_number_cameras()
 
 
 def get_timestamp():
