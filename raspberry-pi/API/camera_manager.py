@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 import subprocess
@@ -31,22 +32,91 @@ class CaptureResult:
 
 class CameraManager:
     def __init__(self):
-        self.cameras = [
-            Camera(1, "/dev/video0", "Camera 1"),
-            Camera(2, "/dev/video2", "Camera 2"),
-            Camera(3, "/dev/video4", "Camera 3"),
-            Camera(4, "/dev/video6", "Camera 4"),
-            Camera(5, "/dev/video8", "Camera 5"),
-        ]
+        self.cameras = self.discover_cameras()
+
+    """
+    Automatically search for all camera devices that are plugged in so that system can be scaled up or down.
+    """
+    def discover_cameras(self) -> list[Camera]:
+        cameras = []
+
+        video_devices = sorted(Path("/dev").glob("video*"), key=lambda path: int(path.name.replace("video","")))
+
+        for device in video_devices:
+            command = [
+                "v4l2-ctl",
+                f"--device={device}",
+                "--list-formats-ext"        
+            ]
+            try:
+                result = subprocess.run(
+                    command,
+                    capture_output=True,
+                    text=True,
+                    timeout=2
+                )
+            except subprocess.TimeoutExpired:
+                continue
+
+            if result.returncode != 0:
+                continue
+
+            if "'MJPG'" not in result.stdout:
+                continue
+
+            if "1920x1080" not in result.stdout:
+                continue
+
+            camera_id = len(cameras) + 1
+
+            cameras.append(
+                Camera(
+                    id=camera_id,
+                    device=str(device),
+                    name=f"Camera {camera_id}"
+                )
+            )
+
+        return cameras
+
+    """
+    Capture photos from all Cameras at once. Using MultiThreading so camera captures are concurrent.
+    """
     def capture_all(self, output_directory: Path) -> list[CaptureResult]:
+        #exit early if no cameras connected.
+        if not self.cameras:
+            return []
+
+        output_directory.mkdir(parents=True, exist_ok=True)
         results = []
+        #begin mutli threading to take pictures cocurrently.
+        with ThreadPoolExecutor(max_workers=len(self.cameras)) as executor:
+            futures = {}
 
-        for camera in self.cameras:
-            output_path = output_directory / f"cam_{camera.id:02d}.jpg"
-            result = self.capture_camera(camera, output_path)
-            results.append(result)
+            for camera in self.cameras:
+                output_path = output_directory / f"cam_{camera.id:02d}.jpg"
 
-        return results
+                future = executor.submit(
+                    self.capture_camera,
+                    camera,
+                    output_path
+                )
+
+                futures[future] = camera
+
+            for future in as_completed(futures):
+                camera = futures[future]
+
+                try:
+                    results.append(future.result())
+                except Exception as error:
+                    results.append(
+                        CaptureResult(camera=camera, success=False, output_path=output_directory / f"cam_{camera.id:02d}.jpg",
+                            attempts=[CaptureAttempt(attempt=0, success=False, return_code=-1, error=str(error))]
+                        )
+                    )
+
+                    return results
 
     def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3, timeout: float = 5.0) -> CaptureResult:
         #Create the camera's destination path.
