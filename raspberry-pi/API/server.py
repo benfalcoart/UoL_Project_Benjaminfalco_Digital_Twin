@@ -6,7 +6,7 @@ from API.system_monitor import (
     get_cpu_temperature,
     get_storage_free_gb,
     get_timestamp,
-    get_camera_count,
+    get_active_camera_count,
     get_battery_percentage
 )
 
@@ -29,7 +29,7 @@ async def get_status():
         "battery": get_battery_percentage(),
         "temperature": get_cpu_temperature(),
         "storageFreeGb": get_storage_free_gb(),
-        "cameraCount": get_camera_count(),
+        "cameraCount": get_active_camera_count(),
         "timestamp": get_timestamp()
     }
 
