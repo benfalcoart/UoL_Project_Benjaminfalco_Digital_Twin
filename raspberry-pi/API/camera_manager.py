@@ -38,8 +38,17 @@ class CameraManager:
             Camera(4, "/dev/video6", "Camera 4"),
             Camera(5, "/dev/video8", "Camera 5"),
         ]
+    def capture_all(self, output_directory: Path) -> list[CaptureResult]:
+        results = []
 
-    def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3) -> CaptureResult:
+        for camera in self.cameras:
+            output_path = output_directory / f"cam_{camera.id:02d}.jpg"
+            result = self.capture_camera(camera, output_path)
+            results.append(result)
+
+        return results
+
+    def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3, timeout: float = 5.0) -> CaptureResult:
         #Create the camera's destination path.
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -57,15 +66,21 @@ class CameraManager:
                 "--stream-count=1",
                 f"--stream-to={output_path}"
             ]
+            try:
+                result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+                success = (result.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0)
+                attempts.append(CaptureAttempt(attempt=attempt, success=success, return_code=result.returncode, error=None if success else result.stderr.strip()))
 
-            result = subprocess.run(command, capture_output=True, text=True)
-            success = (result.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0)
-            attempts.append(CaptureAttempt(attempt=attempt, success=success, return_code=result.returncode, error=None if success else result.stderr.strip()))
+                #if success, return the result.
+                if success:
+                    return CaptureResult(camera=camera, success=True, output_path=output_path, attempts=attempts)
 
-            #if success, return the result.
-            if success:
-                return CaptureResult(camera=camera, success=True, output_path=output_path, attempts=attempts)
+            except subprocess.TimeoutExpired:
+                attempts.append(CaptureAttempt(attempt=attempt, success=False, return_code=-1, error=f"Capture timed out after {timeout} seconds"))
 
             time.sleep(0.25)
+
+        if output_path.exists():
+            output_path.unlink()
 
         return CaptureResult(camera=camera, success=False, output_path=output_path, attempts=attempts)
