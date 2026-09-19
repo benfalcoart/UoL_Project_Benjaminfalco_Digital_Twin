@@ -3,6 +3,9 @@ from pathlib import Path
 import subprocess
 import time
 
+"""
+Class representing the USB Camera on the Raspberry Pi.
+"""
 @dataclass
 class Camera:
     id: int
@@ -10,12 +13,20 @@ class Camera:
     name: str
 
 @dataclass
+class CaptureAttempt:
+    attempt: int
+    success: bool
+    error: str | None = None
+
+"""
+Resulting capture of the camera
+"""
+@dataclass
 class CaptureResult:
     camera: Camera
     success: bool
     output_path: Path
-    attempts: int
-    error: str | None = None
+    attempts: list[CaptureAttempt]
 
 class CameraManager:
     def __init__(self):
@@ -31,7 +42,7 @@ class CameraManager:
         #Create the camera's destination path.
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        last_error = None
+        attempts = []
         #attempt to take a photo
         for attempt in range(1, retries + 1):
             if output_path.exists():
@@ -46,10 +57,13 @@ class CameraManager:
             ]
 
             result = subprocess.run(command, capture_output=True, text=True)
+            success = (result.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0)
+            attempts.append(CaptureAttempt(attempt=attempt, success=success, error=None if success else result.stderr.strip()))
 
             #if success, return the result.
-            if result.returncode == 0:
-                return CaptureResult(camera=camera, success=True, output_path=output_path, attempts=attempt)
-            else:
-                last_error = result.stderr.strip()
-                time.sleep(0.25)
+            if success:
+                return CaptureResult(camera=camera, success=True, output_path=output_path, attempts=attempts)
+
+            time.sleep(0.25)
+
+        return CaptureResult(camera=camera, success=False, output_path=output_path, attempts=attempts)
