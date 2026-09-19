@@ -9,7 +9,7 @@ try:
 except OSError:
     battery_monitor = None
 
-cameera_manager = CameraManager()
+camera_manager = CameraManager()
 
 #TODO: Most of these functions are stubs. They need to be integrated with Pi and Hardware and tested.
 
@@ -26,7 +26,7 @@ def get_storage_free_gb():
 
 #Counts detected Linux video devices from the Camera Manager
 def get_camera_count() -> int:
-    return cameera_manager.get_number_cameras()
+    return camera_manager.get_number_active_cameras()
 
 
 def get_timestamp():

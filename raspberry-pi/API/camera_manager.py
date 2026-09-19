@@ -85,17 +85,17 @@ class CameraManager:
     Capture photos from all Cameras at once. Using MultiThreading so camera captures are concurrent.
     """
     def capture_all(self, output_directory: Path) -> list[CaptureResult]:
-        #exit early if no cameras connected.
-        if not self.cameras:
+        #exit early if no cameras connected or no cameras are active.
+        if self.get_number_active_cameras() == 0:
             return []
 
         output_directory.mkdir(parents=True, exist_ok=True)
         results = []
         #begin mutli threading to take pictures cocurrently.
-        with ThreadPoolExecutor(max_workers=len(self.cameras)) as executor:
+        with ThreadPoolExecutor(max_workers=self.get_number_active_cameras()) as executor:
             futures = {}
 
-            for camera in self.cameras:
+            for camera in self.get_active_cameras():
                 output_path = output_directory / f"cam_{camera.id:02d}.jpg"
 
                 future = executor.submit(
@@ -118,11 +118,14 @@ class CameraManager:
                         )
                     )
 
-                    return results
+            return results
 
     def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3, timeout: float = 5.0) -> CaptureResult:
+
         #Create the camera's destination path.
         output_path.parent.mkdir(parents=True, exist_ok=True)
+        if not camera.active:
+            return CaptureResult(camera=camera, success=False, output_path=output_path,attempts=[])
 
         attempts = []
         #attempt to take a photo
@@ -157,9 +160,28 @@ class CameraManager:
 
         return CaptureResult(camera=camera, success=False, output_path=output_path, attempts=attempts)
 
-    def get_number_cameras(self) -> int:
-        count = 0
+    def get_active_cameras(self) -> list[Camera]:
+        active_cameras = []
         for camera in self.cameras:
             if camera.active:
-                count += 1
-        return count
+                active_cameras.append(camera)
+
+        return active_cameras
+
+    def get_number_active_cameras(self) -> int:        
+        return len(self.get_active_cameras())
+
+    def set_camera_active(self, camera_id: int, active: bool) -> bool:
+        for camera in self.cameras:
+            if camera.id == camera_id:
+                camera.active = active
+                return True
+
+        return False
+
+    def enable_camera(self, camera_id: int) -> bool:
+        return self.set_camera_active(camera_id, True)
+
+
+    def disable_camera(self, camera_id: int) -> bool:
+        return self.set_camera_active(camera_id, False)
