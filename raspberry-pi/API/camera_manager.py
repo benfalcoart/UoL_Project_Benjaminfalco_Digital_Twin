@@ -4,12 +4,14 @@ from pathlib import Path
 from enum import Enum
 import subprocess
 import time
-
-
 """
 Class representing the USB Camera on the Raspberry Pi.
 """
 
+
+"""
+Represents the physical camera slots on the Beholder Case. Will need to be manually calibrated.
+"""
 class CameraSlot(Enum):
     UNASSIGNED = "unassigned"
 
@@ -103,21 +105,14 @@ class CameraManager:
 
             camera_id = len(cameras) + 1
 
-            cameras.append(
-                Camera(
-                    id=camera_id,
-                    device=str(device),
-                    name=f"Camera {camera_id}",
-                    active=True
-                )
-            )
+            cameras.append(Camera(id=camera_id, device=str(device), name=f"Camera {camera_id}", active=True))
 
         return cameras
 
     """
     Capture photos from all Cameras at once. Using MultiThreading so camera captures are concurrent.
     """
-    def capture_all(self, output_directory: Path) -> list[CaptureResult]:
+    def capture_all(self, output_directory: Path, capture_id: int, retries: int = 3, timeout: float = 5.0) -> list[CaptureResult]:
         #exit early if no cameras connected or no cameras are active.
         if self.get_number_active_cameras() == 0:
             return []
@@ -129,14 +124,9 @@ class CameraManager:
             futures = {}
 
             for camera in self.get_active_cameras():
-                output_path = output_directory / f"cam_{camera.id:02d}.jpg"
+                output_path = output_directory / f"{capture_id:06d}_CAM{camera.id:02d}.jpg"
 
-                future = executor.submit(
-                    self.capture_camera,
-                    camera,
-                    output_path
-                )
-
+                future = executor.submit(self.capture_camera, camera, output_path, retries, timeout)
                 futures[future] = camera
 
             for future in as_completed(futures):
@@ -146,7 +136,7 @@ class CameraManager:
                     results.append(future.result())
                 except Exception as error:
                     results.append(
-                        CaptureResult(camera=camera, success=False, output_path=output_directory / f"cam_{camera.id:02d}.jpg",
+                        CaptureResult(camera=camera, success=False, output_path=output_directory / f"{capture_id:06d}_CAM{camera.id:02d}.jpg",
                             attempts=[CaptureAttempt(attempt=0, success=False, return_code=-1, error=str(error))]
                         )
                     )
@@ -186,7 +176,8 @@ class CameraManager:
             except subprocess.TimeoutExpired:
                 attempts.append(CaptureAttempt(attempt=attempt, success=False, return_code=-1, error=f"Capture timed out after {timeout} seconds"))
 
-            time.sleep(0.25)
+            if attempt < retries:
+                time.sleep(0.25)
 
         if output_path.exists():
             output_path.unlink()

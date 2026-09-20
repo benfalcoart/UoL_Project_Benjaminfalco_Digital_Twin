@@ -2,16 +2,13 @@ from pathlib import Path
 from datetime import datetime
 import shutil
 from API.hardware.ina219 import INA219, BatteryReading
-from API.camera_manager import CameraManager
+from API.app_state import camera_manager
+
 
 try:
     battery_monitor = INA219()
 except OSError:
     battery_monitor = None
-
-camera_manager = CameraManager()
-
-#TODO: Most of these functions are stubs. They need to be integrated with Pi and Hardware and tested.
 
 #temperature of Pi. good for monitoring it while in the field.
 def get_cpu_temperature() -> float:

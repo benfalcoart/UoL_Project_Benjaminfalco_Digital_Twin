@@ -1,0 +1,16 @@
+[Unit]
+Description=BEHOLDER Capture System
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bfalco
+WorkingDirectory=/home/bfalco/beholder
+ExecStart=/home/bfalco/beholder/start_beholder.sh
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
