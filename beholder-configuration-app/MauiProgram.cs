@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using beholder_configuration_app.Services;
 
 namespace beholder_configuration_app
 {
@@ -18,6 +19,9 @@ namespace beholder_configuration_app
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            builder.Services.AddSingleton<BeholderWebSocketService>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<AppShell>();
 
             return builder.Build();
         }
