@@ -1,2 +1,520 @@
+{
+	"info": {
+		"_postman_id": "fba76979-e9c5-41ad-a148-9c0b68809736",
+		"name": "Beholder API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8730099",
+		"_collection_link": "https://me0000-6419.postman.co/workspace/Canadore-Networking-Class-2~20edc5da-2411-4752-b630-fc0533f417b6/collection/8730099-fba76979-e9c5-41ad-a148-9c0b68809736?action=share&source=collection_link&creator=8730099"
+	},
+	"item": [
+		{
+			"name": "get status",
+			"event": [
 				{
 					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains system state\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json).to.have.property(\"state\");\r",
+							"    pm.expect(json).to.have.property(\"temperature\");\r",
+							"    pm.expect(json).to.have.property(\"storageFreeGb\");\r",
+							"    pm.expect(json).to.have.property(\"detectedCameraCount\");\r",
+							"    pm.expect(json).to.have.property(\"activeCameraCount\");\r",
+							"    pm.expect(json).to.have.property(\"timestamp\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Five cameras detected\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.detectedCameraCount).to.eql(5);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Battery data is valid if available\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    if (json.battery !== null) {\r",
+							"        pm.expect(json.battery).to.have.property(\"percentage\");\r",
+							"        pm.expect(json.battery).to.have.property(\"voltage\");\r",
+							"        pm.expect(json.battery).to.have.property(\"current\");\r",
+							"        pm.expect(json.battery).to.have.property(\"power\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Project was created\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.name).to.eql(\"Postman Test\");\r",
+							"    pm.expect(json.captureCount).to.eql(0);\r",
+							"    pm.expect(json.directory).to.include(\"Postman_Test\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Postman Test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "POST {{baseUrl}}/api/projects",
+					"host": [
+						"POST {{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cameras",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Camera response is an array\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Five cameras detected\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.length).to.eql(5);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each camera has required properties\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    json.forEach(camera => {\r",
+							"        pm.expect(camera).to.have.property(\"id\");\r",
+							"        pm.expect(camera).to.have.property(\"device\");\r",
+							"        pm.expect(camera).to.have.property(\"name\");\r",
+							"        pm.expect(camera).to.have.property(\"active\");\r",
+							"        pm.expect(camera).to.have.property(\"slot\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/cameras",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"cameras"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "disable camera",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Camera 3 was disabled\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.success).to.eql(true);\r",
+							"    pm.expect(json.cameraId).to.eql(3);\r",
+							"    pm.expect(json.active).to.eql(false);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "POST {{baseUrl}}/api/cameras/3/disable",
+					"host": [
+						"POST {{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"cameras",
+						"3",
+						"disable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enable camera",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Camera 3 was enabled\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.success).to.eql(true);\r",
+							"    pm.expect(json.cameraId).to.eql(3);\r",
+							"    pm.expect(json.active).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/cameras/3/enable",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"cameras",
+						"3",
+						"enable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set single shot mode",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "set automatic mode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Automatic mode was selected\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.mode).to.eql(\"automatic\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mode\": \"automatic\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "automatic capture interval",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Interval was set to 0.5 seconds\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.interval).to.eql(0.5);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"seconds\": 0.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/capture/interval",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"capture",
+						"interval"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "capture status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Capture status has required properties\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json).to.have.property(\"mode\");\r",
+							"    pm.expect(json).to.have.property(\"capturing\");\r",
+							"    pm.expect(json).to.have.property(\"automaticRunning\");\r",
+							"    pm.expect(json).to.have.property(\"automaticInterval\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Capture mode is valid\", function () {\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect([\"single\", \"automatic\"]).to.include(json.mode);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/capture/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"capture",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "capture",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Trigger accepted\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.accepted).to.eql(true);\r",
+							"    pm.expect([\"single\", \"automatic\"]).to.include(json.mode)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/capture/trigger",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"capture",
+						"trigger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Automatic capture stopped\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const json = pm.response.json();\r",
+							"\r",
+							"    pm.expect(json.automaticRunning).to.eql(false);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/capture/trigger",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"capture",
+						"trigger"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}
