@@ -40,6 +40,16 @@ datasets/
 data/raw/
 data/processed/
 
+# MINC-2500 dataset
+/machine-learning/data/minc-2500/
+/machine-learning/outputs/
+/machine-learning/test_images/
+
+# Trained ML weights/checkpoints
+/machine-learning/models/*.pth
+/machine-learning/models/*.pt
+/machine-learning/models/*.ckpt
+
 # Reconstruction output
 colmap-output/
 openmvs-output/
@@ -73,6 +83,31 @@ $RECYCLE.BIN/
 .vscode/
 *.user
 *.suo
+
+# Visual Studio / .NET MAUI
+bin/
+obj/
+
+*.user
+*.suo
+*.userprefs
+
+# Build / test output
+artifacts/
+TestResults/
+
+# MAUI / Android build packages
+*.apk
+*.aab
+
+# Android signing secrets
+*.keystore
+*.jks
+
+# Certificates / private keys
+*.pfx
+*.p12
+*.key
 
 # JetBrains
 .idea/
