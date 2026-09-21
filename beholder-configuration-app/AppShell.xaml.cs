@@ -5,8 +5,10 @@
         public AppShell(MainPage mainPage)
         {
             InitializeComponent();
-
             MainShellContent.Content = mainPage;
+            Routing.RegisterRoute(nameof(ConnectionPage), typeof(ConnectionPage));
         }
+
+       
     }
 }

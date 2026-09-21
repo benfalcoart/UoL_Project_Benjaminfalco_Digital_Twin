@@ -1,0 +1,61 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="beholder_configuration_app.ConnectionPage"
+    Title="Connection"
+    BackgroundColor="#101214">
+
+    <VerticalStackLayout
+        Padding="24"
+        Spacing="18">
+
+        <Label
+            Text="CONNECT TO BEHOLDER"
+            FontSize="24"
+            FontAttributes="Bold"
+            TextColor="White" />
+
+        <Label
+            Text="Address"
+            TextColor="#8B949E" />
+
+        <Entry
+            x:Name="AddressEntry"
+            Text="192.168.0.130"
+            Placeholder="BEHOLDER address" />
+
+        <Label
+            Text="Port"
+            TextColor="#8B949E" />
+
+        <Entry
+            x:Name="PortEntry"
+            Text="8000"
+            Keyboard="Numeric" />
+
+        <Label
+            Text="Password"
+            TextColor="#8B949E" />
+
+        <Entry
+            x:Name="PasswordEntry"
+            Placeholder="Password"
+            IsPassword="True" />
+
+        <Button
+            Text="CONNECT"
+            HeightRequest="56"
+            BackgroundColor="#3AA0FF"
+            TextColor="White"
+            FontAttributes="Bold"
+            CornerRadius="8"
+            Clicked="OnConnectClicked" />
+
+        <Label
+            x:Name="StatusLabel"
+            Text="Disconnected"
+            TextColor="#8B949E" />
+
+    </VerticalStackLayout>
+
+</ContentPage>

@@ -2,50 +2,405 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="beholder_configuration_app.MainPage">
+    x:Class="beholder_configuration_app.MainPage"
+    BackgroundColor="#101214">
 
-    <Grid
-        Padding="30"
-        RowDefinitions="Auto,Auto,Auto,Auto,*"
-        RowSpacing="20">
+    <ScrollView>
 
-        <Label
-            Grid.Row="0"
-            Text="BEHOLDER"
-            FontSize="28"
-            FontAttributes="Bold"
-            TextColor="White" />
+        <VerticalStackLayout
+            Padding="24"
+            Spacing="20">
 
-        <Label
-            Grid.Row="1"
-            x:Name="ConnectionLabel"
-            Text="Disconnected"
-            FontSize="18"
-            TextColor="Orange" />
+            <!-- Header -->
+            <Grid
+                ColumnDefinitions="*,Auto">
 
-        <Button
-            Grid.Row="2"
-            Text="Connect"
-            Clicked="OnConnectClicked" />
+                <VerticalStackLayout
+                    Grid.Column="0"
+                    Spacing="2">
 
-        <Label
-            Grid.Row="3"
-            Text="Latest WebSocket Message"
-            FontAttributes="Bold"
-            TextColor="White" />
+                    <Label
+                        Text="BEHOLDER"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="White" />
 
-        <ScrollView
-            Grid.Row="4"
-            BackgroundColor="#191919">
+                    <Label
+                        Text="Capture Control"
+                        FontSize="13"
+                        TextColor="#8B949E" />
 
-            <Label
-                x:Name="MessageLabel"
-                Padding="10"
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout
+                    Grid.Column="1"
+                    Spacing="8"
+                    VerticalOptions="Center">
+
+                    <Button
+                        x:Name="ConnectionButton"
+                        Grid.Column="1"
+                        Text="CONNECT"
+                        BackgroundColor="#22252B"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Clicked="OnConnectionClicked" />
+                    <BoxView
+                        x:Name="ConnectionIndicator"
+                        WidthRequest="10"
+                        HeightRequest="10"
+                        CornerRadius="5"
+                        Color="#E74C3C"
+                        VerticalOptions="Center" />
+                    <Label
+                        x:Name="ConnectionLabel"
+                        Text="OFFLINE"
+                        FontAttributes="Bold"
+                        TextColor="#E74C3C"
+                        VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+
+            </Grid>
+
+
+            <!-- Current project -->
+            <Border
+                BackgroundColor="#191919"
+                Stroke="#444444"
+                StrokeThickness="1"
+                Padding="18">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <Grid
+                    ColumnDefinitions="*,Auto">
+
+                    <VerticalStackLayout
+                        Grid.Column="0"
+                        Spacing="5">
+
+                        <Label
+                            Text="CURRENT PROJECT"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="ProjectNameLabel"
+                            Text="No project selected"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        HorizontalOptions="End"
+                        Spacing="5">
+
+                        <Label
+                            Text="CAPTURE"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E"
+                            HorizontalTextAlignment="End" />
+
+                        <Label
+                            x:Name="CaptureIdLabel"
+                            Text="#—"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HorizontalTextAlignment="End" />
+
+                    </VerticalStackLayout>
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- Capture mode -->
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="10">
+
+                <Button
+                    x:Name="SingleModeButton"
+                    Grid.Column="0"
+                    Text="SINGLE"
+                    BackgroundColor="#3AA0FF"
+                    TextColor="White"
+                    CornerRadius="8" />
+
+                <Button
+                    x:Name="AutomaticModeButton"
+                    Grid.Column="1"
+                    Text="AUTOMATIC"
+                    BackgroundColor="#22252B"
+                    TextColor="#C9D1D9"
+                    CornerRadius="8" />
+
+            </Grid>
+
+
+            <!-- Main capture button -->
+            <Button
+                x:Name="CaptureButton"
+                Text="CAPTURE"
+                FontSize="18"
+                FontAttributes="Bold"
+                HeightRequest="60"
+                BackgroundColor="#3AA0FF"
                 TextColor="White"
-                LineBreakMode="WordWrap" />
+                CornerRadius="8" />
 
-        </ScrollView>
 
-    </Grid>
+            <!-- Automatic interval -->
+            <Border
+                x:Name="AutomaticIntervalPanel"
+                IsVisible="False"
+                BackgroundColor="#191919"
+                Stroke="#444444"
+                StrokeThickness="1"
+                Padding="14">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <Grid
+                    ColumnDefinitions="*,Auto">
+
+                    <Label
+                        Text="Automatic Interval"
+                        TextColor="#C9D1D9"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        x:Name="AutomaticIntervalLabel"
+                        Grid.Column="1"
+                        Text="0.50 s"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- System health heading -->
+            <Label
+                Text="SYSTEM HEALTH"
+                FontSize="13"
+                FontAttributes="Bold"
+                TextColor="#8B949E"
+                Margin="0,8,0,0" />
+
+
+            <!-- Health cards -->
+            <Grid
+                ColumnDefinitions="*,*"
+                RowDefinitions="Auto,Auto"
+                ColumnSpacing="12"
+                RowSpacing="12">
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    BackgroundColor="#191919"
+                    Stroke="#444444"
+                    StrokeThickness="1"
+                    Padding="16">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="CAMERAS"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="CameraCountLabel"
+                            Text="— / —"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    BackgroundColor="#191919"
+                    Stroke="#444444"
+                    StrokeThickness="1"
+                    Padding="16">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="BATTERY"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="BatteryLabel"
+                            Text="—%"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    BackgroundColor="#191919"
+                    Stroke="#444444"
+                    StrokeThickness="1"
+                    Padding="16">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="TEMPERATURE"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="TemperatureLabel"
+                            Text="— °C"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="#191919"
+                    Stroke="#444444"
+                    StrokeThickness="1"
+                    Padding="16">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="STORAGE"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="StorageLabel"
+                            Text="— GB"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                </Border>
+
+            </Grid>
+
+
+            <!-- Capture status -->
+            <Border
+                BackgroundColor="#191919"
+                Stroke="#444444"
+                StrokeThickness="1"
+                Padding="16">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <Grid
+                    ColumnDefinitions="*,Auto">
+
+                    <VerticalStackLayout
+                        Grid.Column="0"
+                        Spacing="3">
+
+                        <Label
+                            Text="CAPTURE STATUS"
+                            FontSize="11"
+                            FontAttributes="Bold"
+                            TextColor="#8B949E" />
+
+                        <Label
+                            x:Name="CaptureStatusLabel"
+                            Text="Idle"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                    </VerticalStackLayout>
+
+                    <BoxView
+                        x:Name="CaptureStatusIndicator"
+                        Grid.Column="1"
+                        WidthRequest="12"
+                        HeightRequest="12"
+                        CornerRadius="6"
+                        Color="#2ECC71"
+                        VerticalOptions="Center" />
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- Cameras -->
+            <Label
+                Text="CAMERAS"
+                FontSize="13"
+                FontAttributes="Bold"
+                TextColor="#8B949E"
+                Margin="0,8,0,0" />
+
+            <VerticalStackLayout
+                x:Name="CameraList"
+                Spacing="8" />
+
+        </VerticalStackLayout>
+
+    </ScrollView>
 
 </ContentPage>

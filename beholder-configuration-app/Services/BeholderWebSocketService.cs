@@ -17,9 +17,9 @@ public class BeholderWebSocketService
 
     public bool IsConnected => _socket?.State == WebSocketState.Open;
 
-    private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
+    //private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
 
-    public async Task ConnectAsync()
+    public async Task ConnectAsync(string address, int port)
     {
         if (IsConnected)
         {
@@ -29,10 +29,11 @@ public class BeholderWebSocketService
         _socket = new ClientWebSocket();
         _cancellationTokenSource = new CancellationTokenSource();
 
-        await _socket.ConnectAsync(new Uri(_wsConnectionUri), _cancellationTokenSource.Token);
+        string uri = $"ws://{address}:{port}/ws";
 
+        await _socket.ConnectAsync(new Uri(uri), _cancellationTokenSource.Token);
+        
         ConnectionChanged?.Invoke(true);
-
         _ = ReceiveLoopAsync(_cancellationTokenSource.Token);
     }
 

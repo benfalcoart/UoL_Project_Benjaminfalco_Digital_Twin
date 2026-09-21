@@ -21,6 +21,7 @@ namespace beholder_configuration_app
 #endif
             builder.Services.AddSingleton<BeholderWebSocketService>();
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<ConnectionPage>();
             builder.Services.AddSingleton<AppShell>();
 
             return builder.Build();
