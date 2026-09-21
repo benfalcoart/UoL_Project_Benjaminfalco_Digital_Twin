@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="beholder_configuration_app.Pages.ConsoleLogPage"
+             Title="ConsoleLogPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#101214">
+
+    <Grid
+        Padding="24"
+        RowDefinitions="Auto,Auto,*"
+        RowSpacing="16">
+        <Label
+            Grid.Row="0"
+            Text="DIAGNOSTIC LOG"
+            FontSize="28"
+            FontAttributes="Bold"
+            TextColor="White" />
+
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="*,Auto">
+            <Label
+                Text="Application and communication events"
+                TextColor="#8B949E"
+                VerticalOptions="Center" />
+
+            <Button
+                Grid.Column="1"
+                Text="CLEAR"
+                BackgroundColor="#22252B"
+                TextColor="#E74C3C"
+                Clicked="OnClearClicked" />
+        </Grid>
+
+        <CollectionView
+            Grid.Row="2"
+            x:Name="LogCollection"
+            VerticalScrollBarVisibility="Always">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Margin="0,0,0,8"
+                        Padding="12"
+                        BackgroundColor="#191919"
+                        Stroke="#444444">
+                        <Grid
+                            ColumnDefinitions="Auto,Auto,*"
+                            ColumnSpacing="10">
+                            <Label
+                                Text="{Binding Timestamp, StringFormat='{0:HH:mm:ss}'}"
+                                FontFamily="Courier New"
+                                FontSize="12"
+                                TextColor="#8B949E" />
+                            
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Level}"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                TextColor="#3AA0FF" />
+
+                            <Label
+                                Grid.Column="2"
+                                Text="{Binding Message}"
+                                FontFamily="Courier New"
+                                FontSize="12"
+                                TextColor="White"
+                                LineBreakMode="WordWrap" />
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

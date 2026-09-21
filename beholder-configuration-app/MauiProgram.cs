@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using beholder_configuration_app.Services;
+﻿using beholder_configuration_app.Pages;
+using beholder_configuration_app.Services.Logging;
+using beholder_configuration_app.Services.WebServices;
+using Microsoft.Extensions.Logging;
 
 namespace beholder_configuration_app
 {
@@ -19,14 +21,18 @@ namespace beholder_configuration_app
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            //Websocket Service:
+            //Web Services:
             builder.Services.AddSingleton<BeholderWebSocketService>();
+            builder.Services.AddSingleton<BeholderAPIService>();
+            //Logging Service:
+            builder.Services.AddSingleton<AppLogService>();
             //App pages:
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<ConnectionPage>();
             builder.Services.AddSingleton<ProjectsPage>();
             builder.Services.AddSingleton<SettingsPage>();
             builder.Services.AddSingleton<CamerasPage>();
+            builder.Services.AddTransient<ConsoleLogPage>();
             //App Shell:
             builder.Services.AddSingleton<AppShell>();
 

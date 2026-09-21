@@ -283,7 +283,8 @@
                     </Grid>
 
                     <Button
-                        Text="VIEW LIVE STATUS"
+                        Text="VIEW DIAGNOSTICS LOG"
+                        Clicked="OnViewDiagnosticLogClicked"
                         BackgroundColor="#22252B"
                         TextColor="#3AA0FF"
                         CornerRadius="8" />

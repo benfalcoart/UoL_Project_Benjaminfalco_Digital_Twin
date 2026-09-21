@@ -1,4 +1,5 @@
-using beholder_configuration_app.Services;
+using beholder_configuration_app.Services.Logging;
+using beholder_configuration_app.Services.WebServices;
 using System;
 
 namespace beholder_configuration_app;
@@ -6,11 +7,14 @@ namespace beholder_configuration_app;
 public partial class ConnectionPage : ContentPage
 {
     private readonly BeholderWebSocketService _webSocketService;
-    public ConnectionPage(BeholderWebSocketService webSocketService)
+    private readonly AppLogService _logService;
+
+    public ConnectionPage(BeholderWebSocketService webSocketService, AppLogService logService)
 	{
 		InitializeComponent();
 
 		_webSocketService = webSocketService;
+        _logService = logService;
 	}
 
     private async void OnConnectClicked(object sender, EventArgs e)
@@ -23,22 +27,31 @@ public partial class ConnectionPage : ContentPage
 
         try
         {
-            StatusLabel.Text = "Connecting...";
+            string status = $"Connecting to {AddressEntry.Text}:{PortEntry.Text}";
+            StatusLabel.Text = status;
+            _logService.Info(status);
             await _webSocketService.ConnectAsync(AddressEntry.Text, port);
             if (_webSocketService.IsConnected)
             {
-                StatusLabel.Text = "Connected!";
+                status = $"Successfully connected to {AddressEntry.Text}:{PortEntry.Text}";
+                StatusLabel.Text = status;
+                _logService.Info(status);
                 //Go back to the dashboard
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                StatusLabel.Text = "Connection Failed!";
+                status = $"Connection to {AddressEntry.Text}:{PortEntry.Text} Failed!";
+                StatusLabel.Text = status;
+                _logService.Error(status);
+
             }
         }
         catch (Exception exception)
         {
-            StatusLabel.Text = exception.ToString();
+            StatusLabel.Text = $"{exception.GetType().Name}: {exception.Message}";
+            _logService.Error(exception);
+
         }
     }
 }

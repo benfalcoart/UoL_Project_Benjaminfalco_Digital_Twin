@@ -1,0 +1,51 @@
+{
+  "SystemGetStatus": {
+    "method": "GET",
+    "path": "/api/status"
+  },
+
+  "ProjectCreate": {
+    "method": "POST",
+    "path": "/api/projects"
+  },
+
+  "CameraGetAll": {
+    "method": "GET",
+    "path": "/api/cameras"
+  },
+
+  "CameraEnable": {
+    "method": "POST",
+    "path": "/api/cameras/{cameraId}/enable"
+  },
+
+  "CameraDisable": {
+    "method": "POST",
+    "path": "/api/cameras/{cameraId}/disable"
+  },
+
+  "CaptureSetSingleMode": {
+    "method": "PUT",
+    "path": "/api/capture/mode"
+  },
+
+  "CaptureSetAutomaticMode": {
+    "method": "PUT",
+    "path": "/api/capture/mode"
+  },
+
+  "CaptureSetAutomaticInterval": {
+    "method": "PUT",
+    "path": "/api/capture/interval"
+  },
+
+  "CaptureGetStatus": {
+    "method": "GET",
+    "path": "/api/capture/status"
+  },
+
+  "CaptureTrigger": {
+    "method": "POST",
+    "path": "/api/capture/trigger"
+  }
+}

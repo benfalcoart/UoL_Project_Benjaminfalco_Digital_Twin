@@ -1,5 +1,6 @@
 ﻿using beholder_configuration_app.Models;
-using beholder_configuration_app.Services;
+using beholder_configuration_app.Services.Logging;
+using beholder_configuration_app.Services.WebServices;
 using Microsoft.Maui.Controls.Shapes;
 using System.Text.Json;
 
@@ -8,15 +9,18 @@ namespace beholder_configuration_app
     public partial class MainPage : ContentPage
     {
         private readonly BeholderWebSocketService _webSocketService;
+        private readonly AppLogService _logService;
+
         private BeholderStatus? _status;
         /// <summary>
         /// Start up the main page of the MAUI app
         /// </summary>
         /// <param name="webSocketService"></param>
-        public MainPage(BeholderWebSocketService webSocketService)
+        public MainPage(BeholderWebSocketService webSocketService, AppLogService logService)
         {
             InitializeComponent();
             _webSocketService = webSocketService;
+            _logService = logService;
 
             _webSocketService.MessageReceived += OnMessageReceived;
             _webSocketService.ConnectionChanged += OnConnectionChanged;
@@ -34,8 +38,7 @@ namespace beholder_configuration_app
                 }
                 catch (Exception exception)
                 {
-                    //TODO:
-                    //MessageLabel.Text = exception.ToString();
+                    _logService.Error(exception);
                 }
             });
         }

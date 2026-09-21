@@ -1,4 +1,6 @@
-﻿namespace beholder_configuration_app
+﻿using beholder_configuration_app.Pages;
+
+namespace beholder_configuration_app
 {
     public partial class AppShell : Shell
     {
@@ -13,7 +15,9 @@
             ProjectsContent.Content = projectsPage;
             CamerasContent.Content = camerasPage;
             SettingsContent.Content = settingsPage;
-           
+
+            Routing.RegisterRoute(nameof(ConsoleLogPage), typeof(ConsoleLogPage));
+
 
             //Connection Page:
             //Routing.RegisterRoute(nameof(ConnectionPage), typeof(ConnectionPage));
