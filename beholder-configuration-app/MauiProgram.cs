@@ -19,9 +19,15 @@ namespace beholder_configuration_app
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            //Websocket Service:
             builder.Services.AddSingleton<BeholderWebSocketService>();
+            //App pages:
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<ConnectionPage>();
+            builder.Services.AddSingleton<ProjectsPage>();
+            builder.Services.AddSingleton<SettingsPage>();
+            builder.Services.AddSingleton<CamerasPage>();
+            //App Shell:
             builder.Services.AddSingleton<AppShell>();
 
             return builder.Build();

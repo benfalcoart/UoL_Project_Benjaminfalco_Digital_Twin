@@ -2,13 +2,22 @@
 {
     public partial class AppShell : Shell
     {
-        public AppShell(MainPage mainPage)
+        private const double CompactWidth = 700;
+
+        public AppShell(MainPage mainPage, ConnectionPage connectionPage, ProjectsPage projectsPage, CamerasPage camerasPage, SettingsPage settingsPage)
         {
             InitializeComponent();
+            //Page set up for navigation:
             MainShellContent.Content = mainPage;
-            Routing.RegisterRoute(nameof(ConnectionPage), typeof(ConnectionPage));
+            ConnectionPage.Content = connectionPage;
+            ProjectsContent.Content = projectsPage;
+            CamerasContent.Content = camerasPage;
+            SettingsContent.Content = settingsPage;
+           
+
+            //Connection Page:
+            //Routing.RegisterRoute(nameof(ConnectionPage), typeof(ConnectionPage));
         }
 
-       
     }
 }

@@ -4,11 +4,44 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:beholder_configuration_app"
-    Title="beholder_configuration_app">
+    Title="beholder_configuration_app"
+    Shell.BackgroundColor="#191919"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
+    Shell.TabBarBackgroundColor="#191919"
+    Shell.TabBarForegroundColor="#3AA0FF"
+    Shell.TabBarUnselectedColor="#8B949E">
 
-    <ShellContent
-        x:Name="MainShellContent"
-        Title="Home"
-        Route="MainPage" />
+    <!-- Icons Downloaded from: https://lucide.dev/icons/-->
+    <TabBar>
+        <ShellContent
+            x:Name="MainShellContent"
+            Title=""
+            Route="MainPage"
+            Icon="house.png"/>
+      
+        <ShellContent
+            x:Name="ConnectionPage"
+            Title=""
+            Route="Connection"
+            Icon="wifi.png"/>
+        
+        <ShellContent
+            x:Name="ProjectsContent"
+            Title=""
+            Route="Projects"
+            Icon="folder_open_dot.png"/>
 
+        <ShellContent
+            x:Name="CamerasContent"
+            Title=""
+            Route="Cameras"
+            Icon="camera.png"/>
+
+        <ShellContent
+            x:Name="SettingsContent"
+            Title=""
+            Route="Settings"
+            Icon="settings.png"/>
+    </TabBar>
 </Shell>

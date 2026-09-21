@@ -171,7 +171,7 @@ namespace beholder_configuration_app
                 ConnectionLabel.Text = connected ? "LIVE" : "OFFLINE";
                 ConnectionLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
                 ConnectionIndicator.Color = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
-                ConnectionButton.TextColor = connected ? Color.FromArgb("#2ECC71") : Colors.White;
+                //ConnectionButton.TextColor = connected ? Color.FromArgb("#2ECC71") : Colors.White;
             });
         }
 

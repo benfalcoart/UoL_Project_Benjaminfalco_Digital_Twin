@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="beholder_configuration_app.MainPage"
-    BackgroundColor="#101214">
+    BackgroundColor="#101214"
+    Shell.NavBarIsVisible="False">
 
     <ScrollView>
 
@@ -36,7 +37,7 @@
                     Grid.Column="1"
                     Spacing="8"
                     VerticalOptions="Center">
-
+                     <!-- Removed to place in tab bar for better navigation        
                     <Button
                         x:Name="ConnectionButton"
                         Grid.Column="1"
@@ -45,6 +46,7 @@
                         TextColor="White"
                         CornerRadius="8"
                         Clicked="OnConnectionClicked" />
+                    -->
                     <BoxView
                         x:Name="ConnectionIndicator"
                         WidthRequest="10"
