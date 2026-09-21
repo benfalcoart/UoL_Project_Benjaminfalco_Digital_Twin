@@ -22,6 +22,7 @@ namespace beholder_configuration_app
     		builder.Logging.AddDebug();
 #endif
             //Web Services:
+            builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<BeholderWebSocketService>();
             builder.Services.AddSingleton<BeholderAPIService>();
             //Logging Service:

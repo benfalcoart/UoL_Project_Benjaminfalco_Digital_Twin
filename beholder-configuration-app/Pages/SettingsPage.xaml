@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="beholder_configuration_app.SettingsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="beholder_configuration_app.SettingsPage"
     Title="Settings"
     BackgroundColor="#101214"
     Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="24"
-            Spacing="20">
+        <VerticalStackLayout Padding="24" Spacing="20">
 
             <Label
-                Text="SETTINGS"
-                FontSize="28"
                 FontAttributes="Bold"
+                FontSize="28"
+                Text="SETTINGS"
                 TextColor="White" />
 
-            <!-- CONNECTION -->
+            <!--  CONNECTION  -->
             <Label
-                Text="CONNECTION"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="CONNECTION"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="16"
                 BackgroundColor="#191919"
-                Stroke="#444444"
-                Padding="16">
+                Stroke="#444444">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
@@ -41,8 +39,8 @@
                         <VerticalStackLayout>
 
                             <Label
-                                Text="BEHOLDER"
                                 FontAttributes="Bold"
+                                Text="BEHOLDER"
                                 TextColor="White" />
 
                             <Label
@@ -58,44 +56,34 @@
                             VerticalOptions="Center">
 
                             <BoxView
-                                WidthRequest="8"
-                                HeightRequest="8"
                                 CornerRadius="4"
-                                Color="#2ECC71"
-                                VerticalOptions="Center" />
+                                HeightRequest="8"
+                                VerticalOptions="Center"
+                                WidthRequest="8"
+                                Color="#2ECC71" />
 
                             <Label
-                                Text="CONNECTED"
-                                FontSize="12"
                                 FontAttributes="Bold"
+                                FontSize="12"
+                                Text="CONNECTED"
                                 TextColor="#2ECC71" />
 
                         </HorizontalStackLayout>
-
                     </Grid>
-
-                    <Button
-                        Text="MANAGE CONNECTION"
-                        BackgroundColor="#22252B"
-                        TextColor="#3AA0FF"
-                        CornerRadius="8"
-                        Clicked="OnManageConnectionClicked" />
-
                 </VerticalStackLayout>
-
             </Border>
 
-            <!-- FIELD BEHAVIOUR -->
+            <!--  FIELD BEHAVIOUR  -->
             <Label
-                Text="FIELD BEHAVIOUR"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="FIELD BEHAVIOUR"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="16"
                 BackgroundColor="#191919"
-                Stroke="#444444"
-                Padding="16">
+                Stroke="#444444">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
@@ -110,9 +98,7 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch
-                            Grid.Column="1"
-                            IsToggled="True" />
+                        <Switch Grid.Column="1" IsToggled="True" />
 
                     </Grid>
 
@@ -123,9 +109,7 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch
-                            Grid.Column="1"
-                            IsToggled="True" />
+                        <Switch Grid.Column="1" IsToggled="True" />
 
                     </Grid>
 
@@ -136,8 +120,7 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch
-                            Grid.Column="1" />
+                        <Switch Grid.Column="1" />
 
                     </Grid>
 
@@ -150,9 +133,9 @@
 
                         <Entry
                             Grid.Column="1"
-                            Text="0.50"
+                            HorizontalTextAlignment="Center"
                             Keyboard="Numeric"
-                            HorizontalTextAlignment="Center" />
+                            Text="0.50" />
 
                     </Grid>
 
@@ -160,17 +143,17 @@
 
             </Border>
 
-            <!-- DATA TRANSFER -->
+            <!--  DATA TRANSFER  -->
             <Label
-                Text="DATA TRANSFER"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="DATA TRANSFER"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="16"
                 BackgroundColor="#191919"
-                Stroke="#444444"
-                Padding="16">
+                Stroke="#444444">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
@@ -179,15 +162,15 @@
                 <VerticalStackLayout Spacing="12">
 
                     <Label
-                        Text="Current Project"
                         FontSize="12"
+                        Text="Current Project"
                         TextColor="#8B949E" />
 
                     <Label
                         x:Name="TransferProjectNameLabel"
-                        Text="No project selected"
-                        FontSize="18"
                         FontAttributes="Bold"
+                        FontSize="18"
+                        Text="No project selected"
                         TextColor="White" />
 
                     <Label
@@ -196,33 +179,33 @@
                         TextColor="#C9D1D9" />
 
                     <Button
-                        Text="OFFLOAD CURRENT PROJECT"
                         BackgroundColor="#3AA0FF"
-                        TextColor="White"
+                        CornerRadius="8"
                         FontAttributes="Bold"
-                        CornerRadius="8" />
+                        Text="OFFLOAD CURRENT PROJECT"
+                        TextColor="White" />
 
                     <Button
-                        Text="OFFLOAD ALL PROJECTS"
                         BackgroundColor="#22252B"
-                        TextColor="#3AA0FF"
-                        CornerRadius="8" />
+                        CornerRadius="8"
+                        Text="OFFLOAD ALL PROJECTS"
+                        TextColor="#3AA0FF" />
 
                 </VerticalStackLayout>
 
             </Border>
 
-            <!-- DIAGNOSTICS -->
+            <!--  DIAGNOSTICS  -->
             <Label
-                Text="DIAGNOSTICS"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="DIAGNOSTICS"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="16"
                 BackgroundColor="#191919"
-                Stroke="#444444"
-                Padding="16">
+                Stroke="#444444">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
@@ -232,9 +215,7 @@
 
                     <Grid ColumnDefinitions="*,Auto">
 
-                        <Label
-                            Text="WebSocket"
-                            TextColor="#C9D1D9" />
+                        <Label Text="WebSocket" TextColor="#C9D1D9" />
 
                         <Label
                             Grid.Column="1"
@@ -245,9 +226,7 @@
 
                     <Grid ColumnDefinitions="*,Auto">
 
-                        <Label
-                            Text="Last Status Update"
-                            TextColor="#C9D1D9" />
+                        <Label Text="Last Status Update" TextColor="#C9D1D9" />
 
                         <Label
                             Grid.Column="1"
@@ -258,9 +237,7 @@
 
                     <Grid ColumnDefinitions="*,Auto">
 
-                        <Label
-                            Text="API Version"
-                            TextColor="#C9D1D9" />
+                        <Label Text="API Version" TextColor="#C9D1D9" />
 
                         <Label
                             Grid.Column="1"
@@ -271,9 +248,7 @@
 
                     <Grid ColumnDefinitions="*,Auto">
 
-                        <Label
-                            Text="App Version"
-                            TextColor="#C9D1D9" />
+                        <Label Text="App Version" TextColor="#C9D1D9" />
 
                         <Label
                             Grid.Column="1"
@@ -283,83 +258,78 @@
                     </Grid>
 
                     <Button
-                        Text="VIEW DIAGNOSTICS LOG"
-                        Clicked="OnViewDiagnosticLogClicked"
                         BackgroundColor="#22252B"
-                        TextColor="#3AA0FF"
-                        CornerRadius="8" />
+                        Clicked="OnViewDiagnosticLogClicked"
+                        CornerRadius="8"
+                        Text="VIEW DIAGNOSTICS LOG"
+                        TextColor="#3AA0FF" />
 
                     <Button
-                        Text="FORCE STATUS REFRESH"
                         BackgroundColor="#22252B"
-                        TextColor="#C9D1D9"
-                        CornerRadius="8" />
+                        CornerRadius="8"
+                        Text="FORCE STATUS REFRESH"
+                        TextColor="#C9D1D9" />
 
                 </VerticalStackLayout>
 
             </Border>
 
-            <!-- SECURITY -->
+            <!--  SECURITY  -->
             <Label
-                Text="SECURITY"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="SECURITY"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="16"
                 BackgroundColor="#191919"
-                Stroke="#444444"
-                Padding="16">
+                Stroke="#444444">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
 
-                <Grid
-                    ColumnDefinitions="*,Auto">
+                <Grid ColumnDefinitions="*,Auto">
 
                     <VerticalStackLayout>
 
                         <Label
+                            FontAttributes="Bold"
                             Text="Authentication"
-                            TextColor="White"
-                            FontAttributes="Bold" />
+                            TextColor="White" />
 
-                        <Label
-                            Text="Not configured"
-                            TextColor="#8B949E" />
+                        <Label Text="Not configured" TextColor="#8B949E" />
 
                     </VerticalStackLayout>
 
                     <Button
                         Grid.Column="1"
-                        Text="SECURITY"
                         BackgroundColor="#22252B"
-                        TextColor="#C9D1D9"
-                        CornerRadius="8" />
+                        CornerRadius="8"
+                        Text="SECURITY"
+                        TextColor="#C9D1D9" />
 
                 </Grid>
 
             </Border>
 
-            <!-- ADVANCED -->
+            <!--  ADVANCED  -->
             <Label
-                Text="ADVANCED"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="ADVANCED"
                 TextColor="#8B949E" />
 
             <Button
-                Text="RESET APP PREFERENCES"
                 BackgroundColor="#191919"
-                TextColor="#E74C3C"
                 BorderColor="#444444"
                 BorderWidth="1"
-                CornerRadius="8" />
+                CornerRadius="8"
+                Text="RESET APP PREFERENCES"
+                TextColor="#E74C3C" />
 
-            <BoxView
-                HeightRequest="30"
-                Color="Transparent" />
+            <BoxView HeightRequest="30" Color="Transparent" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -9,23 +9,29 @@ namespace beholder_configuration_app
     public partial class MainPage : ContentPage
     {
         private readonly BeholderWebSocketService _webSocketService;
+        private readonly BeholderAPIService _apiService;
         private readonly AppLogService _logService;
 
         private BeholderStatus? _status;
+
+        private bool _automaticIntervalDirty = false;
+        private bool _updatingAutomaticIntervalFromStatus = false;
+
         /// <summary>
         /// Start up the main page of the MAUI app
         /// </summary>
         /// <param name="webSocketService"></param>
-        public MainPage(BeholderWebSocketService webSocketService, AppLogService logService)
+        public MainPage(BeholderWebSocketService webSocketService, BeholderAPIService apiService, AppLogService logService)
         {
             InitializeComponent();
             _webSocketService = webSocketService;
+            _apiService = apiService;
             _logService = logService;
 
             _webSocketService.MessageReceived += OnMessageReceived;
             _webSocketService.ConnectionChanged += OnConnectionChanged;
         }
-        
+
 
         private void OnMessageReceived(string message)
         {
@@ -45,6 +51,10 @@ namespace beholder_configuration_app
 
         private void UpdateDashboard()
         {
+            if (_status == null)
+            {
+                return;
+            }
             if (_status.System != null)
             {
                 TemperatureLabel.Text = $"{_status.System.TemperatureC:F1} °C";
@@ -71,8 +81,26 @@ namespace beholder_configuration_app
             {
                 bool automatic = _status.Capture.Mode == "automatic";
 
-                AutomaticIntervalPanel.IsVisible = automatic;
-                AutomaticIntervalLabel.Text = $"{_status.Capture.AutomaticIntervalSeconds:F2} s";
+                AutomaticOptionsPanel.IsVisible = automatic;
+
+                double serverInterval = _status.Capture.AutomaticIntervalSeconds;
+
+                if (_automaticIntervalDirty)
+                {
+                    if (double.TryParse(AutomaticIntervalEntry.Text, out double localInterval))
+                    {
+                        if (Math.Abs(localInterval - serverInterval) < 0.001)
+                        {
+                            _automaticIntervalDirty = false;
+                        }
+                    }
+                }
+                else
+                {
+                    _updatingAutomaticIntervalFromStatus = true;
+                    AutomaticIntervalEntry.Text = serverInterval.ToString("F2");
+                    _updatingAutomaticIntervalFromStatus = false;
+                }
 
                 SingleModeButton.BackgroundColor = automatic ? Color.FromArgb("#22252B") : Color.FromArgb("#3AA0FF");
                 AutomaticModeButton.BackgroundColor = automatic ? Color.FromArgb("#3AA0FF") : Color.FromArgb("#22252B");
@@ -162,6 +190,60 @@ namespace beholder_configuration_app
             }
         }
 
+        private async void OnSingleModeClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CaptureSetSingleMode, new
+                {
+                    mode = "single"
+                });
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logService.Warning($"Unable to set single capture mode. HTTP {(int)response.StatusCode}");
+                }
+            }
+            catch (Exception exception)
+            {
+                _logService.Error(exception);
+            }
+        }
+
+        private void OnAutomaticIntervalApplyClicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void OnAutomaticModeClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                HttpResponseMessage response =
+                    await _apiService.SendAsync(APIEndpoint.CaptureSetAutomaticMode, new
+                    {
+                        mode = "automatic"
+                    });
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logService.Warning($"Unable to set automatic capture mode. HTTP {(int)response.StatusCode}");
+                }
+            }
+            catch (Exception exception)
+            {
+                _logService.Error(exception);
+            }
+        }
+
+        private void OnAutomaticIntervalTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_updatingAutomaticIntervalFromStatus)
+            {
+                _automaticIntervalDirty = true;
+            }
+        }
+
         private async void OnConnectionClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(ConnectionPage));
@@ -174,7 +256,6 @@ namespace beholder_configuration_app
                 ConnectionLabel.Text = connected ? "LIVE" : "OFFLINE";
                 ConnectionLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
                 ConnectionIndicator.Color = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
-                //ConnectionButton.TextColor = connected ? Color.FromArgb("#2ECC71") : Colors.White;
             });
         }
 
