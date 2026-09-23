@@ -6,7 +6,7 @@ namespace beholder_configuration_app
     {
         private const double CompactWidth = 700;
 
-        public AppShell(MainPage mainPage, ConnectionPage connectionPage, ProjectsPage projectsPage, CamerasPage camerasPage, SettingsPage settingsPage)
+        public AppShell(MainPage mainPage, ConnectionPage connectionPage, ProjectsPage projectsPage, CamerasPage camerasPage, SettingsPage settingsPage, ConsoleLogPage consolePage)
         {
             InitializeComponent();
             //Page set up for navigation:
@@ -15,12 +15,7 @@ namespace beholder_configuration_app
             ProjectsContent.Content = projectsPage;
             CamerasContent.Content = camerasPage;
             SettingsContent.Content = settingsPage;
-
-            Routing.RegisterRoute(nameof(ConsoleLogPage), typeof(ConsoleLogPage));
-
-
-            //Connection Page:
-            //Routing.RegisterRoute(nameof(ConnectionPage), typeof(ConnectionPage));
+            ConsoleContent.Content = consolePage;
         }
 
     }

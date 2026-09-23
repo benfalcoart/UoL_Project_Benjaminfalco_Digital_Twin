@@ -146,6 +146,7 @@
             <Button
                 x:Name="CaptureButton"
                 BackgroundColor="#3AA0FF"
+                Clicked="OnCaptureClicked"
                 CornerRadius="8"
                 FontAttributes="Bold"
                 FontSize="18"
@@ -168,9 +169,7 @@
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="14">
-
                     <Grid ColumnDefinitions="*,Auto">
-
                         <Label
                             FontAttributes="Bold"
                             FontSize="12"
@@ -196,7 +195,6 @@
                                 VerticalOptions="Center" />
 
                         </HorizontalStackLayout>
-
                     </Grid>
 
                     <Grid ColumnDefinitions="*,100,Auto" ColumnSpacing="10">

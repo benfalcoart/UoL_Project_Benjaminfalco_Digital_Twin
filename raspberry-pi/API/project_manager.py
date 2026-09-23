@@ -43,6 +43,14 @@ class ProjectManager:
         return project
 
     """
+    Returns a specific Project
+    """
+    def get_project(self, name: str) -> Project:
+        project_directory = self.get_project_directory(name)
+        project = self.load_project(project_directory)
+        return self.refresh_project(project)
+
+    """
     Returns list of all Projects
     """
     def get_projects(self) -> list[Project]:
@@ -135,7 +143,11 @@ class ProjectManager:
 
         return True
 
-    
+    """
+    Closes Current Project
+    """
+    def close_project(self) -> None:
+        self.current_project = None
     """
     Saves Project Metadata for reload later.
     """

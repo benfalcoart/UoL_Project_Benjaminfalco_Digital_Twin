@@ -1,9 +1,7 @@
-﻿using System;
+﻿using beholder_configuration_app.Services.Logging;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,6 +10,7 @@ namespace beholder_configuration_app.Services.WebServices
     public class BeholderAPIService
     {
         private readonly HttpClient _httpClient;
+        private readonly AppLogService _logService;
 
         private readonly Dictionary<APIEndpoint, APIEndpointDefinition> _endpoints = new();
 
@@ -20,9 +19,10 @@ namespace beholder_configuration_app.Services.WebServices
         private string _address = "192.168.0.130"; //This needs to be set dynamically from the app input
         private int _port = 8000;
 
-        public BeholderAPIService(HttpClient httpClient)
+        public BeholderAPIService(HttpClient httpClient, AppLogService logService)
         {
             _httpClient = httpClient;
+            _logService = logService;
         }
 
         //Load the Endpoints JSON file and parse it. Set up the Dictionary with all the API calls to make.
@@ -41,7 +41,7 @@ namespace beholder_configuration_app.Services.WebServices
             {
                 if (!Enum.TryParse(prop.Name, true, out APIEndpoint endpoint))
                 {
-                    //TDOO: Maybe add a console or log to the app to look for errors like this?
+                    _logService.Warning($"Unknown API endpoint in APIEndpoints.json: {prop.Name}");
                     continue;
                 }
 
@@ -58,11 +58,14 @@ namespace beholder_configuration_app.Services.WebServices
             }
             //set the loaded flag so that we dont try again
             _loaded = true;
+            _logService.Info($"Loaded {_endpoints.Count} API endpoints.");
         }
 
         //Option to Reload the API Endpoints should something be amiss?
         public async Task ReloadEndPointsAsync()
         {
+
+            _endpoints.Clear();
             _loaded = false;
             await LoadEndPointsAsync();
         }
@@ -81,7 +84,7 @@ namespace beholder_configuration_app.Services.WebServices
             return $"http://{_address}:{_port}{definition.Path}";
         }
 
-        public async Task<HttpResponseMessage> SendAsync(APIEndpoint endpoint, object? body = null)
+        public async Task<HttpResponseMessage> SendAsync(APIEndpoint endpoint, object? body = null, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
             if (!_loaded)
             {
@@ -101,7 +104,7 @@ namespace beholder_configuration_app.Services.WebServices
                 request.Content = JsonContent.Create(body);
             }
 
-            return await _httpClient.SendAsync(request);
+            return await _httpClient.SendAsync(request, completionOption);
         }
     }
 }

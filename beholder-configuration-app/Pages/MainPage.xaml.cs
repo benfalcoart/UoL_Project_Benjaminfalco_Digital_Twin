@@ -3,11 +3,18 @@ using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using Microsoft.Maui.Controls.Shapes;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace beholder_configuration_app
 {
     public partial class MainPage : ContentPage
     {
+        //STRESS TEST
+        private readonly Stopwatch _stressTestTimer = new();
+        private bool _stressTestRunning = true;
+        private const double StressTestBatteryThreshold = 2.0;        
+
+        //SERVICES
         private readonly BeholderWebSocketService _webSocketService;
         private readonly BeholderAPIService _apiService;
         private readonly AppLogService _logService;
@@ -30,6 +37,8 @@ namespace beholder_configuration_app
 
             _webSocketService.MessageReceived += OnMessageReceived;
             _webSocketService.ConnectionChanged += OnConnectionChanged;
+
+           
         }
 
 
@@ -129,6 +138,20 @@ namespace beholder_configuration_app
                 CameraCountLabel.Text = $"{_status.Cameras.ActiveCount} / " + $"{_status.Cameras.DetectedCount}";
                 UpdateCameraList(_status.Cameras.Items);
             }
+
+            if (_stressTestRunning)
+            {
+                if (!_stressTestTimer.IsRunning)
+                    _logService.Info($"Stress Test Start at {_status?.System?.Battery?.Percentage:F1}%");
+                    _stressTestTimer.Start();
+
+                if (_status?.System?.Battery?.Percentage <= StressTestBatteryThreshold)
+                {
+                    _logService.Info($"Stress Test Ended at {_status?.System?.Battery?.Percentage:F1}%");
+                    _stressTestTimer.Stop();
+                    _logService.Info($"Battery life lasts: {_stressTestTimer.Elapsed.ToString()}");
+                }
+            }
         }
 
         private void UpdateCameraList(List<CameraStatus> cameras)
@@ -210,9 +233,44 @@ namespace beholder_configuration_app
             }
         }
 
-        private void OnAutomaticIntervalApplyClicked(object sender, EventArgs e)
+        private async void OnAutomaticIntervalApplyClicked(object sender, EventArgs e)
         {
+            if (!double.TryParse(AutomaticIntervalEntry.Text, out double seconds))
+            {
+                _logService.Warning("Invalid automatic capture interval.");
+                return;
+            }
 
+            if (seconds <= 0)
+            {
+                _logService.Warning("Automatic capture interval must be greater than zero.");
+                return;
+            }
+
+            try
+            {
+                if (_apiService != null)
+                {
+                    HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CaptureSetAutomaticInterval,
+                        new
+                        {
+                            seconds
+                        });
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logService.Warning($"Unable to set automatic interval. HTTP {(int)response.StatusCode}");
+                    }
+                    else
+                    {
+                        _logService.Info($"Automatic interval requested: {seconds:F2}s");
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                _logService.Error(exception);
+            }
         }
 
         private async void OnAutomaticModeClicked(object sender, EventArgs e)
@@ -257,6 +315,27 @@ namespace beholder_configuration_app
                 ConnectionLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
                 ConnectionIndicator.Color = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
             });
+        }
+
+        private async void OnCaptureClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CaptureTrigger);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logService.Warning($"Unable to trigger capture. HTTP {(int)response.StatusCode}");
+                }
+                else
+                {
+                    _logService.Info("Capture trigger sent.");
+                }
+            }
+            catch (Exception exception)
+            {
+                _logService.Error(exception);
+            }
         }
 
     }

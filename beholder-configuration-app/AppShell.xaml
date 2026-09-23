@@ -7,41 +7,46 @@
     Title="beholder_configuration_app"
     Shell.BackgroundColor="#191919"
     Shell.ForegroundColor="White"
-    Shell.TitleColor="White"
     Shell.TabBarBackgroundColor="#191919"
     Shell.TabBarForegroundColor="#3AA0FF"
-    Shell.TabBarUnselectedColor="#8B949E">
+    Shell.TabBarUnselectedColor="#8B949E"
+    Shell.TitleColor="White">
 
-    <!-- Icons Downloaded from: https://lucide.dev/icons/-->
+    <!--  Icons Downloaded from: https://lucide.dev/icons/  -->
     <TabBar>
         <ShellContent
             x:Name="MainShellContent"
             Title=""
-            Route="MainPage"
-            Icon="house.png"/>
-      
+            Icon="house.png"
+            Route="MainPage" />
+
         <ShellContent
             x:Name="ConnectionPage"
             Title=""
-            Route="Connection"
-            Icon="wifi.png"/>
-        
+            Icon="wifi.png"
+            Route="Connection" />
+
         <ShellContent
             x:Name="ProjectsContent"
             Title=""
-            Route="Projects"
-            Icon="folder_open_dot.png"/>
+            Icon="folder_open_dot.png"
+            Route="Projects" />
 
         <ShellContent
             x:Name="CamerasContent"
             Title=""
-            Route="Cameras"
-            Icon="camera.png"/>
+            Icon="camera.png"
+            Route="Cameras" />
 
         <ShellContent
             x:Name="SettingsContent"
             Title=""
-            Route="Settings"
-            Icon="settings.png"/>
+            Icon="settings.png"
+            Route="Settings" />
+        <ShellContent
+            x:Name="ConsoleContent"
+            Title=""
+            Icon="square_chevron_right.png"
+            Route="Settings" />
     </TabBar>
 </Shell>

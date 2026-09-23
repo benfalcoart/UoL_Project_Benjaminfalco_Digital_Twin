@@ -4,9 +4,44 @@
     "path": "/api/status"
   },
 
+  "ProjectGetAll": {
+    "method": "GET",
+    "path": "/api/projects"
+  },
+
+  "ProjectGetCurrent": {
+    "method": "GET",
+    "path": "/api/projects/current"
+  },
+
   "ProjectCreate": {
     "method": "POST",
     "path": "/api/projects"
+  },
+
+  "ProjectOpen": {
+    "method": "POST",
+    "path": "/api/projects/open"
+  },
+
+  "ProjectClose": {
+    "method": "POST",
+    "path": "/api/projects/close"
+  },
+
+  "ProjectDelete": {
+    "method": "POST",
+    "path": "/api/projects/delete"
+  },
+
+  "ProjectTransferManifest": {
+    "method": "POST",
+    "path": "/api/projects/transfer/manifest"
+  },
+
+  "ProjectTransferFile": {
+    "method": "POST",
+    "path": "/api/projects/transfer/file"
   },
 
   "CameraGetAll": {
@@ -16,12 +51,22 @@
 
   "CameraEnable": {
     "method": "POST",
-    "path": "/api/cameras/{cameraId}/enable"
+    "path": "/api/cameras/enable"
   },
 
   "CameraDisable": {
     "method": "POST",
-    "path": "/api/cameras/{cameraId}/disable"
+    "path": "/api/cameras/disable"
+  },
+
+  "CameraSetSlot": {
+    "method": "PUT",
+    "path": "/api/cameras/slot"
+  },
+
+  "CameraIdentify": {
+    "method": "POST",
+    "path": "/api/cameras/identify"
   },
 
   "CaptureSetSingleMode": {

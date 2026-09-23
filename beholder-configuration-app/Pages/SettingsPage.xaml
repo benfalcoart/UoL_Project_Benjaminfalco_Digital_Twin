@@ -56,6 +56,7 @@
                             VerticalOptions="Center">
 
                             <BoxView
+                                x:Name="SettingsConnectionIndicator"
                                 CornerRadius="4"
                                 HeightRequest="8"
                                 VerticalOptions="Center"
@@ -63,6 +64,7 @@
                                 Color="#2ECC71" />
 
                             <Label
+                                x:Name="SettingsConnectionStatusLabel"
                                 FontAttributes="Bold"
                                 FontSize="12"
                                 Text="CONNECTED"
@@ -98,7 +100,10 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch Grid.Column="1" IsToggled="True" />
+                        <Switch
+                            x:Name="KeepScreenAwakeSwitch"
+                            Grid.Column="1"
+                            Toggled="OnKeepScreenAwakeToggled" />
 
                     </Grid>
 
@@ -109,7 +114,10 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch Grid.Column="1" IsToggled="True" />
+                        <Switch
+                            x:Name="HapticFeedbackSwitch"
+                            Grid.Column="1"
+                            Toggled="OnHapticFeedbackToggled" />
 
                     </Grid>
 
@@ -120,7 +128,10 @@
                             TextColor="White"
                             VerticalOptions="Center" />
 
-                        <Switch Grid.Column="1" />
+                        <Switch
+                            x:Name="CaptureSoundSwitch"
+                            Grid.Column="1"
+                            Toggled="OnCaptureSoundToggled" />
 
                     </Grid>
 
@@ -132,15 +143,14 @@
                             VerticalOptions="Center" />
 
                         <Entry
+                            x:Name="DefaultIntervalEntry"
                             Grid.Column="1"
                             HorizontalTextAlignment="Center"
                             Keyboard="Numeric"
-                            Text="0.50" />
-
+                            Text="0.50"
+                            Unfocused="OnDefaultIntervalUnfocused" />
                     </Grid>
-
                 </VerticalStackLayout>
-
             </Border>
 
             <!--  DATA TRANSFER  -->
@@ -180,6 +190,7 @@
 
                     <Button
                         BackgroundColor="#3AA0FF"
+                        Clicked="OnOffloadCurrentProjectClicked"
                         CornerRadius="8"
                         FontAttributes="Bold"
                         Text="OFFLOAD CURRENT PROJECT"
@@ -187,14 +198,39 @@
 
                     <Button
                         BackgroundColor="#22252B"
+                        Clicked="OnOffloadAllProjectsClicked"
                         CornerRadius="8"
                         Text="OFFLOAD ALL PROJECTS"
                         TextColor="#3AA0FF" />
+                    <VerticalStackLayout
+                        x:Name="TransferProgressPanel"
+                        IsVisible="False"
+                        Spacing="8">
 
+                        <ProgressBar x:Name="TransferProgressBar" Progress="0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                x:Name="TransferStatusLabel"
+                                Text="Preparing transfer..."
+                                TextColor="#C9D1D9" />
+
+                            <Label
+                                x:Name="TransferPercentLabel"
+                                Grid.Column="1"
+                                FontAttributes="Bold"
+                                Text="0%"
+                                TextColor="White" />
+
+                        </Grid>
+                        <Label
+                            x:Name="TransferFileLabel"
+                            FontSize="11"
+                            LineBreakMode="MiddleTruncation"
+                            TextColor="#8B949E" />
+
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-
             </Border>
-
             <!--  DIAGNOSTICS  -->
             <Label
                 FontAttributes="Bold"
@@ -218,9 +254,10 @@
                         <Label Text="WebSocket" TextColor="#C9D1D9" />
 
                         <Label
+                            x:Name="WebSocketStatusLabel"
                             Grid.Column="1"
-                            Text="Connected"
-                            TextColor="#2ECC71" />
+                            Text="Disconnected"
+                            TextColor="#E74C3C" />
 
                     </Grid>
 
@@ -256,16 +293,9 @@
                             TextColor="White" />
 
                     </Grid>
-
                     <Button
                         BackgroundColor="#22252B"
-                        Clicked="OnViewDiagnosticLogClicked"
-                        CornerRadius="8"
-                        Text="VIEW DIAGNOSTICS LOG"
-                        TextColor="#3AA0FF" />
-
-                    <Button
-                        BackgroundColor="#22252B"
+                        Clicked="OnForceStatusRefreshClicked"
                         CornerRadius="8"
                         Text="FORCE STATUS REFRESH"
                         TextColor="#C9D1D9" />
@@ -325,6 +355,7 @@
                 BackgroundColor="#191919"
                 BorderColor="#444444"
                 BorderWidth="1"
+                Clicked="OnResetPreferencesClicked"
                 CornerRadius="8"
                 Text="RESET APP PREFERENCES"
                 TextColor="#E74C3C" />

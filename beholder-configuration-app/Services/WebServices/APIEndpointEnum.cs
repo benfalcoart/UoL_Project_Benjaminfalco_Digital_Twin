@@ -4,11 +4,20 @@
     {
         SystemGetStatus,
 
+        ProjectGetAll,
+        ProjectGetCurrent,
         ProjectCreate,
+        ProjectOpen,
+        ProjectClose,
+        ProjectDelete,
+        ProjectTransferManifest,
+        ProjectTransferFile,
 
         CameraGetAll,
         CameraEnable,
         CameraDisable,
+        CameraSetSlot,
+        CameraIdentify,
 
         CaptureSetSingleMode,
         CaptureSetAutomaticMode,

@@ -1,7 +1,10 @@
 ﻿using beholder_configuration_app.Pages;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
+using beholder_configuration_app.Services.WebServices.ProjectTransfer;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 
 namespace beholder_configuration_app
 {
@@ -12,6 +15,7 @@ namespace beholder_configuration_app
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -21,19 +25,22 @@ namespace beholder_configuration_app
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            //Community Tools Pluggins:
+            builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+            //Logging Service:
+            builder.Services.AddSingleton<AppLogService>();
             //Web Services:
             builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<BeholderWebSocketService>();
             builder.Services.AddSingleton<BeholderAPIService>();
-            //Logging Service:
-            builder.Services.AddSingleton<AppLogService>();
+            builder.Services.AddSingleton<ProjectTransferService>();            
             //App pages:
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<ConnectionPage>();
             builder.Services.AddSingleton<ProjectsPage>();
             builder.Services.AddSingleton<SettingsPage>();
             builder.Services.AddSingleton<CamerasPage>();
-            builder.Services.AddTransient<ConsoleLogPage>();
+            builder.Services.AddSingleton<ConsoleLogPage>();
             //App Shell:
             builder.Services.AddSingleton<AppShell>();
 

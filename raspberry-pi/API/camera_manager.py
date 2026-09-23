@@ -110,6 +110,50 @@ class CameraManager:
         return cameras
 
     """
+    Get Camera by ID.
+    """
+    def get_camera(self, camera_id: int) -> Camera | None:
+        for camera in self.cameras:
+            if camera.id == camera_id:
+                return camera
+
+        return None
+
+    def identify_camera(self, camera_id: int) -> CaptureResult | None:
+        camera = self.get_camera(camera_id)
+
+        if camera is None:
+            return None
+
+        output_path = Path(f"/tmp/beholder_identify_camera_{camera_id:02d}.jpg")
+        return self.capture_camera(camera, output_path, retries=1, timeout=5.0, allow_inactive=True)
+
+    """
+    Set camera to specific slot. Only 1 slot can be occupied at a time.
+    """
+    def set_camera_slot(self, camera_id: int, slot_value: str) -> bool:
+        camera = self.get_camera(camera_id)
+
+        if camera is None:
+            return False
+
+        try:
+            slot = CameraSlot(slot_value)
+        except ValueError:
+            return False
+
+        if slot != CameraSlot.UNASSIGNED:
+            for current_camera in self.cameras:
+                if (
+                    current_camera.id != camera_id
+                    and current_camera.slot == slot
+                ):
+                    return False
+
+        camera.slot = slot
+        return True
+
+    """
     Capture photos from all Cameras at once. Using MultiThreading so camera captures are concurrent.
     """
     def capture_all(self, output_directory: Path, capture_id: int, retries: int = 3, timeout: float = 5.0) -> list[CaptureResult]:
@@ -143,11 +187,11 @@ class CameraManager:
 
             return results
 
-    def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3, timeout: float = 5.0) -> CaptureResult:
+    def capture_camera(self, camera: Camera, output_path: Path, retries: int = 3, timeout: float = 5.0, allow_inactive: bool = False) -> CaptureResult:
 
         #Create the camera's destination path.
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        if not camera.active:
+        if not camera.active and not allow_inactive:
             return CaptureResult(camera=camera, success=False, output_path=output_path,attempts=[])
 
         attempts = []
