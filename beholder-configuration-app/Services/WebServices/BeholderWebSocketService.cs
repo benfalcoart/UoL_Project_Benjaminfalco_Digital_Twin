@@ -21,7 +21,7 @@ namespace beholder_configuration_app.Services.WebServices
 
         private readonly AppLogService _logService;
         private readonly BeholderConnectionSettings _connectionSettings;
-
+        
 
         //private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
         public BeholderWebSocketService(AppLogService logService, BeholderConnectionSettings connectionSettings)

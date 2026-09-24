@@ -61,14 +61,14 @@
                                 HeightRequest="8"
                                 VerticalOptions="Center"
                                 WidthRequest="8"
-                                Color="#2ECC71" />
+                                Color="#E74C3C" />
 
                             <Label
                                 x:Name="SettingsConnectionStatusLabel"
                                 FontAttributes="Bold"
                                 FontSize="12"
-                                Text="CONNECTED"
-                                TextColor="#2ECC71" />
+                                Text="DISCONNECTED"
+                                TextColor="#E74C3C" />
 
                         </HorizontalStackLayout>
                     </Grid>
@@ -278,7 +278,7 @@
 
                         <Label
                             Grid.Column="1"
-                            Text="0.1.0"
+                            Text="1.0.1"
                             TextColor="White" />
 
                     </Grid>
@@ -289,16 +289,10 @@
 
                         <Label
                             Grid.Column="1"
-                            Text="0.1.0"
+                            Text="1.0.1"
                             TextColor="White" />
 
                     </Grid>
-                    <Button
-                        BackgroundColor="#22252B"
-                        Clicked="OnForceStatusRefreshClicked"
-                        CornerRadius="8"
-                        Text="FORCE STATUS REFRESH"
-                        TextColor="#C9D1D9" />
 
                 </VerticalStackLayout>
 

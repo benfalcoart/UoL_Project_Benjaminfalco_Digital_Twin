@@ -4,6 +4,7 @@ using beholder_configuration_app.Services.WebServices;
 using Microsoft.Maui.Controls.Shapes;
 using System.Text.Json;
 using System.Diagnostics;
+using beholder_configuration_app.Services.Audio;
 
 namespace beholder_configuration_app
 {
@@ -18,6 +19,7 @@ namespace beholder_configuration_app
         private readonly BeholderWebSocketService _webSocketService;
         private readonly BeholderAPIService _apiService;
         private readonly AppLogService _logService;
+        private readonly SoundManager _soundManager;
 
         private BeholderStatus? _status;
 
@@ -28,12 +30,13 @@ namespace beholder_configuration_app
         /// Start up the main page of the MAUI app
         /// </summary>
         /// <param name="webSocketService"></param>
-        public MainPage(BeholderWebSocketService webSocketService, BeholderAPIService apiService, AppLogService logService)
+        public MainPage(BeholderWebSocketService webSocketService, BeholderAPIService apiService, AppLogService logService, SoundManager soundManager)
         {
             InitializeComponent();
             _webSocketService = webSocketService;
             _apiService = apiService;
             _logService = logService;
+            _soundManager = soundManager;
 
             _webSocketService.MessageReceived += OnMessageReceived;
             _webSocketService.ConnectionChanged += OnConnectionChanged;
@@ -220,11 +223,16 @@ namespace beholder_configuration_app
                 HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CaptureSetSingleMode, new
                 {
                     mode = "single"
+
                 });
 
                 if (!response.IsSuccessStatusCode)
                 {
                     _logService.Warning($"Unable to set single capture mode. HTTP {(int)response.StatusCode}");
+                }
+                else
+                {
+                   _ = _soundManager.PlayAsync(SoundEffect.Click);
                 }
             }
             catch (Exception exception)
@@ -263,7 +271,9 @@ namespace beholder_configuration_app
                     }
                     else
                     {
-                        _logService.Info($"Automatic interval requested: {seconds:F2}s");
+                        _logService.Info($"Automatic interval requested: {seconds:F2}s");                        
+                        _ = _soundManager.PlayAsync(SoundEffect.Click);
+                        
                     }
                 }
             }
@@ -321,15 +331,43 @@ namespace beholder_configuration_app
         {
             try
             {
+                bool automaticMode = _status?.Capture?.Mode == "automatic";
+                bool automaticWasRunning = _status?.Capture?.AutomaticRunning == true;
                 HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CaptureTrigger);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     _logService.Warning($"Unable to trigger capture. HTTP {(int)response.StatusCode}");
                 }
+                if (!automaticMode)
+                {
+                    _ = _soundManager.PlayAsync(
+                        SoundEffect.Camera_Click_On
+                    );
+
+                    _logService.Info(
+                        "Single capture triggered."
+                    );
+                }
+                else if (automaticWasRunning)
+                {
+                    _ = _soundManager.PlayAsync(
+                        SoundEffect.Camera_Click_Off
+                    );
+
+                    _logService.Info(
+                        "Automatic capture stop requested."
+                    );
+                }
                 else
                 {
-                    _logService.Info("Capture trigger sent.");
+                    _ = _soundManager.PlayAsync(
+                        SoundEffect.Camera_Click_On
+                    );
+
+                    _logService.Info(
+                        "Automatic capture started."
+                    );
                 }
             }
             catch (Exception exception)

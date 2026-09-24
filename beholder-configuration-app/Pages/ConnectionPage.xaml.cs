@@ -1,3 +1,4 @@
+using beholder_configuration_app.Services.Audio;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using System;
@@ -9,20 +10,38 @@ public partial class ConnectionPage : ContentPage
     private readonly BeholderWebSocketService _webSocketService;
     private readonly AppLogService _logService;
     private readonly BeholderConnectionSettings _connectionSettings;
-    public ConnectionPage(BeholderWebSocketService webSocketService, AppLogService logService, BeholderConnectionSettings connectionSettings)
+    private readonly SoundManager _soundManager;
+    public ConnectionPage(BeholderWebSocketService webSocketService, AppLogService logService, BeholderConnectionSettings connectionSettings,SoundManager soundManager)
 	{
 		InitializeComponent();
 
 		_webSocketService = webSocketService;
         _logService = logService;
         _connectionSettings = connectionSettings;
-	}
+        _soundManager = soundManager;
+
+        ConnectionPresetPicker.ItemsSource = _connectionSettings.PresetAddresses.Keys.ToList();
+    }
+
+    private void OnConnectionPresetChanged(object sender, EventArgs e)
+    {
+        if (ConnectionPresetPicker.SelectedItem is not string presetName)
+        {
+            return;
+        }
+
+        if (_connectionSettings.PresetAddresses.TryGetValue(presetName, out string? address))
+        {
+            AddressEntry.Text = address;
+        }
+    }
 
     private async void OnConnectClicked(object sender, EventArgs e)
     {
         if (!int.TryParse(PortEntry.Text, out int port))
         {
             StatusLabel.Text = "Invalid port";
+            _logService.Error($"Invalid port {port}");
             return;
         }
 
@@ -32,12 +51,14 @@ public partial class ConnectionPage : ContentPage
             StatusLabel.Text = status;
             _logService.Info(status);
             _connectionSettings.SetAddressPort(AddressEntry.Text, port);
+            _ = _soundManager.PlayAsync(SoundEffect.Click);
             await _webSocketService.ConnectAsync();
             if (_webSocketService.IsConnected)
             {
                 status = $"Successfully connected to {AddressEntry.Text}:{PortEntry.Text}";
                 StatusLabel.Text = status;
                 _logService.Info(status);
+                _ = _soundManager.PlayAsync(SoundEffect.Success);
                 //Go back to the dashboard
                 await Shell.Current.GoToAsync("..");
             }

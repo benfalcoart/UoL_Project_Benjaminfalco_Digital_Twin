@@ -1,56 +1,56 @@
 <ContentPage
+    x:Class="beholder_configuration_app.ConnectionPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="beholder_configuration_app.ConnectionPage"
     Title="Connection"
     BackgroundColor="#101214"
     Shell.NavBarIsVisible="False">
-    
-    <VerticalStackLayout
-        Padding="24"
-        Spacing="18">
+
+    <VerticalStackLayout Padding="24" Spacing="18">
 
         <Label
-            Text="CONNECT TO BEHOLDER"
-            FontSize="24"
             FontAttributes="Bold"
+            FontSize="24"
+            Text="CONNECT TO BEHOLDER"
             TextColor="White" />
 
-        <Label
-            Text="Address"
-            TextColor="#8B949E" />
+        <Label Text="Address" TextColor="#8B949E" />
 
+        <Picker
+            x:Name="ConnectionPresetPicker"
+            Title="Select Connection"
+            BackgroundColor="#1A1D21"
+            SelectedIndexChanged="OnConnectionPresetChanged" />
         <Entry
             x:Name="AddressEntry"
-            Text="192.168.0.130"
-            Placeholder="BEHOLDER address" />
+            BackgroundColor="#1A1D21"
+            Placeholder="BEHOLDER address"
+            Text="192.168.0.130" />
 
-        <Label
-            Text="Port"
-            TextColor="#8B949E" />
+        <Label Text="Port" TextColor="#8B949E" />
 
         <Entry
             x:Name="PortEntry"
-            Text="8000"
-            Keyboard="Numeric" />
+            BackgroundColor="#1A1D21"
+            Keyboard="Numeric"
+            Text="8000" />
 
-        <Label
-            Text="Password"
-            TextColor="#8B949E" />
+        <Label Text="Password" TextColor="#8B949E" />
 
         <Entry
             x:Name="PasswordEntry"
-            Placeholder="Password"
-            IsPassword="True" />
+            BackgroundColor="#1A1D21"
+            IsPassword="True"
+            Placeholder="Password" />
 
         <Button
-            Text="CONNECT"
-            HeightRequest="56"
             BackgroundColor="#3AA0FF"
-            TextColor="White"
-            FontAttributes="Bold"
+            Clicked="OnConnectClicked"
             CornerRadius="8"
-            Clicked="OnConnectClicked" />
+            FontAttributes="Bold"
+            HeightRequest="56"
+            Text="CONNECT"
+            TextColor="White" />
 
         <Label
             x:Name="StatusLabel"

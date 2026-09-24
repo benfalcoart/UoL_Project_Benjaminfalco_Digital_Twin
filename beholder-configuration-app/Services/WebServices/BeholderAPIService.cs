@@ -76,7 +76,7 @@ namespace beholder_configuration_app.Services.WebServices
             {
                 throw new KeyNotFoundException($"API endpoint '{endpoint}' was not found.");
             }
-            return $"http://{_connectionSettings.Address}:{_connectionSettings.Port}{definition.Path}";
+            return $"{_connectionSettings.HttpBaseAddress}{definition.Path}";
         }
 
         public async Task<HttpResponseMessage> SendAsync(APIEndpoint endpoint, object? body = null, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)

@@ -1,5 +1,6 @@
 using beholder_configuration_app.Models;
 using beholder_configuration_app.Pages;
+using beholder_configuration_app.Services.Audio;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using beholder_configuration_app.Services.WebServices.ProjectTransfer;
@@ -17,11 +18,12 @@ public partial class SettingsPage : ContentPage
     private readonly AppLogService _logService;
     private readonly ProjectTransferService _projectTransferService;
     private readonly IFolderPicker _folderPicker;
+    private readonly SoundManager _soundManager;
+    private readonly BeholderConnectionSettings _connectionSettings;
 
 
     private bool _loadingPreferences;
-    public SettingsPage(BeholderWebSocketService webSocketService, BeholderAPIService apiService, AppLogService logService, ProjectTransferService transferService,
-    IFolderPicker folderPicker)
+    public SettingsPage(BeholderWebSocketService webSocketService, BeholderAPIService apiService, AppLogService logService, ProjectTransferService transferService, IFolderPicker folderPicker, SoundManager soundManager, BeholderConnectionSettings connectionSettings)
     {
         InitializeComponent();
         _webSocketService = webSocketService;
@@ -29,11 +31,24 @@ public partial class SettingsPage : ContentPage
         _logService = logService;
         _projectTransferService = transferService;
         _folderPicker = folderPicker;
+        _soundManager = soundManager;
+        _connectionSettings = connectionSettings;
 
         _webSocketService.MessageReceived += OnMessageReceived;
         _webSocketService.ConnectionChanged += OnConnectionChanged;
 
         LoadPreferences();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateConnectionSettings();
+        UpdateConnectionStatus(_webSocketService.IsConnected);
+    }
+    private void UpdateConnectionSettings()
+    {
+        ConnectionAddressLabel.Text = $"{_connectionSettings.Address}:{_connectionSettings.Port}";
     }
     private void LoadPreferences()
     {
@@ -56,6 +71,7 @@ public partial class SettingsPage : ContentPage
         Preferences.Default.Set("KeepScreenAwake", e.Value);
         DeviceDisplay.Current.KeepScreenOn = e.Value;
         _logService.Info($"Keep screen awake: {e.Value}");
+        _ = _soundManager.PlayAsync(SoundEffect.Click);
     }
     private void OnHapticFeedbackToggled(object sender, ToggledEventArgs e)
     {
@@ -65,6 +81,7 @@ public partial class SettingsPage : ContentPage
         }
         Preferences.Default.Set("HapticFeedback", e.Value);
         _logService.Info($"Haptic feedback: {e.Value}");
+        _ = _soundManager.PlayAsync(SoundEffect.Click);
     }
 
     //TODO: Add a sound effect to the capture
@@ -75,7 +92,9 @@ public partial class SettingsPage : ContentPage
             return;
         }
         Preferences.Default.Set("CaptureSound", e.Value);
+
         _logService.Info($"Capture sound: {e.Value}");
+        _ = _soundManager.PlayAsync(SoundEffect.Click);
     }
     private void OnDefaultIntervalUnfocused(object sender, FocusEventArgs e)
     {
@@ -97,27 +116,7 @@ public partial class SettingsPage : ContentPage
         DefaultIntervalEntry.Text = interval.ToString("F2");
         _logService.Info($"Default automatic interval set to {interval:F2}s.");
     }
-
-    private async void OnForceStatusRefreshClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.SystemGetStatus);
-
-            if (response.IsSuccessStatusCode)
-            {
-                _logService.Info("Status refresh successful.");
-            }
-            else
-            {
-                _logService.Warning($"Status refresh failed. HTTP {(int)response.StatusCode}");
-            }
-        }
-        catch (Exception exception)
-        {
-            _logService.Error(exception);
-        }
-    }
+       
 
     private void OnMessageReceived(string message)
     {
@@ -135,6 +134,22 @@ public partial class SettingsPage : ContentPage
             }
         });
     }
+    private void UpdateConnectionStatus(bool connected)
+    {
+        SettingsConnectionStatusLabel.Text = connected ? "CONNECTED" : "DISCONNECTED";
+        SettingsConnectionStatusLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
+        SettingsConnectionIndicator.Color = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
+        WebSocketStatusLabel.Text = connected ? "Connected" : "Disconnected";
+        WebSocketStatusLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
+        if (connected)
+        {
+            ConnectionAddressLabel.Text = $"{_connectionSettings.Address}:{_connectionSettings.Port}";
+        }
+        else
+        {
+            ConnectionAddressLabel.Text = "No active connection";
+        }
+    }
     private void UpdateProjectStatus()
     {
         if (_status?.Project == null)
@@ -151,11 +166,8 @@ public partial class SettingsPage : ContentPage
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            SettingsConnectionStatusLabel.Text = connected ? "CONNECTED" : "DISCONNECTED";
-            SettingsConnectionStatusLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
-            SettingsConnectionIndicator.Color = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
-            WebSocketStatusLabel.Text = connected ? "Connected" : "Disconnected";
-            WebSocketStatusLabel.TextColor = connected ? Color.FromArgb("#2ECC71") : Color.FromArgb("#E74C3C");
+            UpdateConnectionSettings();
+            UpdateConnectionStatus(connected);
         });
     }
     private async void OnResetPreferencesClicked(object sender, EventArgs e)
@@ -175,6 +187,7 @@ public partial class SettingsPage : ContentPage
         LoadPreferences();
 
         _logService.Info("Application preferences reset.");
+        _ = _soundManager.PlayAsync(SoundEffect.Click);
     }
     private async void OnOffloadCurrentProjectClicked(object sender, EventArgs e)
     {
@@ -215,13 +228,13 @@ public partial class SettingsPage : ContentPage
             TransferPercentLabel.Text = "0%";
             TransferStatusLabel.Text = "Preparing transfer...";
             TransferFileLabel.Text = "";
-
+            _ = _soundManager.PlayAsync(SoundEffect.Click);
             await _projectTransferService.OffloadProjectAsync(projectName, destination, progress);
 
             TransferProgressBar.Progress = 1;
             TransferPercentLabel.Text = "100%";
             TransferStatusLabel.Text = "Transfer complete";
-
+            _ = _soundManager.PlayAsync(SoundEffect.Success);
             _logService.Info($"Project '{projectName}' offloaded to '{destination}'.");
         }
         catch (Exception exception)
@@ -287,14 +300,14 @@ public partial class SettingsPage : ContentPage
 
                         TransferFileLabel.Text = $"{project.Name} · {update.CurrentFile}";
                     });
-
+                _ = _soundManager.PlayAsync(SoundEffect.Click);
                 _logService.Info($"Offloading project '{project.Name}'.");
                 await _projectTransferService.OffloadProjectAsync(project.Name, destination, progress);
             }
 
             TransferProgressBar.Progress = 1;
             TransferPercentLabel.Text = "100%";
-
+            _ = _soundManager.PlayAsync(SoundEffect.Success);
             TransferStatusLabel.Text = $"Transfer complete · {projects.Count} projects";
             TransferFileLabel.Text = "";
 

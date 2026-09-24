@@ -1,4 +1,6 @@
-﻿using beholder_configuration_app.Pages;
+﻿using Plugin.Maui.Audio;
+using beholder_configuration_app.Services.Audio;
+using beholder_configuration_app.Pages;
 using beholder_configuration_app.Services;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
@@ -26,6 +28,9 @@ namespace beholder_configuration_app
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+            //Audio Pluggin:
+            builder.AddAudio();
+            builder.Services.AddSingleton<SoundManager>();
             //Community Tools Pluggins:
             builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
             //Logging Service:
