@@ -11,18 +11,18 @@ namespace beholder_configuration_app.Services.WebServices
     {
         private readonly HttpClient _httpClient;
         private readonly AppLogService _logService;
+        private readonly BeholderConnectionSettings _connectionSettings;
 
         private readonly Dictionary<APIEndpoint, APIEndpointDefinition> _endpoints = new();
 
         private bool _loaded;
+               
 
-        private string _address = "192.168.0.130"; //This needs to be set dynamically from the app input
-        private int _port = 8000;
-
-        public BeholderAPIService(HttpClient httpClient, AppLogService logService)
+        public BeholderAPIService(HttpClient httpClient, AppLogService logService, BeholderConnectionSettings connectionSettings)
         {
             _httpClient = httpClient;
             _logService = logService;
+            _connectionSettings = connectionSettings;
         }
 
         //Load the Endpoints JSON file and parse it. Set up the Dictionary with all the API calls to make.
@@ -69,11 +69,6 @@ namespace beholder_configuration_app.Services.WebServices
             _loaded = false;
             await LoadEndPointsAsync();
         }
-        public void SetConnection(string address, int port)
-        {
-            _address = address;
-            _port = port;
-        }
 
         private string GetUrl(APIEndpoint endpoint)
         {
@@ -81,7 +76,7 @@ namespace beholder_configuration_app.Services.WebServices
             {
                 throw new KeyNotFoundException($"API endpoint '{endpoint}' was not found.");
             }
-            return $"http://{_address}:{_port}{definition.Path}";
+            return $"http://{_connectionSettings.Address}:{_connectionSettings.Port}{definition.Path}";
         }
 
         public async Task<HttpResponseMessage> SendAsync(APIEndpoint endpoint, object? body = null, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)

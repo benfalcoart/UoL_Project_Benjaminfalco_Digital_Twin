@@ -1,10 +1,11 @@
 ﻿using beholder_configuration_app.Pages;
+using beholder_configuration_app.Services;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using beholder_configuration_app.Services.WebServices.ProjectTransfer;
-using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace beholder_configuration_app
 {
@@ -31,6 +32,7 @@ namespace beholder_configuration_app
             builder.Services.AddSingleton<AppLogService>();
             //Web Services:
             builder.Services.AddSingleton<HttpClient>();
+            builder.Services.AddSingleton<BeholderConnectionSettings>();
             builder.Services.AddSingleton<BeholderWebSocketService>();
             builder.Services.AddSingleton<BeholderAPIService>();
             builder.Services.AddSingleton<ProjectTransferService>();            

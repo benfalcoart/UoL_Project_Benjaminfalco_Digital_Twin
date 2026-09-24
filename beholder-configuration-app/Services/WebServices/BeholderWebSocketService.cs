@@ -1,4 +1,5 @@
-﻿using System;
+﻿using beholder_configuration_app.Services.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
@@ -18,9 +19,17 @@ namespace beholder_configuration_app.Services.WebServices
 
         public bool IsConnected => _socket?.State == WebSocketState.Open;
 
-        //private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
+        private readonly AppLogService _logService;
+        private readonly BeholderConnectionSettings _connectionSettings;
 
-        public async Task ConnectAsync(string address, int port)
+
+        //private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
+        public BeholderWebSocketService(AppLogService logService, BeholderConnectionSettings connectionSettings)
+        {
+            _logService = logService;
+            _connectionSettings = connectionSettings;
+        }
+        public async Task ConnectAsync()
         {
             if (IsConnected)
             {
@@ -30,7 +39,7 @@ namespace beholder_configuration_app.Services.WebServices
             _socket = new ClientWebSocket();
             _cancellationTokenSource = new CancellationTokenSource();
 
-            string uri = $"ws://{address}:{port}/ws";
+            string uri = _connectionSettings.WebSocketAddress;
 
             await _socket.ConnectAsync(new Uri(uri), _cancellationTokenSource.Token);
 
@@ -69,9 +78,11 @@ namespace beholder_configuration_app.Services.WebServices
             }
             catch (OperationCanceledException ocex)
             {
+                _logService.Error(ocex);
             }
             catch (WebSocketException wsex)
             {
+                _logService.Error(wsex);
             }
             finally
             {

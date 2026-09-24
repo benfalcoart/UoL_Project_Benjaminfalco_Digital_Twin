@@ -8,13 +8,14 @@ public partial class ConnectionPage : ContentPage
 {
     private readonly BeholderWebSocketService _webSocketService;
     private readonly AppLogService _logService;
-
-    public ConnectionPage(BeholderWebSocketService webSocketService, AppLogService logService)
+    private readonly BeholderConnectionSettings _connectionSettings;
+    public ConnectionPage(BeholderWebSocketService webSocketService, AppLogService logService, BeholderConnectionSettings connectionSettings)
 	{
 		InitializeComponent();
 
 		_webSocketService = webSocketService;
         _logService = logService;
+        _connectionSettings = connectionSettings;
 	}
 
     private async void OnConnectClicked(object sender, EventArgs e)
@@ -30,7 +31,8 @@ public partial class ConnectionPage : ContentPage
             string status = $"Connecting to {AddressEntry.Text}:{PortEntry.Text}";
             StatusLabel.Text = status;
             _logService.Info(status);
-            await _webSocketService.ConnectAsync(AddressEntry.Text, port);
+            _connectionSettings.SetAddressPort(AddressEntry.Text, port);
+            await _webSocketService.ConnectAsync();
             if (_webSocketService.IsConnected)
             {
                 status = $"Successfully connected to {AddressEntry.Text}:{PortEntry.Text}";
@@ -50,6 +52,7 @@ public partial class ConnectionPage : ContentPage
         catch (Exception exception)
         {
             StatusLabel.Text = $"{exception.GetType().Name}: {exception.Message}";
+            _connectionSettings.SetAddressPort("",-1);
             _logService.Error(exception);
 
         }
