@@ -1,0 +1,194 @@
+--------- beginning of main
+09-24 23:04:57.120   842 31212 I sensors-hal: handle_sns_client_event:660, [0][950] accel_sample [-0.319, -0.418,  9.757] 320990630285165
+09-24 23:04:57.721  1118  1906 D WifiConnectivityMonitor.NetworkStatsAnalyzer: Backhaul Disconnection due to RetransSeg
+09-24 23:04:57.725  1118  1906 D WifiConnectivityMonitor.NetworkStatsAnalyzer: Backhaul result - RSSI:-45, CE:12, PE:12, TI:-1, PTI:-1, TW:0, PTW:0, Tx:0, Rx:31, TxS:0, RxS:0, RESULT:true, IC:0, ICT:5, WC:0, WCT:5, R:0, RC:9, IE:0, EC:0
+09-24 23:04:57.864  1118  1904 D WifiConnectivityMonitor: Stop WCM Poll. cnt : 5
+--------- beginning of system
+09-24 23:04:58.190   674   674 D io_stats: !@   8,0 r 18660168 607149236 w 7576956 143728652 d 0 0 f 0 0 iot 7297610 0 th 0 0 0 pt 0 inp 0 0 117165.733
+09-24 23:04:58.199   842 31206 I sensors-hal: handle_sns_client_event:217, auto_rotation_event_2: mode:255, type:1:0/-0.290,-0.431,9.775, ar:0
+09-24 23:04:59.119   842 31212 I sensors-hal: handle_sns_client_event:660, [0][960] accel_sample [-0.311, -0.424,  9.754] 320992720922092
+09-24 23:04:59.999  1118  1747 D SamsungAlarmManager: Expired : 8
+09-24 23:05:00.000  1118  1747 V SamsungAlarmManager: Sending to uid : 10578 action=null alarm=Alarm{67df86b type 1 origWhen 1790305500000 whenElapsed 320994307 com.brunoschalch.timeuntil}
+09-24 23:05:00.002  1118  1747 D ActivityManager: Received BROADCAST intent 0x2c41137 Key{broadcastIntent pkg=com.brunoschalch.timeuntil intent=flg=0x10000000 cmp=com.brunoschalch.timeuntil/.WidgetUpdaterBroadcastReceiver flags=0x4000000 u=0} requestCode=5 sent=0 from uid 1000
+09-24 23:05:00.032  1118  1747 V SamsungAlarmManager: setLocked to kernel - W:321032004 / NW:320994308, now=320994340
+09-24 23:05:00.033  1118  1465 D PowerManagerService: [api] setDeviceIdleTempWhitelist: appids: [0]10578  (uid: 1000 pid: 1118)
+09-24 23:05:00.033  1118  1747 D SamsungAlarmManager: Expired : 8
+09-24 23:05:00.033  1118  1747 V SamsungAlarmManager: Sending to uid : 1000 L=1d4ce0a:TIME_TICK alarm=Alarm{ead5861 type 3 origWhen 320994308 whenElapsed 320994308 android}
+09-24 23:05:00.034  1118  1747 D SamsungAlarmManager: setExact (T:3/F:9/AC:false) 20260924T230600 now=320994342 - CU:1000/CP:1118/L:1d4ce0a:TIME_TICK
+09-24 23:05:00.035  1118  1747 V SamsungAlarmManager: setLocked to kernel - W:321032004 / NW:321012290, now=320994342
+09-24 23:05:00.036  1118  1747 V SamsungAlarmManager: setLocked to kernel - W:321032004 / NW:321012290, now=320994343
+09-24 23:05:00.039  1118  4396 D SamsungAlarmManager: Cancel Alarm calling from uid:10578 pid :4072 / OP:PendingIntent{cc25f86: PendingIntentRecord{f81b047 com.brunoschalch.timeuntil broadcastIntent}}
+09-24 23:05:00.039  2015  2628 D QSClockBellTower: onReceive(android.intent.action.TIME_TICK) mTimeZoneString:null
+09-24 23:05:00.052  1118  1118 I EyeComfortSolutionService: action  :  android.intent.action.TIME_TICK
+09-24 23:05:00.053  1118  4396 D SamsungAlarmManager: setExact (T:1/F:9/AC:false) 20260924T233600 now=320994360 - CU:10578/CP:4072/OP:PendingIntent{bd7e074: PendingIntentRecord{f81b047 com.brunoschalch.timeuntil broadcastIntent}}
+09-24 23:05:00.053  1118  4396 V SamsungAlarmManager: setLocked to kernel - W:321032004 / NW:321012290, now=320994361
+09-24 23:05:00.054  4072  4072 D widget_frequency_debug: about to update widgets! With images: false
+09-24 23:05:00.062  4072  4072 I AppWidgetManager: updateAppWidget() appWidgetIds = [41]
+09-24 23:05:00.065  1118  1118 D AppWidgetServiceImpl: handleNotifyUpdateAppWidget, appWidgetId = 41
+09-24 23:05:00.066  2015  2015 D KeyguardUpdateMonitor: received broadcast android.intent.action.TIME_TICK
+09-24 23:05:00.066  2556  2556 I AppWidgetHost: updateAppWidgetView, appWidgetId = 41, v = com.android.launcher3.widget.LauncherAppWidgetHostView{8205a1d VFE....LX R....... 0,0-1002,331 #dc}[a=1.0,v=0][c(0,0-4,1),id=220]
+09-24 23:05:00.068  2556  2556 W LauncherAppWidgetHostView: updateAppWidget, widgetId : 41, mReinflateOnConfigChange : false
+09-24 23:05:00.071  2556  2556 W NavigableAppWidgetHostView: setResizeScaleResult() 1002/ 331 scaleToResize = 1.0(widget id = 41) 8205a1d 0,0-1002,331
+09-24 23:05:00.087   936   936 E SurfaceFlinger: Attempt to update InputPolicyFlags without permission ACCESS_SURFACE_FLINGER
+09-24 23:05:00.126  2015  2015 D QSClockBellTower: He is ready to ring the bell. (((QSClockBellSound - TimeText:11:05, TimeContentDescription:11:05 PM, DateText:Thu, September 24, ShortDateText:Thu, Sep 24, Demofalse)))
+09-24 23:05:00.127  2015  2015 D QSClockHomeIndicatorView: Home Indicator status_bar_clock notifyTimeChanged(QSClockBellSound - TimeText:11:05, TimeContentDescription:11:05 PM, DateText:Thu, September 24, ShortDateText:Thu, Sep 24, Demofalse) ClockVisibleByPolicy:true, ClockVisibleByUser:true, visible?true, parent:android.widget.LinearLayout{8ac4b28 V.E...... ......ID 0,0-97,88 #7f0b0472 app:id/left_clock_container}
+09-24 23:05:00.127  2015  2015 D QSClockBellTower: Everyone heard the bell. run(currentTime:1790305500126,   getTime():Thu Sep 24 23:05:00 EDT 2026,   getTimeZone():libcore.util.ZoneInfo[mDstSavings=3600000,mUseDst=true,mDelegate=[id="America/Toronto",mRawOffset=-18000000,mEarliestRawOffset=-19052000,transitions=233]])
+09-24 23:05:00.145  2015  2015 D QS      : setQSExpansion 0.0 -162.4
+09-24 23:05:00.153  2015  2015 D QS      : setQSExpansion 0.0 -162.4
+09-24 23:05:00.153  2015  2015 V SecQSFragmentAnimatorBase: setQsExpansionPosition 0.0
+09-24 23:05:00.153  2015  2015 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+09-24 23:05:00.153  2015  2015 D QS      : setQSExpansion 0.0 -162.4
+09-24 23:05:00.157  2015  2015 D IndicatorGardenInputProperty: updateRotation() prv:-1 >> new:0
+09-24 23:05:00.157  2015  2015 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 420 deviceDensity = 420 initialDisplaySizeFactor = 1440 currentDisplaySizeFactor = 1080 initialDisplayDensity = 560 proportionalDensity = 420 proportionalPixel = 66
+09-24 23:05:00.157  2015  2015 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 420 deviceDensity = 420 initialDisplaySizeFactor = 1440 currentDisplaySizeFactor = 1080 initialDisplayDensity = 560 proportionalDensity = 420 proportionalPixel = 27
+09-24 23:05:00.157  2015  2015 D DeviceState: getDeviceResolutionPixelSize - currentDensity = 420 deviceDensity = 420 initialDisplaySizeFactor = 1440 currentDisplaySizeFactor = 1080 initialDisplayDensity = 560 proportionalDensity = 420 proportionalPixel = 24
+09-24 23:05:00.159  2015  2015 D KeyguardUpdateMonitor: handleTimeUpdate
+09-24 23:05:00.160  2015  2015 D FaceWidgetPagesController: onTimeChanged()
+09-24 23:05:00.160  2015  2015 V QsExpandAnimator: updateAnimators
+09-24 23:05:00.160  2015  2015 V QsExpandAnimator: clearAnimationState 
+09-24 23:05:00.161  2015  2015 V QsExpandAnimator: setQsExpansionPosition 0.0 0
+09-24 23:05:00.647  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:00.648  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-73 rsrp=-102 rsrq=-11 rssnr=5 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:00.648  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:00.650  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:00.650  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:00.655  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:01.120   842 31212 I sensors-hal: handle_sns_client_event:660, [0][970] accel_sample [-0.298, -0.432,  9.758] 320994811545269
+09-24 23:05:02.001  2275  2760 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@c01eff7
+09-24 23:05:02.001   763   793 W Netd    : No subsystem found in netlink event
+09-24 23:05:02.002  2275  2760 D ApfFilter: (wlan0): Ignoring RA RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0  which matches RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0 
+09-24 23:05:02.195   674   674 D io_stats: !@   8,0 r 18660171 607149328 w 7576959 143728664 d 0 0 f 0 0 iot 7297620 0 th 0 0 0 pt 0 inp 0 0 117169.738
+09-24 23:05:03.119   842 31212 I sensors-hal: handle_sns_client_event:660, [0][980] accel_sample [-0.303, -0.422,  9.756] 320996902272613
+09-24 23:05:03.207  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:03.208  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-71 rsrp=-102 rsrq=-10 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:03.208  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:03.209  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:03.209  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:03.215  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:03.939   737   737 E audit   : type=1400 audit(1790305503.931:26362): avc:  denied  { kill } for  pid=8 comm="ksoftirqd/0" capability=5  scontext=u:r:kernel:s0 tcontext=u:r:kernel:s0 tclass=capability permissive=0 SEPF_SM-G973U_12_0001 audit_filtered
+09-24 23:05:04.251  1118  1476 E Watchdog: !@Sync: 3901 heap: 165 / 165 [2026-09-24 23:05:04.250] sdogWay: softdog FD: 1191
+09-24 23:05:04.351  1118  1173 W System  : A resource failed to call close. 
+09-24 23:05:04.352  1118  1173 W System  : A resource failed to call close. 
+09-24 23:05:04.358  1118  1173 W System  : A resource failed to call close. 
+09-24 23:05:04.461   737   737 E audit   : type=1400 audit(1790305504.451:26363): avc:  denied  { write } for  pid=11043 comm="ThreadPoolForeg" name="traced_producer" dev="tmpfs" ino=33562 scontext=u:r:gmscore_app:s0:c512,c768 tcontext=u:object_r:traced_producer_socket:s0 tclass=sock_file permissive=0 SEPF_SM-G973U_12_0001 audit_filtered
+09-24 23:05:04.461   737   737 E audit   : type=1300 audit(1790305504.451:26363): arch=c00000b7 syscall=203 success=no exit=-13 a0=7b a1=b4000077d0aadf50 a2=1e a3=ffffffff954be4d3 items=0 ppid=764 pid=11043 auid=4294967295 uid=10096 gid=10096 euid=10096 suid=10096 fsuid=10096 egid=10096 sgid=10096 fsgid=10096 tty=(none) ses=4294967295 comm="ThreadPoolForeg" exe="/system/bin/app_process64" subj=u:r:gmscore_app:s0:c512,c768 key=(null)
+09-24 23:05:04.461   737   737 E audit   : type=1327 audit(1790305504.451:26363): proctitle="com.google.android.gms"
+09-24 23:05:04.914  2275  2760 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@c01eff7
+09-24 23:05:04.918  2275  2760 D ApfFilter: (wlan0): Ignoring RA RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0  which matches RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0 
+09-24 23:05:04.919   763   793 W Netd    : No subsystem found in netlink event
+09-24 23:05:05.120   842 31212 I sensors-hal: handle_sns_client_event:660, [0][990] accel_sample [-0.304, -0.417,  9.748] 320998992972040
+09-24 23:05:05.767  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:05.769  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-69 rsrp=-102 rsrq=-10 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:05.769  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:05.769  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:05.770  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:05.776  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:05.798   842 31221 I sensors-hal: handle_sns_std_sensor_event:319, [SSC_LIGHT] P lux:2 mode:1 copr:1 br:110
+09-24 23:05:06.157  1959  1959 I wpa_supplicant: Heartbeat 11229
+09-24 23:05:06.291 26365 26440 I Finsky  : [296] AIM: AppInfoManager-Perf > Destroying AppInfoManager ...
+09-24 23:05:06.619 26365 26442 I Finsky  : [298] AIM: AppInfoManager-Perf > Destroying AppInfoManager ...
+09-24 23:05:06.735 26365 26470 I PlayCommon: [304] Preparing logs for uploading
+09-24 23:05:06.744 26365 26470 I PlayCommon: [304] Connecting to server: https://play.googleapis.com/play/log?format=raw&proto_v2=true
+09-24 23:05:06.763  1118  1916 D NetdEventListenerService: DNS Requested by : 164, 10113, 0
+09-24 23:05:06.980 26365 26470 I PlayCommon: [304] Successfully uploaded logs.
+09-24 23:05:07.048  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:07.050  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-71 rsrp=-102 rsrq=-10 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:07.050  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:07.051  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:07.051  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:07.058  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:07.121   842 31212 I sensors-hal: handle_sns_client_event:660, [0][1000] accel_sample [-0.328, -0.452,  9.754] 321001083682457
+09-24 23:05:07.129  1118  1882 I SemWifiServiceDetector: Traff. tracking resumed
+09-24 23:05:07.335 11043  2723 I NearbyMediums: No BLE Fast/GATT advertisements found in the latest cycle.
+09-24 23:05:07.335 11043  2723 I NearbyMediums: Current Tracked Scanning Clients are : {NearbyConnections.EnvironmentMonitor, NearbyConnections.TxAdvertisement}
+09-24 23:05:07.663  1118  1882 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0034506856]
+09-24 23:05:07.664  1118  1882 D SemNscXgbMsL1: Probability - Real time: [0.006961577]
+09-24 23:05:07.665  1118  1882 D SemNscXgbMsL1: Probability - Non real time: [0.9868729]
+09-24 23:05:07.665  1118  1882 D SemNscXgbMsL1: 1 sample inference time: 3.00651 msecs
+09-24 23:05:07.669  1118  1882 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 4.392709 msecs
+09-24 23:05:07.672  1118  1882 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.387188 msecs
+09-24 23:05:07.734  1118  1906 D WifiConnectivityMonitor.NetworkStatsAnalyzer: Backhaul Disconnection due to RetransSeg
+09-24 23:05:07.734  1118  1906 D WifiConnectivityMonitor.NetworkStatsAnalyzer: Backhaul result - RSSI:-43, CE:12, PE:12, TI:-1, PTI:-1, TW:0, PTW:0, Tx:12, Rx:23, TxS:12, RxS:12, RESULT:true, IC:0, ICT:5, WC:0, WCT:5, R:0, RC:10, IE:0, EC:0
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [CONTACT contacts(127) data(1177) accounts({com.whatsapp (72)=60, com.google (3)=75, vnd.sec.contact.phone (1)=126, com.samsung.android.coreapps (54)=3, vnd.sec.contact.phone (2)=1, com.google.android.apps.tachyon (145)=39}) accounts deleted({}) in_trash(in_trash(0), in_trash_for_sync(0)) calls([logtype:100 cnt:1212, logtype:150 cnt:786, logtype:200 cnt:9, logtype:300 cnt:491, logtype:500 cnt:2]) countryIso(CA) userId(0)  ]
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [ agr({[1 ,3 ,145 ,72]=1, [1 ,3]=26, [1]=23, [1 ,72 ,145]=10, [2]=1, [1 ,3 ,72 ,54]=1, [1 ,3 ,54]=1, [1 ,72]=14, [1 ,3 ,72]=22, [1 ,3 ,54 ,145]=1, [1 ,145]=4, [1 ,3 ,72 ,145]=12, [1 ,3 ,145]=11})  ]
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [ actCnt({android.process.acore(20712)=1})  ]
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [PROFILE contacts(0) data(0) accounts({})  ] [SAPROFILE contacts(1) data(0) accounts({vnd.sec.contact.phone (1)=1})  ]
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [STORAGE Contacts(CE) Profile(CE) SAProfile(CE) CallLog(CE)  ]
+09-24 23:05:07.747 20712 20740 I ContactsProvider_EventLog: contents_sample_state: [STATE R(F) ]
+09-24 23:05:08.176  1118  1882 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0042586736]
+09-24 23:05:08.177  1118  1882 D SemNscXgbMsL1: Probability - Real time: [0.0061544557]
+09-24 23:05:08.178  1118  1882 D SemNscXgbMsL1: Probability - Non real time: [0.9911073]
+09-24 23:05:08.178  1118  1882 D SemNscXgbMsL1: 1 sample inference time: 2.945521 msecs
+09-24 23:05:08.182  1118  1882 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 3.191563 msecs
+09-24 23:05:08.184  1118  1882 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.349895 msecs
+09-24 23:05:08.202   674   674 D io_stats: !@   8,0 r 18660183 607149456 w 7576985 143728904 d 0 0 f 0 0 iot 7297640 0 th 0 0 0 pt 0 inp 0 0 117175.745
+09-24 23:05:08.357  2015  2015 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+09-24 23:05:08.689  1118  1882 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0032595186]
+09-24 23:05:08.690  1118  1882 D SemNscXgbMsL1: Probability - Real time: [0.009146784]
+09-24 23:05:08.691  1118  1882 D SemNscXgbMsL1: Probability - Non real time: [0.98973924]
+09-24 23:05:08.691  1118  1882 D SemNscXgbMsL1: 1 sample inference time: 2.806771 msecs
+09-24 23:05:08.695  1118  1882 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 3.504218 msecs
+09-24 23:05:08.698  1118  1882 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 3.443438 msecs
+09-24 23:05:08.966  2275  2760 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@c01eff7
+09-24 23:05:08.968   763   793 W Netd    : No subsystem found in netlink event
+09-24 23:05:08.968  2275  2760 D ApfFilter: (wlan0): Ignoring RA RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0  which matches RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0 
+09-24 23:05:09.122   842 31212 I sensors-hal: handle_sns_client_event:660, [0][1010] accel_sample [-0.301, -0.412,  9.770] 321003174307717
+09-24 23:05:09.202  1118  1882 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0027815388]
+09-24 23:05:09.203  1118  1882 D SemNscXgbMsL1: Probability - Real time: [0.0041235043]
+09-24 23:05:09.204  1118  1882 D SemNscXgbMsL1: Probability - Non real time: [0.9929351]
+09-24 23:05:09.205  1118  1882 D SemNscXgbMsL1: 1 sample inference time: 3.008802 msecs
+09-24 23:05:09.209  1118  1882 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 3.970833 msecs
+09-24 23:05:09.212  1118  1882 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.606875 msecs
+09-24 23:05:09.351   842 31206 I sensors-hal: handle_sns_client_event:217, auto_rotation_event_2: mode:255, type:1:0/-0.280,-0.376,9.749, ar:0
+09-24 23:05:09.717  1118  1882 D SemNscXgbMsL1: Probability - Cloud gaming: [0.0023715307]
+09-24 23:05:09.718  1118  1882 D SemNscXgbMsL1: Probability - Real time: [0.008414836]
+09-24 23:05:09.719  1118  1882 D SemNscXgbMsL1: Probability - Non real time: [0.99171305]
+09-24 23:05:09.719  1118  1882 D SemNscXgbMsL1: 1 sample inference time: 3.284687 msecs
+09-24 23:05:09.723  1118  1882 D SemNscXgbL2Rt: L2 RT 1 sample inference time: 4.010729 msecs
+09-24 23:05:09.726  1118  1882 D SemNscXgbL2Nrt: L2 NRT 1 sample inference time: 2.829792 msecs
+09-24 23:05:10.076  1118  1714 D PowerManagerService: [api] setDeviceIdleTempWhitelist: appids:  (uid: 1000 pid: 1118)
+09-24 23:05:10.137  1118  1882 I SemWifiServiceDetector: Traff. tracking suspended
+09-24 23:05:10.889  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:10.891  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-69 rsrp=-102 rsrq=-11 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:10.891  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:10.892  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:10.892  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:10.899  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:11.121   842 31212 I sensors-hal: handle_sns_client_event:660, [0][1020] accel_sample [-0.310, -0.438,  9.754] 321005264908915
+09-24 23:05:11.512  2015  2015 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+09-24 23:05:11.824  2275  2760 D IpClient/wlan0: interfaceLinkStateChanged: ifindex 9 up
+09-24 23:05:12.210   674   674 D io_stats: !@   8,0 r 18660183 607149456 w 7577003 143728976 d 0 0 f 0 0 iot 7297650 0 th 0 0 0 pt 0 inp 0 0 117179.753
+09-24 23:05:13.449  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:13.451  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-71 rsrp=-101 rsrq=-11 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:13.451  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:13.452  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:13.452  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:13.459  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:13.848  2005  2183 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x13, addressType=1, address=64FE3D_3, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-67, periodicAdvInt=0x0
+09-24 23:05:13.850  2005  2183 D BtGatt.GattService: onScanResult to scannerId: 17- eventType=0x13, addressType=1, address=64FE3D_3, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-67, periodicAdvInt=0x0
+09-24 23:05:13.863 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: TagKeyManager.findCloudId - key: ($)031db2d3
+09-24 23:05:13.863 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: TagKeyManager.findCloudId - key: ($)031db2d3
+09-24 23:05:13.865 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: SmartTag@BleParserForTag.parsePacket - [name]($)-S(9)[bleMac]($)64:FE[tagState]5[advertisementType]0[privacyId]d9e70a9c801e3725[uWBFlag]0[batteryLevel]3[motionDetection]0[lastReceivedTime]1790305513862[rssi]-67[activityTrackingMode]false
+09-24 23:05:13.878 22701 31266 I [-0400]oneconnect[1.8.47.24_01][CORE]: SmartTag@DeviceStatusTriggerTaskImpl.isAvailableGattConnection - deviceId: ($)031db2d3 | isAvailableGattConnection: false | priorityConnectionSize : 0 | availableConnectionSize : 2
+09-24 23:05:14.212   674   674 D io_stats: !@   8,0 r 18660183 607149456 w 7577007 143729060 d 0 0 f 0 0 iot 7297660 0 th 0 0 0 pt 0 inp 0 0 117181.755
+09-24 23:05:14.632  2015  2015 D NetworkController.WifiSignalController: notifyListener: visible=true, enabled=true, connected=true, inetCondition=1, isDefault=true, receivedCR=true, receivedIC=-1, shouldForceHide=false, emptyConnected=false
+09-24 23:05:14.904  2275  2760 W AlarmManager: Unrecognized alarm listener com.android.networkstack.android.net.ip.IpClientLinkObserver$Dhcp6PdPreferredPrefixAlarmListener@c01eff7
+09-24 23:05:14.906   763   793 W Netd    : No subsystem found in netlink event
+09-24 23:05:14.907  2275  2760 D ApfFilter: (wlan0): Ignoring RA RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0  which matches RA fe80::422b:50ff:fee8:f4b7 -> ff02::1 1800s 2001:1970:5ae0:5b00::/64 604800s/86400s DNS 300s 2001:1970:5ae0:5b00:422b:50ff:fee8:f4b7 RIO 604800s 2001:1970:5ae0:5b00::/56 RIO 1800s ::/0 
+09-24 23:05:15.119   842 31212 I sensors-hal: handle_sns_client_event:660, [0][1030] accel_sample [-0.305, -0.425,  9.758] 321007355468655
+09-24 23:05:15.825  2005  2183 D BtGatt.GattService: onScanResult to scannerId: 7- eventType=0x13, addressType=1, address=64FE3D_3, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-72, periodicAdvInt=0x0
+09-24 23:05:15.828  2005  2183 D BtGatt.GattService: onScanResult to scannerId: 17- eventType=0x13, addressType=1, address=64FE3D_3, primaryPhy=1, secondaryPhy=0, advertisingSid=0xff, txPower=127, rssi=-72, periodicAdvInt=0x0
+09-24 23:05:15.836 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: TagKeyManager.findCloudId - key: ($)031db2d3
+09-24 23:05:15.836 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: TagKeyManager.findCloudId - key: ($)031db2d3
+09-24 23:05:15.838 22701 23059 I [-0400]oneconnect[1.8.47.24_01][CORE]: SmartTag@BleParserForTag.parsePacket - [name]($)-S(9)[bleMac]($)64:FE[tagState]5[advertisementType]0[privacyId]d9e70a9c801e3725[uWBFlag]0[batteryLevel]3[motionDetection]0[lastReceivedTime]1790305515835[rssi]-72[activityTrackingMode]false
+09-24 23:05:15.850 22701 22414 I [-0400]oneconnect[1.8.47.24_01][CORE]: SmartTag@DeviceStatusTriggerTaskImpl.isAvailableGattConnection - deviceId: ($)031db2d3 | isAvailableGattConnection: false | priorityConnectionSize : 0 | availableConnectionSize : 2
+09-24 23:05:15.999   842 31221 I sensors-hal: handle_sns_std_sensor_event:319, [SSC_LIGHT] P lux:2 mode:1 copr:1 br:110
+09-24 23:05:15.999   842 31212 I sensors-hal: handle_sns_client_event:660, [0][1040] accel_sample [-0.304, -0.423,  9.751] 321009445952092
+09-24 23:05:15.999  1118  1722 I SensorService: [REARLIGHT] lux value : 2, code value : 110
+09-24 23:05:16.011  1118  1873 D SemCellularStateManager: onSignalStrengthsChanged: mCellularSignalLevel=3
+09-24 23:05:16.012  2015  2215 D MobileStatusTracker(0/4): onSignalStrengthsChanged signalStrength=SignalStrength:{mCdma=Invalid,mGsm=Invalid,mWcdma=Invalid,mTdscdma=Invalid,mLte=CellSignalStrengthLte: rssi=-67 rsrp=-101 rsrq=-10 rssnr=6 cqiTableIndex=2147483647 cqi=2147483647 ta=2147483647 level=3 parametersUseForLevel=0,mNr=Invalid,SignalBarInfo{ lteLevel=4 },rat=14,primary=CellSignalStrengthLte} level=4
+09-24 23:05:16.013  2015  2215 D CscParser: OMC path : /product/omc/XAA/conf/customer.xml
+09-24 23:05:16.013  2015  2215 I CscParser: getCustomerPath : omc customer file can read
+09-24 23:05:16.013  2015  2215 E CscParser: update(): xml file exist
+09-24 23:05:16.021  2015  2215 D NetworkController: SignalStrength from intent slotId=0
+09-24 23:05:16.167  1959  1959 I wpa_supplicant: Heartbeat 11230

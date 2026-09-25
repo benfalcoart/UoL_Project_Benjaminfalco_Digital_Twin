@@ -44,6 +44,12 @@ namespace beholder_configuration_app
            
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            bool keepScreenAwake = Preferences.Default.Get("KeepScreenAwake", true);
+            DeviceDisplay.Current.KeepScreenOn = keepScreenAwake;
+        }
 
         private void OnMessageReceived(string message)
         {

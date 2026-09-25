@@ -99,7 +99,7 @@ namespace beholder_configuration_app.Services.WebServices
                 request.Content = JsonContent.Create(body);
             }
 
-            return await _httpClient.SendAsync(request, completionOption);
+            return await _httpClient.SendAsync(request, completionOption).ConfigureAwait(false);
         }
     }
 }

@@ -5,6 +5,10 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+#if ANDROID
+using Android.Content;
+using Android.Provider;
+#endif
 
 namespace beholder_configuration_app.Services.WebServices.ProjectTransfer
 {
@@ -39,22 +43,30 @@ namespace beholder_configuration_app.Services.WebServices.ProjectTransfer
         public async Task OffloadProjectAsync(string projectName, string destination, IProgress<TransferProgress>? progress = null)
         {
             TransferManifest manifest = await GetManifestAsync(projectName);
+
             string projectDirectory = Path.Combine(destination, projectName);
+#if !ANDROID
             Directory.CreateDirectory(projectDirectory);
+#endif
 
             long bytesTransferred = 0;
             int filesTransferred = 0;
 
             foreach (TransferFile file in manifest.Files)
             {
-                HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.ProjectTransferFile, body: new
+                using HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.ProjectTransferFile, body: new
                 {
                     projectName,
                     path = file.Path
                 },
-                completionOption: HttpCompletionOption.ResponseHeadersRead);
-
+                completionOption: HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
+                await using Stream input = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+#if ANDROID
+
+                await using Stream output = CreateAndroidDownloadStream(projectName, file.Path);
+
+#else
 
                 string localPath = Path.Combine(projectDirectory, file.Path.Replace('/', Path.DirectorySeparatorChar));
                 string? directory = Path.GetDirectoryName(localPath);
@@ -63,9 +75,8 @@ namespace beholder_configuration_app.Services.WebServices.ProjectTransfer
                 {
                     Directory.CreateDirectory(directory);
                 }
-
-                await using Stream input = await response.Content.ReadAsStreamAsync();
                 await using FileStream output = File.Create(localPath);
+#endif
 
                 byte[] buffer = new byte[64 * 1024];
 
@@ -73,7 +84,7 @@ namespace beholder_configuration_app.Services.WebServices.ProjectTransfer
 
                 while ((bytesRead = await input.ReadAsync(buffer)) > 0)
                 {
-                    await output.WriteAsync(buffer.AsMemory(0, bytesRead));
+                    await output.WriteAsync(buffer.AsMemory(0, bytesRead)).ConfigureAwait(false);
                     bytesTransferred += bytesRead;
 
                     progress?.Report(new TransferProgress
@@ -91,5 +102,60 @@ namespace beholder_configuration_app.Services.WebServices.ProjectTransfer
 
             _logService.Info($"Project '{projectName}' offloaded successfully.");
         }
+
+#if ANDROID
+
+    private Stream CreateAndroidDownloadStream(string projectName, string relativeFilePath)
+    {
+        string normalizedPath = relativeFilePath.Replace('\\', '/');
+
+        string fileName = Path.GetFileName(normalizedPath);
+
+        string? relativeDirectory = Path.GetDirectoryName(normalizedPath)?.Replace('\\', '/');
+
+        string downloadDirectory = $"{Android.OS.Environment.DirectoryDownloads}/BEHOLDER/{projectName}/";
+
+        if (!string.IsNullOrWhiteSpace(relativeDirectory))
+        {
+            downloadDirectory += $"{relativeDirectory.Trim('/')}/";
+        }
+
+        ContentValues values = new();
+
+        values.Put(MediaStore.IMediaColumns.DisplayName, fileName);
+        values.Put(MediaStore.IMediaColumns.RelativePath, downloadDirectory);
+        values.Put(MediaStore.IMediaColumns.MimeType, GetMimeType(fileName));
+        
+        ContentResolver resolver = Android.App.Application.Context.ContentResolver;
+
+        Android.Net.Uri? uri = resolver.Insert(MediaStore.Downloads.ExternalContentUri, values);
+
+        if (uri == null)
+        {
+            throw new IOException($"Unable to create '{fileName}' in '{downloadDirectory}'.");
+        }
+        Stream? stream = resolver.OpenOutputStream(uri, "w");
+
+        if (stream == null)
+        {
+            throw new IOException($"Unable to open '{fileName}' for writing.");
+        }
+
+        return stream;
+    }
+
+    private string GetMimeType(string fileName)
+    {
+        string extension = Path.GetExtension(fileName).ToLowerInvariant();
+        return extension switch
+        {
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".json" => "application/json",
+            ".txt" => "text/plain",
+            _ => "application/octet-stream"
+        };
+    }
+#endif
     }
 }

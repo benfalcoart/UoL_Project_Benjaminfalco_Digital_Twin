@@ -1,0 +1,285 @@
+09-25 01:08:47.518  1118  1972 I Pageboost: start alp : com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.518  1118  1977 I Pageboost: alp skip : com.benfalcoUoL.BEHOLDER , 2
+09-25 01:08:47.521  2015  2015 D StartingSurfaceDrawer: preloadSplashScreenAppIcon com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.536  1118  1489 I ActivityManager: Start proc 28840:com.benfalcoUoL.BEHOLDER/u0a632 for activelaunch {com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity}
+09-25 01:08:47.536  1118  1489 D ActivityManager: [SecIpm] it's a ML_TYPE_EMPTYPROCESS protected process com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.565 28840 28840 E USNET   : USNET: appName: com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.576  1118  1189 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity bnds=[543,833][789,1164]} from uid 10160
+09-25 01:08:47.576  1118  1189 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity display-from-option=0 display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527
+09-25 01:08:47.576  1118  1189 D [secipm]: mSecIpmManager Preload com.benfalcoUoL.BEHOLDER dex files
+09-25 01:08:47.577  1118  1189 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t-1} display-from-option=0 display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527 inherit-from-source=fullscreen activity-options-fullscreen=Rect(0, 0 - 0, 0) non-freeform-display display-area=DefaultTaskDisplayArea@237633527 maximized-bounds
+09-25 01:08:47.577  1118  3375 D PkgPredictorService-IpmAdcpController: create a new DexPreloadTask pkg:com.benfalcoUoL.BEHOLDER  path:/data/app/~~mxumF-g-GKlbL0ve_waV1Q==/com.benfalcoUoL.BEHOLDER-2ifcpsOT7y5B0LTD2Siz2w==
+09-25 01:08:47.578  1118  3375 D PkgPredictorService-IpmAdcpController: /data/app/~~mxumF-g-GKlbL0ve_waV1Q==/com.benfalcoUoL.BEHOLDER-2ifcpsOT7y5B0LTD2Siz2w==/oat/arm64/base.art is already preloaded
+09-25 01:08:47.580  1118  1189 D ActivityTaskManager: TaskLaunchParamsModifier:task=Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=false mode=fullscreen translucent=true sz=0} activity=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t-1} display-from-option=0 display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527 inherit-from-source=fullscreen activity-options-fullscreen=Rect(0, 0 - 0, 0) non-freeform-display display-area=DefaultTaskDisplayArea@237633527 maximized-bounds
+09-25 01:08:47.584   936  1604 I SurfaceFlinger: id=19160 createSurf (0x0),-1 flag=80004, ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}#0
+09-25 01:08:47.590  2015  2173 D StartingSurfaceDrawer: addSplashScreen com.benfalcoUoL.BEHOLDER theme=7f10013f task=10458 suggestType=1
+09-25 01:08:47.596  2556  2698 I AppIconSolution: getThemeIconWithBG called with public API, pkg = com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.596  2556  2698 I AppIconSolution: return adaptive icon for com.benfalcoUoL.BEHOLDER, isNight = true
+09-25 01:08:47.596  2556  2698 I LauncherActivityInfo: packageName: com.benfalcoUoL.BEHOLDER, useThemeIcon: false, height: 288, width: 288, density: 640
+09-25 01:08:47.599  1118  4419 I ActivityManager: DSS OFF for com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.600  1118  2595 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:47.607   936  1604 I SurfaceFlinger: id=19161 createSurf (0x0),-1 flag=80004, f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER#0
+09-25 01:08:47.610  1118  4298 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.610  1118  4298 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.611  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: setView = android.widget.FrameLayout@adeb687 TM=true
+09-25 01:08:47.613  1118  2595 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.614  1118  4298 V WindowManager: Relayout Window{f3b4a8f u0 Splash Screen com.benfalcoUoL.BEHOLDER}: viewVisibility=0 req=1080x2280 d0
+09-25 01:08:47.614   936  1604 I SurfaceFlinger: id=19162 createSurf (1080x2280),-3 flag=40004, Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0
+09-25 01:08:47.615  1118  4298 D WindowManager: makeSurface duration=1 name=Splash Screen com.benfalcoUoL.BEHOLDER$_2015
+09-25 01:08:47.618  1118  4298 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.620  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=8 res=0x7 s={true -5476376626371534272} ch=true fn=-1
+09-25 01:08:47.622  1118  4419 I DexController: getTaskHasActivityIsWaitingToRun: r=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}, app=ProcessRecord{65dff97 28840:com.benfalcoUoL.BEHOLDER/u0a632}
+09-25 01:08:47.627  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11420 android.view.ViewRootImpl.performTraversals:4193 android.view.ViewRootImpl.doTraversal:2919 
+09-25 01:08:47.627  1118  4419 D ActivityManager: attachApplicationLocked() app=ProcessRecord{65dff97 28840:com.benfalcoUoL.BEHOLDER/u0a632} app.isolatedEntryPoint=null instr2=null
+09-25 01:08:47.630  2015  2245 I BufferQueueProducer: [ViewRootImpl@b9ca508[BEHOLDER]#783(BLAST Consumer)783](id:7df0000030f,api:1,p:2015,c:2015) queueBuffer: queued for the first time.
+09-25 01:08:47.630  1118  4419 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.630  1118  4419 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.631  1118  4419 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:47.632  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_CREATE, pkgName: com.benfalcoUoL.BEHOLDER, userId: 0
+09-25 01:08:47.632  1118  4419 D SGM:PkgDataHelper: notifyAppCreate(), pkgName: com.benfalcoUoL.BEHOLDER, userId: 0, sendRet: true
+09-25 01:08:47.633  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:4995 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+09-25 01:08:47.633  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: [DP] rdf()
+09-25 01:08:47.633  2015  2173 D ViewRootImpl@b9ca508[BEHOLDER]: reportDrawFinished (fn: -1) 
+09-25 01:08:47.634  1118  4419 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:47.636  1118  4419 D SGM:GameManager:   sendRunningComponentFocus(), pkgName: com.benfalcoUoL.BEHOLDER, userId: 0
+09-25 01:08:47.637  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_TASK_FOCUSED, pkgName: com.benfalcoUoL.BEHOLDER, userId: 0
+09-25 01:08:47.637  1118  1801 D SGM:GameManager:   handleTaskFocused(), pkgName: com.benfalcoUoL.BEHOLDER, userID:0
+09-25 01:08:47.637  1118  1801 D SGM:GameManager:   handleResume(). pkgName: com.benfalcoUoL.BEHOLDER, userId: 0, isTunableApp: null
+09-25 01:08:47.637  1118  1801 D SGM:GameManager: notifyFocusInOut(). of pkg: com.benfalcoUoL.BEHOLDER, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+09-25 01:08:47.644  1118  4298 D WindowManager: finishDrawingWindow: Window{f3b4a8f u0 Splash Screen com.benfalcoUoL.BEHOLDER} mDrawState=DRAW_PENDING
+09-25 01:08:47.645 28840 28840 D ActivityThread: handleBindApplication()++ app=com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.646  1118  1470 V ActivityManager: Changed top to ProcessRecord{65dff97 28840:com.benfalcoUoL.BEHOLDER/u0a632}
+09-25 01:08:47.655  1118  1471 D WindowManager: createAnimationAdapter(): container=Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=true mode=fullscreen translucent=false sz=1}
+09-25 01:08:47.656  1118  1118 I Pageboost: package com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.658  1118  1471 D WindowManager: 	Add container=Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=true mode=fullscreen translucent=false sz=1}
+09-25 01:08:47.668  1118  1471 I WindowManager: container=Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=true mode=fullscreen translucent=false sz=1}
+09-25 01:08:47.668  1118  1471 I WindowManager:   taskInfo=TaskInfo{userId=0 taskId=10458 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity } baseActivity=ComponentInfo{com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} topActivity=ComponentInfo{com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} origActivity=null realActivity=ComponentInfo{com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} numActivities=1 lastActiveTime=328421944 supportsSplitScreenMultiWindow=true supportsMultiWindow=true resizeMode=1 isResizeable=true token=WCT{RemoteToken{4127bb9 Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=true mode=fullscreen translucent=false sz=1}}} topActivityType=1 pictureInPictureParams=PictureInPictureParams( aspectRatio=null sourceRectHint=null hasSetActions=false isAutoPipEnabled=false isSeamlessResizeEnabled=true) displayCutoutSafeInsets=Rect(0, 112 - 0, 0) topActivityInfo=ActivityInfo{7a73bfe crc64f22d34b9a473a111.MainActivity} launchCookies=[android.os.BinderProxy@af01f5f] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=true topActivityInSizeCompat=false locusId= null topLaunchHome=false launchSplitWindowingMode=0 isPairTask=false pairedTaskIds=[] pairWindowingMode=0 pairDockSide=0 isAnimatingByRecent=false originallySupportedSplitScreen=true isAnimatingFreeformToFullscreen=false topActivityInFixedAspectRatio=false isTopTransparentActivity=true}
+09-25 01:08:47.679 28840 28840 V GraphicsEnvironment: ANGLE Developer option for 'com.benfalcoUoL.BEHOLDER' set to: 'default'
+09-25 01:08:47.680 28840 28840 D LoadedApk: LoadedApk::makeApplication() appContext.mOpPackageName=com.benfalcoUoL.BEHOLDER appContext.mBasePackageName=com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.683  1118  1189 D SGM:GameManager: identifyForegroundApp. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0
+09-25 01:08:47.683  1118  1189 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.686  1118  4419 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.samsung.android.game.IGameManagerService$Stub.onTransact(IGameManagerService.java:242)
+09-25 01:08:47.686  1118  4419 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.688 28840 28840 D DOTNET  : AndroidCryptoNative_InitLibraryOnLoad: jint AndroidCryptoNative_InitLibraryOnLoad(JavaVM *, void *) in /__w/1/s/src/native/libs/System.Security.Cryptography.Native.Android/pal_jni.c
+09-25 01:08:47.688 28840 28840 D DOTNET  : GetOptionalClassGRef: optional class com/android/org/conscrypt/OpenSSLEngineImpl was not found
+09-25 01:08:47.705  9649  9649 I Utils   : HomePackage : com.sec.android.app.launcher, resumePackageName : com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.706  1118  1470 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.samsung.android.game.SemGameManager.isGamePackage(SemGameManager.java:104)
+09-25 01:08:47.706  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.706  1118  1470 D SGM:SemGameManager: isGamePackage(), pkgName=com.benfalcoUoL.BEHOLDER, ret=false
+09-25 01:08:47.708  1118  1470 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.fgapps.GameAppUtils.isGame(GameAppUtils.java:84)
+09-25 01:08:47.708  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.708  1118  1470 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.SortingMachine.isGame(SortingMachine.java:162)
+09-25 01:08:47.708  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.709  1118  1470 I GameSDK@LifeCycle: noteResumeComponent(): package name  : com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.709  1118  1470 D SGM:GameManager: noteResumeComponent(), received pkgName: com.benfalcoUoL.BEHOLDER, userId: 0
+09-25 01:08:47.709  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_RESUME, pkgName: com.benfalcoUoL.BEHOLDER, userid: 0
+09-25 01:08:47.709  1118  1801 D SGM:GameManager:   handleResume(). pkgName: com.benfalcoUoL.BEHOLDER, userId: 0, isTunableApp: null
+09-25 01:08:47.709  1118  1801 D SGM:GameManager: notifyFocusInOut(). of pkg: com.benfalcoUoL.BEHOLDER, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+09-25 01:08:47.729   936   936 D SurfaceFlinger:      CLIENT | 0xb4000072d6564df0 | 0100 | RGBA_8888    |    0.0  344.0 1080.0 1784.0 |  578  823  752 1056 | Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0
+09-25 01:08:47.810  1118  2069 D MdnieScenarioControlService:  packageName : com.benfalcoUoL.BEHOLDER    className : crc64f22d34b9a473a111.MainActivity
+09-25 01:08:47.876  1118  1886 W SemWifiTransportLayerUtils: getApplicationCategory - IOException com.benfalcoUoL.BEHOLDER
+09-25 01:08:47.876  1118  1886 W System.err: java.io.FileNotFoundException: https://play.google.com/store/apps/details?id=com.benfalcoUoL.BEHOLDER&hl=en
+09-25 01:08:48.057  1118  2595 D WindowManager: 	container=Task{ce9f5f0 #10458 type=standard A=10632:com.benfalcoUoL.BEHOLDER U=0 visible=true mode=fullscreen translucent=false sz=1}
+09-25 01:08:48.078   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6564df0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0
+09-25 01:08:48.240   936  1000 I SurfaceFlinger: id=19168 createSurf (0x0),-1 flag=80004, 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity#0
+09-25 01:08:48.252  1118  4400 V WindowManager: Relayout Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity}: viewVisibility=0 req=1080x2280 d0
+09-25 01:08:48.253   936  1000 I SurfaceFlinger: id=19169 createSurf (1x1),-3 flag=40004, com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#0
+09-25 01:08:48.254  1118  4400 D WindowManager: makeSurface duration=1 name=com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840
+09-25 01:08:48.256  1118  4400 V WindowManager: Changing focus from null to Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6480 com.android.server.wm.WindowManagerService.relayoutWindow:2750 com.android.server.wm.Session.relayout:242 
+09-25 01:08:48.256  1118  4400 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:48.276  1118  4400 D InputDispatcher: Focus request (0): 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity but waiting because NOT_VISIBLE
+09-25 01:08:48.455  1118  4400 D WindowManager: finishDrawingWindow: Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} mDrawState=DRAW_PENDING
+09-25 01:08:48.456  1118  1471 I WindowManager: Reparenting to leash, surface=Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137, leashParent=Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4
+09-25 01:08:48.457   936  1000 I SurfaceFlinger: id=19172 createSurf (0x0),-1 flag=24000, Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137 - animation-leash of starting_reveal#0
+09-25 01:08:48.459  1118  1471 D WindowManager: makeSurface duration=3 leash=Surface(name=Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137 - animation-leash of starting_reveal)/@0x56bc0d
+09-25 01:08:48.464  1118  1464 I PkgPredictorService-SecIpmManagerServiceImpl: reportToNAP uid:10632 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity thisTime:885
+09-25 01:08:48.465  1118  1464 I ActivityTaskManager: Displayed com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity: +885ms
+09-25 01:08:48.465  1118  1464 I Pageboost: Launch time gathered : pid 28840 com.benfalcoUoL.BEHOLDER 885
+09-25 01:08:48.475  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: t = android.view.SurfaceControl$Transaction@4e63423 fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+09-25 01:08:48.475  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: merge t to BBQ
+09-25 01:08:48.475  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: t = android.view.SurfaceControl$Transaction@ff90d20 fN = 2 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+09-25 01:08:48.475  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: merge t to BBQ
+09-25 01:08:48.476  1118  2627 D InputDispatcher: Focus entered window (0): 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:48.481   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d654e200 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#0
+09-25 01:08:48.481   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6564df0 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0
+09-25 01:08:48.491  2015  2998 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: t = android.view.SurfaceControl$Transaction@5ca86d9 fN = 3 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+09-25 01:08:48.491  2015  2998 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: merge t to BBQ
+09-25 01:08:48.508  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: t = android.view.SurfaceControl$Transaction@127b89e fN = 4 android.view.SyncRtSurfaceTransactionApplier.applyTransaction:94 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0$SyncRtSurfaceTransactionApplier:71 android.view.SyncRtSurfaceTransactionApplier$$ExternalSyntheticLambda0.onFrameDraw:4 
+09-25 01:08:48.508  2015  2999 I ViewRootImpl@b9ca508[BEHOLDER]: mWNT: merge t to BBQ
+09-25 01:08:48.525  1118  2627 V WindowManager: Relayout Window{f3b4a8f u0 Splash Screen com.benfalcoUoL.BEHOLDER}: viewVisibility=8 req=1080x2280 d0
+09-25 01:08:48.526  1118  2627 I WindowManager: Reparenting to leash, surface=Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f, leashParent=Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4
+09-25 01:08:48.527   936  3328 I SurfaceFlinger: id=19174 createSurf (0x0),-1 flag=24000, Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f - animation-leash of window_animation#0
+09-25 01:08:48.528  1118  2627 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f - animation-leash of window_animation)/@0xd9b929c
+09-25 01:08:48.530  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)8 dur=5 res=0x5 s={false 0} ch=true fn=5
+09-25 01:08:48.530  2015  2173 I ViewRootImpl@b9ca508[BEHOLDER]: dispatchDetachedFromWindow
+09-25 01:08:48.531  1118  2595 I WindowManager: Cancelling animation restarting=false, leash=Surface(name=Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137 - animation-leash of starting_reveal)/@0x56bc0d
+09-25 01:08:48.531  1118  2595 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4, destroy=false, surface=Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137
+09-25 01:08:48.531  1118  2595 W InputManager-JNI: Input channel object 'f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER (client)' was disposed without first being removed with the input manager!
+09-25 01:08:48.541   936   936 I Layer   : id=19172 removedFromDrawingState Surface(name=1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x2a69137 - animation-leash of starting_reveal#0 (162)
+09-25 01:08:48.591  1118  1471 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4, destroy=true, surface=Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f
+09-25 01:08:48.592  1118  1471 E WindowManager: win=Window{f3b4a8f u0 Splash Screen com.benfalcoUoL.BEHOLDER EXITING} destroySurfaces: appStopped=false win.mWindowRemovalAllowed=true win.mRemoveOnExit=true win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 com.android.server.wm.WindowState.onAnimationFinished:6228 com.android.server.wm.WindowContainer$$ExternalSyntheticLambda0.onAnimationFinished:2 com.android.server.wm.SurfaceAnimator.lambda$getFinishedCallback$0$SurfaceAnimator:113 
+09-25 01:08:48.592  1118  1471 I WindowManager: Destroying surface Surface(name=Splash Screen com.benfalcoUoL.BEHOLDER$_2015)/@0xf53ba46 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4229 com.android.server.wm.WindowState.destroySurface:4203 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 
+09-25 01:08:48.608   936   936 I Layer   : id=19162 removedFromDrawingState Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0 (162)
+09-25 01:08:48.608   936   936 I Layer   : id=19161 removedFromDrawingState f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER#0 (162)
+09-25 01:08:48.609   936   936 I Layer   : id=19174 removedFromDrawingState Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f - animation-leash of window_animation#0 (162)
+09-25 01:08:48.609   936   936 I SurfaceFlinger: id=19161 Removed f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER#0 (162)
+09-25 01:08:48.609   936   936 I SurfaceFlinger: id=19162 Removed Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0 (162)
+09-25 01:08:48.609   936   936 I SurfaceFlinger: id=19174 Removed Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f - animation-leash of window_animation#0 (162)
+09-25 01:08:48.610   936   936 I Layer   : id=19174 Destroyed Surface(name=f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER)/@0x529b20f - animation-leash of window_animation#0
+09-25 01:08:48.610   936   936 I Layer   : id=19161 Destroyed f3b4a8f Splash Screen com.benfalcoUoL.BEHOLDER#0
+09-25 01:08:48.614   936   936 I Layer   : id=19162 Destroyed Splash Screen com.benfalcoUoL.BEHOLDER$_2015#0
+09-25 01:08:48.620   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d655c390 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#0
+09-25 01:08:48.623  1118  2069 D MdnieScenarioControlService:  packageName : com.benfalcoUoL.BEHOLDER    className : crc64f22d34b9a473a111.MainActivity
+09-25 01:08:48.989  1118  1470 D SGM:GameManager: identifyForegroundApp. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0
+09-25 01:08:48.989  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:50.403  1118  1465 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:50.855  1118  1465 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458}
+09-25 01:08:51.194  1145  7172 V MediaPlayerService: Create new client(185) from AttributionSourceState{pid: 28840, uid: 10632, packageName: com.benfalcoUoL.BEHOLDER, attributionTag: (null), token: {no toString() implemented}, renouncedPermissions: (null), next: []}, 
+09-25 01:08:51.226  1145 28896 V NuPlayer: checkOffloadExceptions is true, call canOffloadStream
+09-25 01:08:51.227  1145 28896 V NuPlayer: checkOffloadExceptions is true, call canOffloadStream
+09-25 01:08:51.238   931  1207 I AudioPolicyEffectException: MySpaceHandler::checkDetachCondition media 1, ring 0, mp 1
+09-25 01:08:51.238   931  1207 I AudioPolicyEffectException: MySpace detach short duration
+09-25 01:08:51.238   931  1207 I AudioPolicyEffectException: MySpace detach value 1
+09-25 01:08:51.873  1145  7172 V MediaPlayerService: Create new client(186) from AttributionSourceState{pid: 28840, uid: 10632, packageName: com.benfalcoUoL.BEHOLDER, attributionTag: (null), token: {no toString() implemented}, renouncedPermissions: (null), next: []}, 
+09-25 01:08:51.912  1145 28909 V NuPlayer: checkOffloadExceptions is true, call canOffloadStream
+09-25 01:08:51.914  1145 28909 V NuPlayer: checkOffloadExceptions is true, call canOffloadStream
+09-25 01:08:51.934   931 25821 I AudioPolicyEffectException: MySpaceHandler::checkDetachCondition media 1, ring 0, mp 1
+09-25 01:08:51.934   931 25821 I AudioPolicyEffectException: MySpace detach short duration
+09-25 01:08:51.934   931 25821 I AudioPolicyEffectException: MySpace detach value 1
+09-25 01:08:52.907   936  3328 I SurfaceFlinger: id=19175 createSurf (0x0),-1 flag=80004, a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity#0
+09-25 01:08:52.910  1118  4297 V WindowManager: Changing focus from Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} to Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6480 com.android.server.wm.WindowManagerService.addWindow:2030 com.android.server.wm.Session.addToDisplayAsUser:211 
+09-25 01:08:52.910  1118  4297 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:52.920  1118  4419 V WindowManager: Relayout Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity}: viewVisibility=0 req=1080x2280 d0
+09-25 01:08:52.921   936  2487 I SurfaceFlinger: id=19178 createSurf (169x169),-3 flag=40004, com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#1
+09-25 01:08:52.923  1118  4419 D WindowManager: makeSurface duration=2 name=com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840
+09-25 01:08:52.945  1118  1182 D WindowManager: finishDrawingWindow: Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} mDrawState=DRAW_PENDING
+09-25 01:08:52.948  1118  1471 I WindowManager: Reparenting to leash, surface=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb, leashParent=Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4
+09-25 01:08:52.949   936  2487 I SurfaceFlinger: id=19179 createSurf (0x0),-1 flag=24004, Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0
+09-25 01:08:52.950  1118  1471 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation)/@0xc5e9218
+09-25 01:08:52.959  1118  1182 D InputDispatcher: Focus request (0): a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity but waiting because NOT_VISIBLE
+09-25 01:08:52.959  1118  1182 D InputDispatcher: Focus left window (0): 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:52.974  1118  4419 D InputDispatcher: Focus entered window (0): a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:52.996   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d654e200 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#0
+09-25 01:08:52.996   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d653c8c0 | 0100 | RGBA_8888    |   84.0    0.0 1164.0 2047.0 |    0  233 1080 2280 | com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#1
+09-25 01:08:53.208  1118  1471 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4, destroy=true, surface=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb
+09-25 01:08:53.223   936   936 I Layer   : id=19179 removedFromDrawingState Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0 (164)
+09-25 01:08:53.223   936   936 I SurfaceFlinger: id=19179 Removed Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0 (164)
+09-25 01:08:53.224   936   936 I Layer   : id=19179 Destroyed Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0
+09-25 01:08:53.481  1118  1470 D SGM:GameManager: identifyForegroundApp. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0
+09-25 01:08:53.481  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:53.739  1118  7827 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.SortingMachine.isGame(SortingMachine.java:162)
+09-25 01:08:53.739  1118  7827 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:53.820  1118  1182 W InputManager-JNI: Input channel object 'a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity (client)' was disposed without first being removed with the input manager!
+09-25 01:08:53.820  1118  1182 I WindowManager: Reparenting to leash, surface=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb, leashParent=Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4
+09-25 01:08:53.821   936  1002 I SurfaceFlinger: id=19183 createSurf (0x0),-1 flag=24000, Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0
+09-25 01:08:53.822  1118  1182 D WindowManager: makeSurface duration=1 leash=Surface(name=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation)/@0xf80afeb
+09-25 01:08:53.822  1118  1182 V WindowManager: removeIfPossible 2, Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity}: mAnimatingExit=true caller=com.android.server.wm.WindowState.removeIfPossible:2984 com.android.server.wm.WindowManagerService.removeWindow:2246 com.android.server.wm.Session.remove:225 android.view.IWindowSession$Stub.onTransact:746 com.android.server.wm.Session.onTransact:176 
+09-25 01:08:53.823  1118  1182 V WindowManager: Changing focus from Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity EXITING} to Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6480 com.android.server.wm.WindowState.setupWindowForRemoveOnExit:3175 com.android.server.wm.WindowState.removeIfPossible:3143 
+09-25 01:08:53.823  1118  1182 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:53.828  1118  4419 D InputDispatcher: Focus left window (0): a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:53.876  1118  1182 D InputDispatcher: Focus entered window (0): 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:54.026  1118  1471 I WindowManager: Reparenting to original parent: Surface(name=ActivityRecord{be7c1a2 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity t10458})/@0x8b4c6a4, destroy=true, surface=Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb
+09-25 01:08:54.027  1118  1471 E WindowManager: win=Window{a1f5739 u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity EXITING} destroySurfaces: appStopped=false win.mWindowRemovalAllowed=true win.mRemoveOnExit=true win.mViewVisibility=0 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 com.android.server.wm.WindowState.onAnimationFinished:6228 com.android.server.wm.WindowContainer$$ExternalSyntheticLambda0.onAnimationFinished:2 com.android.server.wm.SurfaceAnimator.lambda$getFinishedCallback$0$SurfaceAnimator:113 
+09-25 01:08:54.027  1118  1471 I WindowManager: Destroying surface Surface(name=com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840)/@0x774cad5 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4229 com.android.server.wm.WindowState.destroySurface:4203 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.WindowStateAnimator.onAnimationFinished:242 
+09-25 01:08:54.042   936   936 I Layer   : id=19178 removedFromDrawingState com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#1 (164)
+09-25 01:08:54.042   936   936 I Layer   : id=19175 removedFromDrawingState a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity#0 (164)
+09-25 01:08:54.042   936   936 I Layer   : id=19183 removedFromDrawingState Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0 (164)
+09-25 01:08:54.042   936   936 I SurfaceFlinger: id=19175 Removed a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity#0 (164)
+09-25 01:08:54.042   936   936 I SurfaceFlinger: id=19178 Removed com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#1 (164)
+09-25 01:08:54.043   936   936 I SurfaceFlinger: id=19183 Removed Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0 (164)
+09-25 01:08:54.043   936   936 I Layer   : id=19183 Destroyed Surface(name=a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity)/@0x13b51fb - animation-leash of window_animation#0
+09-25 01:08:54.043   936   936 I Layer   : id=19175 Destroyed a1f5739 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity#0
+09-25 01:08:54.045   936   936 I Layer   : id=19178 Destroyed com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#1
+09-25 01:08:54.048   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d655c390 | 0102 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity$_28840#0
+09-25 01:08:54.247 28840 28918 D ProfileInstaller: Installing profile for com.benfalcoUoL.BEHOLDER
+09-25 01:08:54.522  1118  1470 D SGM:GameManager: identifyForegroundApp. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0
+09-25 01:08:54.522  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:55.674  1118  1182 D SGM:GameManager: identifyForegroundApp. com.benfalcoUoL.BEHOLDER, mCurrentUserId: 0, callerUserId: 0
+09-25 01:08:55.674  1118  1182 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.BEHOLDER
+09-25 01:08:57.522 28840 28840 D AndroidRuntime: Shutting down VM
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: FATAL EXCEPTION: main
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: Process: com.benfalcoUoL.BEHOLDER, PID: 28840
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: android.runtime.JavaProxyThrowable: [System.IO.IOException]: Read-only file system : '/Download'
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.IO.FileSystem.CreateParentsAndDirectory + 0xb2(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.IO.FileSystem.CreateDirectory + 0x4e(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.IO.FileSystem.CreateDirectory + 0x0(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.IO.Directory.CreateDirectory + 0x12(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at beholder_configuration_app.SettingsPage+<OnOffloadCurrentProjectClicked>d__22.MoveNext + 0x6e(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw + 0x11(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at System.Threading.Tasks.Task+<>c.<ThrowAsync>b__128_0 + 0x0(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at Android.App.SyncContext+<>c__DisplayClass2_0.<Post>b__0 + 0x0(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at Java.Lang.Thread+RunnableImplementor.Run + 0x8(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at Java.Lang.IRunnableInvoker.n_Run + 0x8(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at mono.java.lang.RunnableImplementor.n_run(Native Method)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at mono.java.lang.RunnableImplementor.run(RunnableImplementor.java:29)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:313)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-25 01:08:57.522 28840 28840 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-25 01:08:57.525 28840 28840 W monodroid-assembly: Shared library 'liblog' not loaded, p/invoke '__android_log_print' may fail
+09-25 01:08:57.527 28840 28840 I MonoDroid: UNHANDLED EXCEPTION:
+09-25 01:08:57.532 28840 28840 I MonoDroid: Android.Runtime.JavaProxyThrowable: Exception_WasThrown, Android.Runtime.JavaProxyThrowable
+09-25 01:08:57.532 28840 28840 I MonoDroid: 
+09-25 01:08:57.532 28840 28840 I MonoDroid:   --- End of managed Android.Runtime.JavaProxyThrowable stack trace ---
+09-25 01:08:57.532 28840 28840 I MonoDroid: android.runtime.JavaProxyThrowable: [System.IO.IOException]: Read-only file system : '/Download'
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateParentsAndDirectory + 0xb2(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateDirectory + 0x4e(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateDirectory + 0x0(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.IO.Directory.CreateDirectory + 0x12(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at beholder_configuration_app.SettingsPage+<OnOffloadCurrentProjectClicked>d__22.MoveNext + 0x6e(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw + 0x11(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at System.Threading.Tasks.Task+<>c.<ThrowAsync>b__128_0 + 0x0(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at Android.App.SyncContext+<>c__DisplayClass2_0.<Post>b__0 + 0x0(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at Java.Lang.Thread+RunnableImplementor.Run + 0x8(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at Java.Lang.IRunnableInvoker.n_Run + 0x8(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at mono.java.lang.RunnableImplementor.n_run(Native Method)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at mono.java.lang.RunnableImplementor.run(RunnableImplementor.java:29)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at android.os.Looper.loop(Looper.java:313)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at java.lang.reflect.Method.invoke(Native Method)
+09-25 01:08:57.532 28840 28840 I MonoDroid: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 
+09-25 01:08:57.533 28840 28840 I MonoDroid:   --- End of managed Android.Runtime.JavaProxyThrowable stack trace ---
+09-25 01:08:57.533 28840 28840 I MonoDroid: android.runtime.JavaProxyThrowable: [System.IO.IOException]: Read-only file system : '/Download'
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateParentsAndDirectory + 0xb2(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateDirectory + 0x4e(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.IO.FileSystem.CreateDirectory + 0x0(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.IO.Directory.CreateDirectory + 0x12(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at beholder_configuration_app.SettingsPage+<OnOffloadCurrentProjectClicked>d__22.MoveNext + 0x6e(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw + 0x11(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at System.Threading.Tasks.Task+<>c.<ThrowAsync>b__128_0 + 0x0(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at Android.App.SyncContext+<>c__DisplayClass2_0.<Post>b__0 + 0x0(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at Java.Lang.Thread+RunnableImplementor.Run + 0x8(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at Java.Lang.IRunnableInvoker.n_Run + 0x8(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at mono.java.lang.RunnableImplementor.n_run(Native Method)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at mono.java.lang.RunnableImplementor.run(RunnableImplementor.java:29)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at android.os.Handler.handleCallback(Handler.java:938)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at android.os.Looper.loop(Looper.java:313)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at java.lang.reflect.Method.invoke(Native Method)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-25 01:08:57.533 28840 28840 I MonoDroid: 
+09-25 01:08:57.539  1118  1182 W ActivityManager: crash : com.benfalcoUoL.BEHOLDER,10632
+09-25 01:08:57.541  1118  1182 W ActivityTaskManager:   Force finishing activity com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:57.546  1118  1182 V WindowManager: Changing focus from Window{1b0b93f u0 com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity} to null displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6480 com.android.server.wm.ActivityTaskManagerService.setResumedActivityUncheckLocked:5497 com.android.server.wm.ActivityRecord.moveFocusableActivityToTop:3339 
+09-25 01:08:57.546  1118  1182 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.BEHOLDER, userId = 0
+09-25 01:08:57.587  1118  4297 D InputDispatcher: Focus left window (0): 1b0b93f com.benfalcoUoL.BEHOLDER/crc64f22d34b9a473a111.MainActivity
+09-25 01:08:57.593  4285  4285 I SDHMS:BarTender:Gatherer:AppError: update AppError : uid=10632, pkg=com.benfalcoUoL.BEHOLDER, errorType=crash
+09-25 01:08:57.600  4285  4285 I SDHMS:BarTender:Analyzer:AppError: analyze app error : uid=10632, pkg=com.benfalcoUoL.BEHOLDER, appErrorCount=4
+09-25 01:08:57.641  1145  7172 V MediaPlayerService: Client(186) destructor AttributionSource = AttributionSourceState{pid: 28840, uid: 10632, packageName: com.benfalcoUoL.BEHOLDER, attributionTag: (null), token: {no toString() implemented}, renouncedPermissions: (null), next: []}
+09-25 01:08:57.641  1145  7172 V MediaPlayerService: disconnect(186) from AttributionSource AttributionSourceState{pid: 28840, uid: 10632, packageName: com.benfalcoUoL.BEHOLDER, attributionTag: (null), token: {no toString() implemented}, renouncedPermissions: (null), next: []}
+09-25 01:08:57.642  1118  1182 I ActivityManager: Proc

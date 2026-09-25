@@ -45,6 +45,9 @@ public partial class SettingsPage : ContentPage
         base.OnAppearing();
         UpdateConnectionSettings();
         UpdateConnectionStatus(_webSocketService.IsConnected);
+        //Moved from Load Preferences to fix Android bug
+
+
     }
     private void UpdateConnectionSettings()
     {
@@ -59,7 +62,7 @@ public partial class SettingsPage : ContentPage
         CaptureSoundSwitch.IsToggled = Preferences.Default.Get("CaptureSound", false);
         double interval = Preferences.Default.Get("DefaultAutomaticInterval", 0.5);
         DefaultIntervalEntry.Text = interval.ToString("F2");
-        DeviceDisplay.Current.KeepScreenOn = KeepScreenAwakeSwitch.IsToggled;
+
         _loadingPreferences = false;
     }
     private void OnKeepScreenAwakeToggled(object sender, ToggledEventArgs e)
@@ -84,7 +87,6 @@ public partial class SettingsPage : ContentPage
         _ = _soundManager.PlayAsync(SoundEffect.Click);
     }
 
-    //TODO: Add a sound effect to the capture
     private void OnCaptureSoundToggled(object sender, ToggledEventArgs e)
     {
         if (_loadingPreferences)
@@ -116,7 +118,7 @@ public partial class SettingsPage : ContentPage
         DefaultIntervalEntry.Text = interval.ToString("F2");
         _logService.Info($"Default automatic interval set to {interval:F2}s.");
     }
-       
+
 
     private void OnMessageReceived(string message)
     {
@@ -199,6 +201,12 @@ public partial class SettingsPage : ContentPage
             return;
         }
 
+        string destination;
+        //This is to fix the folder location bug encountered on android when offloading
+#if ANDROID
+        destination = $"{Android.OS.Environment.DirectoryDownloads}/BEHOLDER";
+#else
+
         FolderPickerResult folderResult = await _folderPicker.PickAsync(CancellationToken.None);
 
         if (!folderResult.IsSuccessful)
@@ -208,10 +216,11 @@ public partial class SettingsPage : ContentPage
                 _logService.Error(folderResult.Exception);
             }
             return;
-        }
+        }        
+        destination = folderResult.Folder.Path;
 
-        string destination = folderResult.Folder.Path;
-
+#endif
+        _logService.Info($"Offload destination: '{destination}'.");
         Progress<TransferProgress> progress = new(update =>
         {
             TransferProgressBar.Progress = update.Percentage;
@@ -245,6 +254,12 @@ public partial class SettingsPage : ContentPage
     }
     private async void OnOffloadAllProjectsClicked(object sender, EventArgs e)
     {
+        string destination;
+
+#if ANDROID
+        destination = $"{Android.OS.Environment.DirectoryDownloads}/BEHOLDER";
+#else
+
         FolderPickerResult folderResult = await _folderPicker.PickAsync(CancellationToken.None);
 
         if (!folderResult.IsSuccessful)
@@ -253,11 +268,14 @@ public partial class SettingsPage : ContentPage
             {
                 _logService.Error(folderResult.Exception);
             }
+
             return;
         }
 
-        string destination = folderResult.Folder.Path;
+        destination = folderResult.Folder.Path;
 
+#endif
+        _logService.Info($"Offload destination: '{destination}'.");
         try
         {
             HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.ProjectGetAll);
@@ -270,8 +288,7 @@ public partial class SettingsPage : ContentPage
 
             List<ProjectInfo>? projects = await response.Content.ReadFromJsonAsync<List<ProjectInfo>>();
 
-            if (projects == null ||
-                projects.Count == 0)
+            if (projects == null || projects.Count == 0)
             {
                 _logService.Warning("No projects found to offload.");
                 return;
@@ -293,11 +310,8 @@ public partial class SettingsPage : ContentPage
                 Progress<TransferProgress> progress = new(update =>
                     {
                         TransferProgressBar.Progress = update.Percentage;
-
                         TransferPercentLabel.Text = $"{update.Percentage:P0}";
-
                         TransferStatusLabel.Text = $"Project {projectNumber} / {projects.Count} · {update.FilesTransferred} / {update.TotalFiles} files";
-
                         TransferFileLabel.Text = $"{project.Name} · {update.CurrentFile}";
                     });
                 _ = _soundManager.PlayAsync(SoundEffect.Click);

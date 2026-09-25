@@ -1,0 +1,273 @@
+09-24 23:30:25.773 12140 12140 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+09-24 23:30:25.780 12140 12140 I AndroidRuntime: Using default boot image
+09-24 23:30:25.780 12140 12140 I AndroidRuntime: Leaving lock profiling enabled
+09-24 23:30:25.783 12140 12140 D AndroidRuntime: addProductProperty: pBrand1 is not null
+09-24 23:30:25.783 12140 12140 D AndroidRuntime: addProductProperty: not brand or 7
+09-24 23:30:26.022 12140 12140 D AndroidRuntime: Calling main entry com.android.commands.monkey.Monkey
+09-24 23:30:26.024 12140 12140 W Monkey  : args: [-p, com.benfalcoUoL.beholderconfigurationapp, 1]
+09-24 23:30:26.025 12140 12140 W Monkey  :  arg: "com.benfalcoUoL.beholderconfigurationapp"
+09-24 23:30:26.025 12140 12140 W Monkey  : data="com.benfalcoUoL.beholderconfigurationapp"
+09-24 23:30:26.094  1118  4399 I ActivityTaskManager: START u0 {act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity} from uid 2000
+09-24 23:30:26.095  1118  4399 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527
+09-24 23:30:26.095  1118  4399 D [secipm]: mSecIpmManager Preload com.benfalcoUoL.beholderconfigurationapp dex files
+09-24 23:30:26.095  1118  4399 D ActivityTaskManager: TaskLaunchParamsModifier:task=null activity=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t-1} display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527 non-freeform-display display-area=DefaultTaskDisplayArea@237633527 maximized-bounds
+09-24 23:30:26.095  1118  3375 D PkgPredictorService-IpmAdcpController: create a new DexPreloadTask pkg:com.benfalcoUoL.beholderconfigurationapp  path:/data/app/~~WTNGZJ2q3io_W3ns85PP3w==/com.benfalcoUoL.beholderconfigurationapp-GbFkdLvLP5W6FONnvksMvA==
+09-24 23:30:26.104  1118  3375 D PkgPredictorService-IpmAdcpController: /data/app/~~WTNGZJ2q3io_W3ns85PP3w==/com.benfalcoUoL.beholderconfigurationapp-GbFkdLvLP5W6FONnvksMvA==/oat/arm64/base.odex is already preloaded
+09-24 23:30:26.107  1118  4399 D ActivityTaskManager: TaskLaunchParamsModifier:task=Task{e113b2a #10445 type=standard A=10630:com.benfalcoUoL.beholderconfigurationapp U=0 visible=false mode=fullscreen translucent=true sz=0} activity=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t-1} display-from-task=0 display-id=0 display-windowing-mode=1 suggested-display-area=DefaultTaskDisplayArea@237633527 non-freeform-display display-area=DefaultTaskDisplayArea@237633527 maximized-bounds
+09-24 23:30:26.112   936  1604 I SurfaceFlinger: id=17948 createSurf (0x0),-1 flag=80004, ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}#0
+09-24 23:30:26.115  2015  2173 D StartingSurfaceDrawer: addSplashScreen com.benfalcoUoL.beholderconfigurationapp theme=7f10013f task=10445 suggestType=3
+09-24 23:30:26.133   936  1604 I SurfaceFlinger: id=17949 createSurf (0x0),-1 flag=80004, 427d491 Splash Screen com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:26.136  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: setView = android.widget.FrameLayout@e948da8 TM=true
+09-24 23:30:26.148  1118  2149 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.beholderconfigurationapp, userId = 0
+09-24 23:30:26.165  1118  1792 V WindowManager: Relayout Window{427d491 u0 Splash Screen com.benfalcoUoL.beholderconfigurationapp}: viewVisibility=0 req=1080x2280 d0
+09-24 23:30:26.165   936  1604 I SurfaceFlinger: id=17950 createSurf (1080x2280),-3 flag=40004, Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0
+09-24 23:30:26.166  1118  1792 D WindowManager: makeSurface duration=2 name=Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015
+09-24 23:30:26.169  1118  1792 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}
+09-24 23:30:26.169  1118  1792 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}
+09-24 23:30:26.171  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)0 dur=33 res=0x7 s={true -5476376626372885872} ch=true fn=-1
+09-24 23:30:26.175  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: [DP] dp(1) 0 android.view.ViewRootImpl.reportNextDraw:11420 android.view.ViewRootImpl.performTraversals:4193 android.view.ViewRootImpl.doTraversal:2919 
+09-24 23:30:26.176  1118  4399 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}
+09-24 23:30:26.179  1118  2149 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}
+09-24 23:30:26.191  2015  2245 I BufferQueueProducer: [ViewRootImpl@8290545[beholderconfigurationapp]#755(BLAST Consumer)755](id:7df000002f3,api:1,p:2015,c:2015) queueBuffer: queued for the first time.
+09-24 23:30:26.192 12140 12140 I AndroidRuntime: VM exiting with result code 0.
+09-24 23:30:26.197  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: [DP] pdf(0) 0 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:4995 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+09-24 23:30:26.197  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: [DP] rdf()
+09-24 23:30:26.197  2015  2173 D ViewRootImpl@8290545[beholderconfigurationapp]: reportDrawFinished (fn: -1) 
+09-24 23:30:26.198  1118  4399 D WindowManager: finishDrawingWindow: Window{427d491 u0 Splash Screen com.benfalcoUoL.beholderconfigurationapp} mDrawState=DRAW_PENDING
+09-24 23:30:26.223  1118  1489 I ActivityManager: Start proc 12166:com.benfalcoUoL.beholderconfigurationapp/u0a630 for pre-top-activity {com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity}
+09-24 23:30:26.223 12166 12166 E USNET   : USNET: appName: com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.229  1118  1189 I ActivityManager: DSS OFF for com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.233  1118  1189 I DexController: getTaskHasActivityIsWaitingToRun: r=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}, app=ProcessRecord{dd60401 12166:com.benfalcoUoL.beholderconfigurationapp/u0a630}
+09-24 23:30:26.233  1118  1189 D ActivityManager: attachApplicationLocked() app=ProcessRecord{dd60401 12166:com.benfalcoUoL.beholderconfigurationapp/u0a630} app.isolatedEntryPoint=null instr2=null
+09-24 23:30:26.235  1118  1189 D WindowManager: rotationForOrientation, orientationSource=ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445}
+09-24 23:30:26.236  1118  1189 D SGM:PkgDataHelper: notifyAppCreate(), pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0, sendRet: true
+09-24 23:30:26.236  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_CREATE, pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0
+09-24 23:30:26.237  1118  1189 D MARsPolicyManager: onPackageResumedFG pkgName = com.benfalcoUoL.beholderconfigurationapp, userId = 0
+09-24 23:30:26.238  1118  1189 D SGM:GameManager:   sendRunningComponentFocus(), pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0
+09-24 23:30:26.238  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_TASK_FOCUSED, pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0
+09-24 23:30:26.238  1118  1801 D SGM:GameManager:   handleTaskFocused(), pkgName: com.benfalcoUoL.beholderconfigurationapp, userID:0
+09-24 23:30:26.238  1118  1801 D SGM:GameManager:   handleResume(). pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0, isTunableApp: null
+09-24 23:30:26.238  1118  1801 D SGM:GameManager: notifyFocusInOut(). of pkg: com.benfalcoUoL.beholderconfigurationapp, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+09-24 23:30:26.241 12166 12166 D ActivityThread: handleBindApplication()++ app=com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.241   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6560170 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |   76  159 1004 2121 | Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0
+09-24 23:30:26.241  1118  1800 V ActivityManager: Changed top to ProcessRecord{dd60401 12166:com.benfalcoUoL.beholderconfigurationapp/u0a630}
+09-24 23:30:26.259 12166 12166 V GraphicsEnvironment: ANGLE Developer option for 'com.benfalcoUoL.beholderconfigurationapp' set to: 'default'
+09-24 23:30:26.260 12166 12166 D LoadedApk: LoadedApk::makeApplication() appContext.mOpPackageName=com.benfalcoUoL.beholderconfigurationapp appContext.mBasePackageName=com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.260  9649  9649 I Utils   : HomePackage : com.sec.android.app.launcher, resumePackageName : com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.261  1118  1470 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.beholderconfigurationapp, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.fgapps.GameAppUtils.isGame(GameAppUtils.java:84)
+09-24 23:30:26.261  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.261  1118  1470 D SGM:GameManager: identifyGamePackage. com.benfalcoUoL.beholderconfigurationapp, mCurrentUserId: 0, callerUserId: 0, callingMethodInfo: com.android.server.ssrm.SortingMachine.isGame(SortingMachine.java:162)
+09-24 23:30:26.261  1118  1470 D SGM:PkgDataHelper: getGamePkgData(). com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.261  1118  1470 I GameSDK@LifeCycle: noteResumeComponent(): package name  : com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.262  1118  1470 D SGM:GameManager: noteResumeComponent(), received pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0
+09-24 23:30:26.262  1118  1801 D SGM:GameManager: onLooperPrepared(), msg: MSG_APP_RESUME, pkgName: com.benfalcoUoL.beholderconfigurationapp, userid: 0
+09-24 23:30:26.262  1118  1801 D SGM:GameManager:   handleResume(). pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0, isTunableApp: null
+09-24 23:30:26.262  1118  1801 D SGM:GameManager: notifyFocusInOut(). of pkg: com.benfalcoUoL.beholderconfigurationapp, type: 4, isMinimized: false, isTunableApp: false, userId: 0
+09-24 23:30:26.267 12166 12166 D DOTNET  : AndroidCryptoNative_InitLibraryOnLoad: jint AndroidCryptoNative_InitLibraryOnLoad(JavaVM *, void *) in /__w/1/s/src/native/libs/System.Security.Cryptography.Native.Android/pal_jni.c
+09-24 23:30:26.268 12166 12166 D DOTNET  : GetOptionalClassGRef: optional class com/android/org/conscrypt/OpenSSLEngineImpl was not found
+09-24 23:30:26.378  1118  2069 D MdnieScenarioControlService:  packageName : com.benfalcoUoL.beholderconfigurationapp    className : crc64f22d34b9a473a111.MainActivity
+09-24 23:30:26.386  1118  1886 W SemWifiTransportLayerUtils: getApplicationCategory - IOException com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.386  1118  1886 W System.err: java.io.FileNotFoundException: https://play.google.com/store/apps/details?id=com.benfalcoUoL.beholderconfigurationapp&hl=en
+09-24 23:30:26.535 12166 12166 D AndroidRuntime: Shutting down VM
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: FATAL EXCEPTION: main
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: Process: com.benfalcoUoL.beholderconfigurationapp, PID: 12166
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: android.runtime.JavaProxyThrowable: [System.NullReferenceException]: The current Activity cannot be detected. Ensure that you have called Init in your Activity or Application class.
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.ApplicationModel.ActivityStateManagerExtensions.GetCurrentActivity + 0xd(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.Devices.DeviceDisplayImplementation.SetKeepScreenOn + 0x5(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.Devices.DeviceDisplayImplementationBase.set_KeepScreenOn + 0x0(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at beholder_configuration_app.SettingsPage.LoadPreferences + 0x80(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at beholder_configuration_app.SettingsPage..ctor + 0x6f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Unknown.Unknown(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor + 0x0(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs + 0x21b(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at System.Reflection.RuntimeConstructorInfo.Invoke + 0x88(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x45(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve + 0x26(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor + 0x55(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at System.Collections.Concurrent.ConcurrentDictionary`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceIdentifier, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[Microsoft.Extensions.DependencyInjection.ServiceProvider+ServiceAccessor, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]].GetOrAdd + 0x48(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0x28(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0xb(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Microsoft.Maui.MauiApplication.OnCreate + 0x4a(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Android.App.Application.n_OnCreate + 0x8(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at crc6488302ad6e9e4df1a.MauiApplication.n_onCreate(Native Method)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at crc6488302ad6e9e4df1a.MauiApplication.onCreate(MauiApplication.java:27)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1211)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:7506)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.app.ActivityThread.access$1700(ActivityThread.java:310)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2281)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:313)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-24 23:30:26.535 12166 12166 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-24 23:30:26.537 12166 12166 W monodroid-assembly: Shared library 'liblog' not loaded, p/invoke '__android_log_print' may fail
+09-24 23:30:26.538 12166 12166 I MonoDroid: UNHANDLED EXCEPTION:
+09-24 23:30:26.542 12166 12166 I MonoDroid: Android.Runtime.JavaProxyThrowable: Exception_WasThrown, Android.Runtime.JavaProxyThrowable
+09-24 23:30:26.542 12166 12166 I MonoDroid: 
+09-24 23:30:26.542 12166 12166 I MonoDroid:   --- End of managed Android.Runtime.JavaProxyThrowable stack trace ---
+09-24 23:30:26.542 12166 12166 I MonoDroid: android.runtime.JavaProxyThrowable: [System.NullReferenceException]: The current Activity cannot be detected. Ensure that you have called Init in your Activity or Application class.
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.ApplicationModel.ActivityStateManagerExtensions.GetCurrentActivity + 0xd(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.Devices.DeviceDisplayImplementation.SetKeepScreenOn + 0x5(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.Devices.DeviceDisplayImplementationBase.set_KeepScreenOn + 0x0(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at beholder_configuration_app.SettingsPage.LoadPreferences + 0x80(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at beholder_configuration_app.SettingsPage..ctor + 0x6f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Unknown.Unknown(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor + 0x0(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs + 0x21b(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at System.Reflection.RuntimeConstructorInfo.Invoke + 0x88(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x45(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve + 0x26(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor + 0x55(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at System.Collections.Concurrent.ConcurrentDictionary`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceIdentifier, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[Microsoft.Extensions.DependencyInjection.ServiceProvider+ServiceAccessor, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]].GetOrAdd + 0x48(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0x28(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0xb(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiApplication.OnCreate + 0x4a(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Android.App.Application.n_OnCreate + 0x8(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at crc6488302ad6e9e4df1a.MauiApplication.n_onCreate(Native Method)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at crc6488302ad6e9e4df1a.MauiApplication.onCreate(MauiApplication.java:27)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1211)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:7506)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.app.ActivityThread.access$1700(ActivityThread.java:310)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2281)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.os.Looper.loop(Looper.java:313)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at java.lang.reflect.Method.invoke(Native Method)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 
+09-24 23:30:26.542 12166 12166 I MonoDroid:   --- End of managed Android.Runtime.JavaProxyThrowable stack trace ---
+09-24 23:30:26.542 12166 12166 I MonoDroid: android.runtime.JavaProxyThrowable: [System.NullReferenceException]: The current Activity cannot be detected. Ensure that you have called Init in your Activity or Application class.
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.ApplicationModel.ActivityStateManagerExtensions.GetCurrentActivity + 0xd(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.Devices.DeviceDisplayImplementation.SetKeepScreenOn + 0x5(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at Microsoft.Maui.Devices.DeviceDisplayImplementationBase.set_KeepScreenOn + 0x0(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at beholder_configuration_app.SettingsPage.LoadPreferences + 0x80(Unknown Source)
+09-24 23:30:26.542 12166 12166 I MonoDroid: 	at beholder_configuration_app.SettingsPage..ctor + 0x6f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Unknown.Unknown(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Constructor + 0x0(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at System.Reflection.MethodBaseInvoker.InvokeWithManyArgs + 0x21b(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at System.Reflection.RuntimeConstructorInfo.Invoke + 0x88(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x45(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor + 0x2c(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSiteMain + 0x3f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache + 0x61(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.RuntimeResolverContext, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].VisitCallSite + 0x4f(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve + 0x26(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor + 0x55(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at System.Collections.Concurrent.ConcurrentDictionary`2[[Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceIdentifier, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60],[Microsoft.Extensions.DependencyInjection.ServiceProvider+ServiceAccessor, Microsoft.Extensions.DependencyInjection, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]].GetOrAdd + 0x48(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService + 0xd(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiContext+WrappedServiceProvider.GetService + 0x2c(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0x28(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService + 0xb(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Microsoft.Maui.MauiApplication.OnCreate + 0x4a(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Android.App.Application.n_OnCreate + 0x8(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at Android.Runtime.JNINativeWrapper.Wrap_JniMarshal_PP_V + 0x5(Unknown Source)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at crc6488302ad6e9e4df1a.MauiApplication.n_onCreate(Native Method)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at crc6488302ad6e9e4df1a.MauiApplication.onCreate(MauiApplication.java:27)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1211)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:7506)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.app.ActivityThread.access$1700(ActivityThread.java:310)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2281)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.os.Looper.loopOnce(Looper.java:226)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.os.Looper.loop(Looper.java:313)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at android.app.ActivityThread.main(ActivityThread.java:8663)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at java.lang.reflect.Method.invoke(Native Method)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:567)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1135)
+09-24 23:30:26.543 12166 12166 I MonoDroid: 
+09-24 23:30:26.551  1118  1189 W ActivityManager: crash : com.benfalcoUoL.beholderconfigurationapp,10630
+09-24 23:30:26.555  1118  1189 W ActivityTaskManager:   Force finishing activity com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity
+09-24 23:30:26.574   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6560170 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0
+09-24 23:30:26.576  1118  1465 I DecorView: updateCaptionType >> DecorView@9808416[beholderconfigurationapp], isFloating=true, isApplication=false, hasWindowControllerCallback=false, hasWindowDecorCaption=false
+09-24 23:30:26.576  1118  1465 D DecorView: setCaptionType = 0, this = DecorView@9808416[beholderconfigurationapp]
+09-24 23:30:26.593   936  1000 I SurfaceFlinger: id=17957 createSurf (0x0),-1 flag=80004, 91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:26.595  1118  1465 V WindowManager: Changing focus from null to Window{91102bd u0 Application Error: com.benfalcoUoL.beholderconfigurationapp} displayId=0 Callers=com.android.server.wm.RootWindowContainer.updateFocusedWindowLocked:583 com.android.server.wm.WindowManagerService.updateFocusedWindowLocked:6480 com.android.server.wm.WindowManagerService.addWindow:2030 com.android.server.wm.Session.addToDisplayAsUser:211 
+09-24 23:30:26.598  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: setView = com.android.internal.policy.DecorView@9808416 TM=true
+09-24 23:30:26.599  4285  4285 I SDHMS:BarTender:Gatherer:AppError: update AppError : uid=10630, pkg=com.benfalcoUoL.beholderconfigurationapp, errorType=crash
+09-24 23:30:26.603  4285  4285 I SDHMS:BarTender:Analyzer:AppError: analyze app error : uid=10630, pkg=com.benfalcoUoL.beholderconfigurationapp, appErrorCount=2
+09-24 23:30:26.603  1118  1465 V WindowManager: Relayout Window{91102bd u0 Application Error: com.benfalcoUoL.beholderconfigurationapp}: viewVisibility=0 req=1078x495 d0
+09-24 23:30:26.603   936  1000 I SurfaceFlinger: id=17960 createSurf (13x13),-3 flag=40004, Application Error: com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:26.604  1118  1465 D WindowManager: makeSurface duration=2 name=Application Error: com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.607  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: Relayout returned: old=(0,112,1080,2154) new=(1,1659,1079,2154) req=(1078,495)0 dur=5 res=0x7 s={true -5476376626373286992} ch=true fn=-1
+09-24 23:30:26.609  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: [DP] dp(1) 1 android.view.ViewRootImpl.reportNextDraw:11420 android.view.ViewRootImpl.performTraversals:4193 android.view.ViewRootImpl.doTraversal:2919 
+09-24 23:30:26.620  1118 16001 I BufferQueueProducer: [ViewRootImpl@e75ef81[beholderconfigurationapp]#227(BLAST Consumer)227](id:45e0000024a,api:1,p:1118,c:1118) queueBuffer: queued for the first time.
+09-24 23:30:26.621  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: [DP] pdf(0) 1 android.view.ViewRootImpl.lambda$addFrameCompleteCallbackIfNeeded$3$ViewRootImpl:4995 android.view.ViewRootImpl$$ExternalSyntheticLambda16.run:6 android.os.Handler.handleCallback:938 
+09-24 23:30:26.621  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: [DP] rdf()
+09-24 23:30:26.621  1118  1465 D ViewRootImpl@e75ef81[beholderconfigurationapp]: reportDrawFinished (fn: -1) 
+09-24 23:30:26.621  1118  1465 D WindowManager: finishDrawingWindow: Window{91102bd u0 Application Error: com.benfalcoUoL.beholderconfigurationapp} mDrawState=DRAW_PENDING
+09-24 23:30:26.622  1118  1471 I WindowManager: Reparenting to leash, surface=Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc, leashParent=Surface(name=WindowToken{5f67826 android.view.ViewRootImpl$W@e75ef81})/@0x178bce5
+09-24 23:30:26.623   936  1002 I SurfaceFlinger: id=17961 createSurf (0x0),-1 flag=24004, Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc - animation-leash of window_animation#0
+09-24 23:30:26.624  1118  1471 D WindowManager: makeSurface duration=2 leash=Surface(name=Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc - animation-leash of window_animation)/@0x81463ba
+09-24 23:30:26.635  1118  4419 D InputDispatcher: Focus entered window (0): 91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp
+09-24 23:30:26.636  1118  1465 I ViewRootImpl@e75ef81[beholderconfigurationapp]: MSG_WINDOW_FOCUS_CHANGED 1 1
+09-24 23:30:26.673   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6560170 | 0100 | RGBA_8888    |    0.0    0.0 1080.0 2280.0 |    0    0 1080 2280 | Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0
+09-24 23:30:26.673   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6538c00 | 0100 | RGBA_8888    |    5.0    0.0 1085.0  507.0 |    0 1744 1080 2251 | Application Error: com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:26.935  1118  1471 I WindowManager: Reparenting to original parent: Surface(name=WindowToken{5f67826 android.view.ViewRootImpl$W@e75ef81})/@0x178bce5, destroy=true, surface=Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc
+09-24 23:30:26.952   936   936 I Layer   : id=17961 removedFromDrawingState Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc - animation-leash of window_animation#0 (161)
+09-24 23:30:26.952   936   936 I SurfaceFlinger: id=17961 Removed Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc - animation-leash of window_animation#0 (161)
+09-24 23:30:26.952   936   936 I Layer   : id=17961 Destroyed Surface(name=91102bd Application Error: com.benfalcoUoL.beholderconfigurationapp)/@0xdfd63dc - animation-leash of window_animation#0
+09-24 23:30:27.056  1118  1470 W ActivityTaskManager: Activity top resumed state loss timeout for ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445 f}}
+09-24 23:30:27.069  1118  1470 W ActivityTaskManager: Activity pause timeout for ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445 f}}
+09-24 23:30:27.082  1118  1470 D SGM:GameManager: notePauseComponent(), received pkgName: com.benfalcoUoL.beholderconfigurationapp, userId: 0
+09-24 23:30:27.087  1118  4419 V WindowManager: Relayout Window{427d491 u0 Splash Screen com.benfalcoUoL.beholderconfigurationapp}: viewVisibility=8 req=1080x2280 d0
+09-24 23:30:27.090  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: Relayout returned: old=(0,0,1080,2280) new=(0,0,1080,2280) req=(1080,2280)8 dur=4 res=0x5 s={false 0} ch=true fn=2
+09-24 23:30:27.091  2015  2173 I ViewRootImpl@8290545[beholderconfigurationapp]: dispatchDetachedFromWindow
+09-24 23:30:27.092  1118  4419 W InputManager-JNI: Input channel object '427d491 Splash Screen com.benfalcoUoL.beholderconfigurationapp (client)' was disposed without first being removed with the input manager!
+09-24 23:30:27.099  1118  1471 E WindowManager: win=Window{427d491 u0 Splash Screen com.benfalcoUoL.beholderconfigurationapp EXITING} destroySurfaces: appStopped=false win.mWindowRemovalAllowed=true win.mRemoveOnExit=true win.mViewVisibility=8 caller=com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.ActivityRecord$$ExternalSyntheticLambda13.accept:2 java.util.ArrayList.forEach:1262 com.android.server.wm.ActivityRecord.onAnimationFinished:7897 com.android.server.wm.ActivityRecord.postApplyAnimation:5579 
+09-24 23:30:27.099  1118  1471 I WindowManager: Destroying surface Surface(name=Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015)/@0x76ba955 called by com.android.server.wm.WindowStateAnimator.destroySurface:987 com.android.server.wm.WindowStateAnimator.destroySurfaceLocked:518 com.android.server.wm.WindowState.destroySurfaceUnchecked:4229 com.android.server.wm.WindowState.destroySurface:4203 com.android.server.wm.ActivityRecord.destroySurfaces:5848 com.android.server.wm.ActivityRecord.destroySurfaces:5829 com.android.server.wm.WindowState.onExitAnimationDone:5975 com.android.server.wm.ActivityRecord$$ExternalSyntheticLambda13.accept:2 
+09-24 23:30:27.103   936   936 I Layer   : id=17950 removedFromDrawingState Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0 (159)
+09-24 23:30:27.109   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6538c00 | 0100 | RGBA_8888    |    5.0    0.0 1085.0  507.0 |    0 1653 1080 2160 | Application Error: com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:27.119   936   936 I Layer   : id=17949 removedFromDrawingState 427d491 Splash Screen com.benfalcoUoL.beholderconfigurationapp#0 (159)
+09-24 23:30:27.120   936   936 I SurfaceFlinger: id=17950 Removed Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0 (159)
+09-24 23:30:27.120   936   936 I SurfaceFlinger: id=17949 Removed 427d491 Splash Screen com.benfalcoUoL.beholderconfigurationapp#0 (159)
+09-24 23:30:27.120   936   936 I Layer   : id=17950 Destroyed Splash Screen com.benfalcoUoL.beholderconfigurationapp$_2015#0
+09-24 23:30:27.120   936   936 I Layer   : id=17949 Destroyed 427d491 Splash Screen com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:27.127   936   936 D SurfaceFlinger:      DEVICE | 0xb4000072d6538c00 | 0100 | RGBA_8888    |    5.0    0.0 1085.0  507.0 |    0 1653 1080 2160 | Application Error: com.benfalcoUoL.beholderconfigurationapp#0
+09-24 23:30:27.549  1118  1901 D SemWifiSwitchForIndividualAppsService: isPackageException - result:1, com.sec.android.app.launcher
+09-24 23:30:37.125  1118  1470 W ActivityTaskManager: Activity destroy timeout for ActivityRecord{df431cc u0 com.benfalcoUoL.beholderconfigurationapp/crc64f22d34b9a473a111.MainActivity t10445 f}}
+09-24 23:30:37.127  1118  1470 I ActivityTaskManager: Removing activity ActivityRecord{df431cc u0 com.benfalcoUoL.beholdercon
