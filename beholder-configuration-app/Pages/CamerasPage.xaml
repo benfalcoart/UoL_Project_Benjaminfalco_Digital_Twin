@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="beholder_configuration_app.CamerasPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="beholder_configuration_app.CamerasPage"
     Title="Cameras"
     BackgroundColor="#101214"
     Shell.NavBarIsVisible="False">
     <ScrollView>
-        <VerticalStackLayout
-            Padding="24"
-            Spacing="20">
-            <Grid
-                ColumnDefinitions="*,Auto">
+        <VerticalStackLayout Padding="24" Spacing="20">
+            <Grid ColumnDefinitions="*,Auto">
 
                 <Label
                     Grid.Column="0"
-                    Text="CAMERAS"
-                    FontSize="28"
                     FontAttributes="Bold"
+                    FontSize="28"
+                    Text="CAMERAS"
                     TextColor="White" />
 
                 <HorizontalStackLayout
@@ -26,16 +23,16 @@
                     VerticalOptions="Center">
 
                     <BoxView
-                        WidthRequest="10"
-                        HeightRequest="10"
                         CornerRadius="5"
-                        Color="#2ECC71"
-                        VerticalOptions="Center" />
+                        HeightRequest="10"
+                        VerticalOptions="Center"
+                        WidthRequest="10"
+                        Color="#2ECC71" />
 
                     <Label
                         x:Name="CameraSummaryLabel"
-                        Text="5 / 5 ACTIVE"
                         FontAttributes="Bold"
+                        Text="5 / 5 ACTIVE"
                         TextColor="#2ECC71"
                         VerticalOptions="Center" />
 
@@ -44,224 +41,252 @@
             </Grid>
 
             <Label
-                Text="PHYSICAL LAYOUT"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="PHYSICAL LAYOUT"
                 TextColor="#8B949E" />
 
             <Border
+                Padding="18"
                 BackgroundColor="#191919"
                 Stroke="#444444"
-                StrokeThickness="1"
-                Padding="18">
+                StrokeThickness="1">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="8" />
                 </Border.StrokeShape>
 
-                <VerticalStackLayout
-                    Spacing="10">
+                <VerticalStackLayout Spacing="10">
 
-                    <!-- TOP -->
-                    <HorizontalStackLayout
-                        HorizontalOptions="Center">
+                    <!--  TOP  -->
+                    <HorizontalStackLayout HorizontalOptions="Center">
 
                         <Button
+                            x:Name="T1Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
                             Text="T1"
-                            WidthRequest="48"
-                            HeightRequest="42"
-                            Padding="0"
-                            BackgroundColor="#22252B"
                             TextColor="#8B949E"
-                            CornerRadius="6" />
+                            WidthRequest="48" />
 
                     </HorizontalStackLayout>
 
-                    <!-- UPPER -->
-                    <HorizontalStackLayout
-                        HorizontalOptions="Center"
-                        Spacing="6">
-
-                        <Button Text="U1" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="U2" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="U3" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="U4" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="U5" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-
-                    </HorizontalStackLayout>
-
-                    <!-- MIDDLE -->
-                    <HorizontalStackLayout
-                        HorizontalOptions="Center"
-                        Spacing="4">
-
-                        <Button Text="M1" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M2" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M3" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M4" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M5" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M6" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M7" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M8" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="M9" WidthRequest="42" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-
-                    </HorizontalStackLayout>
-
-                    <!-- LOWER -->
-                    <HorizontalStackLayout
-                        HorizontalOptions="Center"
-                        Spacing="6">
-
-                        <Button Text="L1" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="L2" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="L3" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="L4" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-                        <Button Text="L5" WidthRequest="48" HeightRequest="42" Padding="0" BackgroundColor="#22252B" TextColor="#8B949E" CornerRadius="6" />
-
-                    </HorizontalStackLayout>
-
-                    <!-- BOTTOM -->
-                    <HorizontalStackLayout
-                        HorizontalOptions="Center">
+                    <!--  UPPER  -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
 
                         <Button
-                            Text="B1"
-                            WidthRequest="48"
-                            HeightRequest="42"
+                            x:Name="U1Button"
                             Padding="0"
                             BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="U1"
                             TextColor="#8B949E"
-                            CornerRadius="6" />
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="U2Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="U2"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="U3Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="U3"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="U4Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="U4"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="U5Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="U5"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
 
                     </HorizontalStackLayout>
 
+                    <!--  MIDDLE  -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+
+                        <Button
+                            x:Name="M1Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M1"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M2Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M2"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M3Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M3"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M4Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M4"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M5Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M5"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M6Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M6"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M7Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M7"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M8Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M8"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+                        <Button
+                            x:Name="M9Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="M9"
+                            TextColor="#8B949E"
+                            WidthRequest="42" />
+
+                    </HorizontalStackLayout>
+
+                    <!--  LOWER  -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+
+                        <Button
+                            x:Name="L1Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="L1"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="L2Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="L2"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="L3Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="L3"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="L4Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="L4"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+                        <Button
+                            x:Name="L5Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="L5"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+
+                    </HorizontalStackLayout>
+
+                    <!--  BOTTOM  -->
+                    <HorizontalStackLayout HorizontalOptions="Center">
+
+                        <Button
+                            x:Name="B1Button"
+                            Padding="0"
+                            BackgroundColor="#22252B"
+                            CornerRadius="6"
+                            HeightRequest="42"
+                            Text="B1"
+                            TextColor="#8B949E"
+                            WidthRequest="48" />
+
+                    </HorizontalStackLayout>
                 </VerticalStackLayout>
 
             </Border>
 
             <Label
-                Text="CAMERA CONFIGURATION"
-                FontSize="12"
                 FontAttributes="Bold"
+                FontSize="12"
+                Text="CAMERA CONFIGURATION"
                 TextColor="#8B949E" />
 
-            <VerticalStackLayout
-                x:Name="CameraConfigurationList"
-                Spacing="12">
-
-                <!-- Temporary sample card. TODO: Replace this with actual detected cameras.-->
-                <Border
-                    BackgroundColor="#191919"
-                    Stroke="#444444"
-                    StrokeThickness="1"
-                    Padding="16">
-
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="8" />
-                    </Border.StrokeShape>
-
-                    <VerticalStackLayout
-                        Spacing="12">
-
-                        <Grid
-                            ColumnDefinitions="*,Auto">
-
-                            <Label
-                                Grid.Column="0"
-                                Text="Camera 1"
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                TextColor="White" />
-
-                            <HorizontalStackLayout
-                                Grid.Column="1"
-                                Spacing="6">
-
-                                <BoxView
-                                    WidthRequest="8"
-                                    HeightRequest="8"
-                                    CornerRadius="4"
-                                    Color="#2ECC71"
-                                    VerticalOptions="Center" />
-
-                                <Label
-                                    Text="ACTIVE"
-                                    FontSize="12"
-                                    FontAttributes="Bold"
-                                    TextColor="#2ECC71"
-                                    VerticalOptions="Center" />
-
-                            </HorizontalStackLayout>
-
-                        </Grid>
-
-                        <Label
-                            Text="/dev/video0"
-                            FontSize="12"
-                            TextColor="#8B949E" />
-
-                        <Grid
-                            ColumnDefinitions="90,*"
-                            RowDefinitions="Auto,Auto"
-                            RowSpacing="10">
-
-                            <Label
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Text="Row"
-                                TextColor="#C9D1D9"
-                                VerticalOptions="Center" />
-
-                            <Picker
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Title="Select Row">
-                                <Picker.Items>
-                                    <x:String>Unassigned</x:String>
-                                    <x:String>Top</x:String>
-                                    <x:String>Upper</x:String>
-                                    <x:String>Middle</x:String>
-                                    <x:String>Lower</x:String>
-                                    <x:String>Bottom</x:String>
-                                </Picker.Items>
-                            </Picker>
-
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Text="Slot"
-                                TextColor="#C9D1D9"
-                                VerticalOptions="Center" />
-
-                            <Picker
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Title="Select Slot" />
-
-                        </Grid>
-
-                        <Grid
-                            ColumnDefinitions="*,*"
-                            ColumnSpacing="10">
-
-                            <Button
-                                Grid.Column="0"
-                                Text="IDENTIFY"
-                                BackgroundColor="#22252B"
-                                TextColor="#3AA0FF"
-                                CornerRadius="8" />
-
-                            <Button
-                                Grid.Column="1"
-                                Text="DISABLE"
-                                BackgroundColor="#22252B"
-                                TextColor="#E74C3C"
-                                CornerRadius="8" />
-
-                        </Grid>
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
+            <VerticalStackLayout x:Name="CameraConfigurationList" Spacing="12" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

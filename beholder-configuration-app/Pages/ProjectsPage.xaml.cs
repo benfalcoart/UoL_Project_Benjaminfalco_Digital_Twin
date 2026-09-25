@@ -1,4 +1,5 @@
 using beholder_configuration_app.Models;
+using beholder_configuration_app.Services.Audio;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using Microsoft.Maui.Controls.Shapes;
@@ -11,15 +12,17 @@ public partial class ProjectsPage : ContentPage
     private readonly BeholderAPIService _apiService;
     private readonly BeholderWebSocketService _webSocketService;
     private readonly AppLogService _logService;
+    private readonly SoundManager _soundManager;
 
     private BeholderStatus? _status;
-    public ProjectsPage(BeholderAPIService apiService, BeholderWebSocketService webSocketService, AppLogService logService)
+    public ProjectsPage(BeholderAPIService apiService, BeholderWebSocketService webSocketService, AppLogService logService, SoundManager soundManager)
     {
         InitializeComponent();
 
         _apiService = apiService;
         _webSocketService = webSocketService;
         _logService = logService;
+        _soundManager = soundManager;
 
         _webSocketService.MessageReceived += OnMessageReceived;
     }
@@ -199,6 +202,7 @@ public partial class ProjectsPage : ContentPage
 
             if (response.IsSuccessStatusCode)
             {
+                _ = _soundManager.PlayAsync(SoundEffect.Success);
                 _logService.Info($"Opened project '{projectName}'.");
             }
             else

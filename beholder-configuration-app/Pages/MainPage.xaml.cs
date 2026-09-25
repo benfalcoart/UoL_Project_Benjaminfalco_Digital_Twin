@@ -12,7 +12,7 @@ namespace beholder_configuration_app
     {
         //STRESS TEST
         private readonly Stopwatch _stressTestTimer = new();
-        private bool _stressTestRunning = true;
+        private bool _stressTestRunning = false;
         private const double StressTestBatteryThreshold = 2.0;        
 
         //SERVICES

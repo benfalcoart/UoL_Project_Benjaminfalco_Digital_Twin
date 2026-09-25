@@ -2,6 +2,7 @@ using beholder_configuration_app.Services.Audio;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
 using System;
+using System.Text;
 
 namespace beholder_configuration_app;
 
@@ -78,4 +79,5 @@ public partial class ConnectionPage : ContentPage
 
         }
     }
+    
 }
