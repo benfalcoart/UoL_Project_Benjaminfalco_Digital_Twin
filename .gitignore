@@ -119,3 +119,6 @@ TestResults/
 *~
 *.bak
 *.cache
+
+#COL-MAP
+BEHOLDER_camera_offloads/
