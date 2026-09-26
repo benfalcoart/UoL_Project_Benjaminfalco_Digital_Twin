@@ -81,6 +81,7 @@ public partial class CamerasPage : ContentPage
     {
         base.OnAppearing();
         await LoadCameraProfilesAsync();
+        await LoadCameraSettingsAsync();
     }
 
     private async Task LoadCameraProfilesAsync()
@@ -145,11 +146,230 @@ public partial class CamerasPage : ContentPage
 
             _logService.Info($"Camera profile '{profile.Name}' applied.");
             _ = _soundManager.PlayAsync(SoundEffect.Camera_Click_On);
+            await LoadCameraSettingsAsync();
         }
         catch (Exception exception)
         {
             _logService.Error(exception);
         }
+    }
+
+    private async Task LoadCameraSettingsAsync()
+    {
+        try
+        {
+            HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CameraSettingsGet);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logService.Warning($"Unable to load camera settings. HTTP {(int)response.StatusCode}");
+                return;
+            }
+
+            string json = await response.Content.ReadAsStringAsync();
+            CameraSettingsResponse? result = JsonSerializer.Deserialize<CameraSettingsResponse>(json);
+
+            if (result == null || result.Cameras.Count == 0)
+            {
+                return;
+            }
+
+            Dictionary<string, int> settings = result.Cameras.First().Value;
+
+            AutoExposureSwitch.IsToggled = settings["auto_exposure"] == 3;
+            ExposureTimeSlider.Value = settings["exposure_time_absolute"];
+            GainSlider.Value = settings["gain"];
+            DynamicFramerateSwitch.IsToggled = settings["exposure_dynamic_framerate"] == 1;
+
+            AutoWhiteBalanceSwitch.IsToggled = settings["white_balance_automatic"] == 1;
+            WhiteBalanceSlider.Value = settings["white_balance_temperature"];
+
+            BrightnessSlider.Value = settings["brightness"];
+            ContrastSlider.Value = settings["contrast"];
+            SaturationSlider.Value = settings["saturation"];
+            HueSlider.Value = settings["hue"];
+            GammaSlider.Value = settings["gamma"];
+            SharpnessSlider.Value = settings["sharpness"];
+            BacklightSlider.Value = settings["backlight_compensation"];
+
+            PowerFrequencyPicker.SelectedIndex = settings["power_line_frequency"];
+
+            UpdateCameraSettingAvailability();
+        }
+        catch (Exception exception)
+        {
+            _logService.Error(exception);
+        }
+    }
+
+    private void AutoExposureSwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+        UpdateCameraSettingAvailability();
+    }
+
+    private void AutoWhiteBalanceSwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+        UpdateCameraSettingAvailability();
+    }
+
+    private void UpdateCameraSettingAvailability()
+    {
+        ExposureTimeSlider.IsEnabled = !AutoExposureSwitch.IsToggled;
+        WhiteBalanceSlider.IsEnabled = !AutoWhiteBalanceSwitch.IsToggled;
+    }
+    private async Task<bool> SetCameraSettingAsync(string setting, int value)
+    {
+        HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CameraSettingsSet, body: new
+        {
+            setting,
+            value
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logService.Warning($"Unable to set camera setting '{setting}'. HTTP {(int)response.StatusCode}");
+            return false;
+        }
+
+        return true;
+    }
+
+    private async Task AskToSaveCameraProfileAsync()
+    {
+        bool saveProfile = await DisplayAlert(
+            "Save Camera Profile?",
+            "Would you like to save these camera settings as a profile?",
+            "SAVE",
+            "NOT NOW");
+
+        if (!saveProfile)
+        {
+            return;
+        }
+
+        string? profileName = await DisplayPromptAsync(
+            "Save Camera Profile",
+            "Enter a name for this profile.",
+            "SAVE",
+            "CANCEL",
+            "Profile name",
+            maxLength: 40,
+            keyboard: Keyboard.Text);
+
+        if (string.IsNullOrWhiteSpace(profileName))
+        {
+            return;
+        }
+
+        profileName = profileName.Trim();
+
+        IEnumerable<CameraProfileSummary>? profiles = CameraProfilePicker.ItemsSource as IEnumerable<CameraProfileSummary>;
+
+        bool profileExists = profiles?.Any(profile =>
+            profile.Name.Equals(profileName, StringComparison.OrdinalIgnoreCase)) == true;
+
+        if (profileExists)
+        {
+            bool overwrite = await DisplayAlert(
+                "Profile Already Exists",
+                $"A profile named '{profileName}' already exists. Replace it?",
+                "REPLACE",
+                "CANCEL");
+
+            if (!overwrite)
+            {
+                return;
+            }
+        }
+
+        try
+        {
+            HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CameraProfileSave, body: new
+            {
+                name = profileName,
+                description = ""
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logService.Warning($"Unable to save camera profile '{profileName}'. HTTP {(int)response.StatusCode}");
+                await DisplayAlert("Save Failed", "The camera profile could not be saved.", "OK");
+                return;
+            }
+
+            _logService.Info($"Camera profile '{profileName}' saved.");
+
+            await LoadCameraProfilesAsync();
+
+            profiles = CameraProfilePicker.ItemsSource as IEnumerable<CameraProfileSummary>;
+
+            CameraProfileSummary? savedProfile = profiles?.FirstOrDefault(profile =>
+                profile.Name.Equals(profileName, StringComparison.OrdinalIgnoreCase));
+
+            if (savedProfile != null)
+            {
+                CameraProfilePicker.SelectedItem = savedProfile;
+            }
+        }
+        catch (Exception exception)
+        {
+            _logService.Error(exception);
+            await DisplayAlert("Save Failed", "The camera profile could not be saved.", "OK");
+        }
+    }
+
+    private async void ApplyCameraSettingsButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            bool autoExposure = AutoExposureSwitch.IsToggled;
+            bool autoWhiteBalance = AutoWhiteBalanceSwitch.IsToggled;
+
+            await SetCameraSettingAsync("auto_exposure", autoExposure ? 3 : 1);
+            await SetCameraSettingAsync("white_balance_automatic", autoWhiteBalance ? 1 : 0);
+            await SetCameraSettingAsync("exposure_dynamic_framerate", DynamicFramerateSwitch.IsToggled ? 1 : 0);
+
+            if (!autoExposure)
+            {
+                await SetCameraSettingAsync("exposure_time_absolute", (int)Math.Round(ExposureTimeSlider.Value));
+            }
+
+            await SetCameraSettingAsync("gain", (int)Math.Round(GainSlider.Value));
+
+            if (!autoWhiteBalance)
+            {
+                await SetCameraSettingAsync("white_balance_temperature", (int)Math.Round(WhiteBalanceSlider.Value));
+            }
+
+            await SetCameraSettingAsync("brightness", (int)Math.Round(BrightnessSlider.Value));
+            await SetCameraSettingAsync("contrast", (int)Math.Round(ContrastSlider.Value));
+            await SetCameraSettingAsync("saturation", (int)Math.Round(SaturationSlider.Value));
+            await SetCameraSettingAsync("hue", (int)Math.Round(HueSlider.Value));
+            await SetCameraSettingAsync("gamma", (int)Math.Round(GammaSlider.Value));
+            await SetCameraSettingAsync("sharpness", (int)Math.Round(SharpnessSlider.Value));
+            await SetCameraSettingAsync("backlight_compensation", (int)Math.Round(BacklightSlider.Value));
+
+            if (PowerFrequencyPicker.SelectedIndex >= 0)
+            {
+                await SetCameraSettingAsync("power_line_frequency", PowerFrequencyPicker.SelectedIndex);
+            }
+
+            _logService.Info("Global camera settings applied.");
+            _ = _soundManager.PlayAsync(SoundEffect.Camera_Click_On);
+
+            await LoadCameraSettingsAsync();
+            await AskToSaveCameraProfileAsync();
+        }
+        catch (Exception exception)
+        {
+            _logService.Error(exception);
+        }
+    }
+
+    private void CameraSettingsExpandButton_Clicked(object sender, EventArgs e)
+    {
+        CameraSettingsContent.IsVisible = !CameraSettingsContent.IsVisible;
+        CameraSettingsExpandButton.Text = CameraSettingsContent.IsVisible ? "-" : "+";
     }
 
     private void OnMessageReceived(string message)

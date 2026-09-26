@@ -332,6 +332,316 @@
                 </VerticalStackLayout>
 
             </Border>
+            <Border
+                Padding="12"
+                BackgroundColor="#22252B"
+                Stroke="#444444"
+                StrokeThickness="1">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label
+                            FontAttributes="Bold"
+                            Text="MANUAL CAMERA SETTINGS"
+                            TextColor="White"
+                            VerticalOptions="Center" />
+
+                        <Button
+                            x:Name="CameraSettingsExpandButton"
+                            Grid.Column="1"
+                            Padding="8,0"
+                            BackgroundColor="Transparent"
+                            Clicked="CameraSettingsExpandButton_Clicked"
+                            Text="+"
+                            TextColor="#3AA0FF" />
+                    </Grid>
+
+                    <VerticalStackLayout
+                        x:Name="CameraSettingsContent"
+                        IsVisible="False"
+                        Spacing="12">
+                        <BoxView
+                            Margin="0,6"
+                            HeightRequest="1"
+                            Color="#333333" />
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            Text="EXPOSURE"
+                            TextColor="#8B949E" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="Automatic Exposure"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Switch
+                                x:Name="AutoExposureSwitch"
+                                Grid.Column="1"
+                                Toggled="AutoExposureSwitch_Toggled" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Exposure Time"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="ExposureTimeSlider"
+                                Grid.Column="1"
+                                Maximum="5000"
+                                Minimum="1" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference ExposureTimeSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Gain"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="GainSlider"
+                                Grid.Column="1"
+                                Maximum="100"
+                                Minimum="0" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference GainSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="Dynamic Framerate"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Switch x:Name="DynamicFramerateSwitch" Grid.Column="1" />
+                        </Grid>
+
+                        <BoxView
+                            Margin="0,6"
+                            HeightRequest="1"
+                            Color="#333333" />
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            Text="WHITE BALANCE"
+                            TextColor="#8B949E" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label
+                                Text="Automatic White Balance"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                            <Switch
+                                x:Name="AutoWhiteBalanceSwitch"
+                                Grid.Column="1"
+                                Toggled="AutoWhiteBalanceSwitch_Toggled" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,60" ColumnSpacing="10">
+                            <Label
+                                Text="Temperature"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="WhiteBalanceSlider"
+                                Grid.Column="1"
+                                Maximum="6500"
+                                Minimum="2800" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference WhiteBalanceSlider}, Path=Value, StringFormat='{0:F0} K'}"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                        </Grid>
+
+                        <BoxView
+                            Margin="0,6"
+                            HeightRequest="1"
+                            Color="#333333" />
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            Text="IMAGE"
+                            TextColor="#8B949E" />
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Brightness"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="BrightnessSlider"
+                                Grid.Column="1"
+                                Maximum="64"
+                                Minimum="-64" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference BrightnessSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Contrast"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="ContrastSlider"
+                                Grid.Column="1"
+                                Maximum="64"
+                                Minimum="0" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference ContrastSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Saturation"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="SaturationSlider"
+                                Grid.Column="1"
+                                Maximum="128"
+                                Minimum="0" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference SaturationSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Hue"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="HueSlider"
+                                Grid.Column="1"
+                                Maximum="40"
+                                Minimum="-40" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference HueSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Gamma"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="GammaSlider"
+                                Grid.Column="1"
+                                Maximum="500"
+                                Minimum="72" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference GammaSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Sharpness"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="SharpnessSlider"
+                                Grid.Column="1"
+                                Maximum="6"
+                                Minimum="0" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference SharpnessSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="120,*,50" ColumnSpacing="10">
+                            <Label
+                                Text="Backlight"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+                            <Slider
+                                x:Name="BacklightSlider"
+                                Grid.Column="1"
+                                Maximum="160"
+                                Minimum="0" />
+                            <Label
+                                Grid.Column="2"
+                                HorizontalTextAlignment="End"
+                                Text="{Binding Source={x:Reference BacklightSlider}, Path=Value, StringFormat='{0:F0}'}"
+                                TextColor="White" />
+                        </Grid>
+
+                        <BoxView
+                            Margin="0,6"
+                            HeightRequest="1"
+                            Color="#333333" />
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="12"
+                            Text="LIGHTING"
+                            TextColor="#8B949E" />
+
+                        <Grid ColumnDefinitions="120,*" ColumnSpacing="10">
+                            <Label
+                                Text="Power Frequency"
+                                TextColor="#C9D1D9"
+                                VerticalOptions="Center" />
+
+                            <Picker
+                                x:Name="PowerFrequencyPicker"
+                                Grid.Column="1"
+                                BackgroundColor="#1A1D21">
+                                <Picker.Items>
+                                    <x:String>Disabled</x:String>
+                                    <x:String>50 Hz</x:String>
+                                    <x:String>60 Hz</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Grid>
+
+                        <Button
+                            Margin="0,8,0,0"
+                            BackgroundColor="#22252B"
+                            Clicked="ApplyCameraSettingsButton_Clicked"
+                            CornerRadius="8"
+                            Text="APPLY SETTINGS TO ALL CAMERAS"
+                            TextColor="#3AA0FF" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
             <Label
                 FontAttributes="Bold"
                 FontSize="12"
