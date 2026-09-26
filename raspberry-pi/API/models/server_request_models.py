@@ -25,3 +25,20 @@ class CameraSlotRequest(BaseModel):
 class TransferFileRequest(BaseModel):
     projectName: str
     path: str
+
+class CameraSettingUpdateRequest(BaseModel):
+    setting: str
+    value: int
+
+class CameraSettingUpdateRequest(BaseModel):
+    setting: str
+    value: int
+
+
+class CameraProfileRequest(BaseModel):
+    profileName: str
+
+
+class CameraProfileSaveRequest(BaseModel):
+    name: str
+    description: str = ""

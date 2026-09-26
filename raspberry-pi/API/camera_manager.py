@@ -4,9 +4,7 @@ from pathlib import Path
 from enum import Enum
 import subprocess
 import time
-"""
-Class representing the USB Camera on the Raspberry Pi.
-"""
+
 
 
 """
@@ -66,9 +64,30 @@ class CaptureResult:
     output_path: Path
     attempts: list[CaptureAttempt]
 
+CAMERA_CONTROLS = {
+    "brightness",
+    "contrast",
+    "saturation",
+    "hue",
+    "white_balance_automatic",
+    "gamma",
+    "gain",
+    "power_line_frequency",
+    "white_balance_temperature",
+    "sharpness",
+    "backlight_compensation",
+    "auto_exposure",
+    "exposure_time_absolute",
+    "exposure_dynamic_framerate"
+}
+
+"""
+Class representing the USB Camera on the Raspberry Pi.
+"""
 class CameraManager:
     def __init__(self):
         self.cameras = self.discover_cameras()
+        
 
     """
     Automatically search for all camera devices that are plugged in so that system can be scaled up or down.
@@ -118,7 +137,51 @@ class CameraManager:
                 return camera
 
         return None
+    """
+    Get the current Camera settings
+    """
+    def get_camera_settings(self, camera_id: int) -> dict | None:
+        camera = self.get_camera(camera_id)
 
+        if camera is None:
+            return None
+
+        controls = ",".join(CAMERA_CONTROLS)
+        command = ["v4l2-ctl", f"--device={camera.device}", f"--get-ctrl={controls}"]
+        result = subprocess.run(command, capture_output=True, text=True, timeout=2)
+
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr.strip())
+
+        settings = {}
+
+        for line in result.stdout.splitlines():
+            if ":" not in line:
+                continue
+
+            name, value = line.split(":", 1)
+            settings[name.strip()] = int(value.strip().split()[0])
+
+        return settings
+    """
+    Get all camera Settings
+    """
+    def get_all_camera_settings(self) -> dict:
+        results = {}
+
+        for camera in self.cameras:
+            try:
+                settings = self.get_camera_settings(camera.id)
+                results[camera.id] = settings
+            except Exception as error:
+                results[camera.id] = {
+                    "error": str(error)
+                }
+
+        return results
+    """
+    Helper made to identify a camera on client app.
+    """
     def identify_camera(self, camera_id: int) -> CaptureResult | None:
         camera = self.get_camera(camera_id)
 
@@ -127,6 +190,42 @@ class CameraManager:
 
         output_path = Path(f"/tmp/beholder_identify_camera_{camera_id:02d}.jpg")
         return self.capture_camera(camera, output_path, retries=1, timeout=5.0, allow_inactive=True)
+    """
+    Set Camera Settings by camera ID
+    """
+    def set_camera_setting(self, camera_id: int, setting: str, value: int) -> bool:
+        camera = self.get_camera(camera_id)
+
+        if camera is None:
+            return False
+
+        if setting not in CAMERA_CONTROLS:
+            raise ValueError(f"Unsupported camera setting: {setting}")
+
+        command = ["v4l2-ctl", f"--device={camera.device}", f"--set-ctrl={setting}={value}"]
+        result = subprocess.run(command, capture_output=True, text=True, timeout=2)
+
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr.strip())
+
+        return True
+
+    """
+    Sets all the camera settings.
+    """
+    def set_all_camera_settings(self, setting: str, value: int) -> dict:
+        if setting not in CAMERA_CONTROLS:
+            raise ValueError(f"Unsupported camera setting: {setting}")        
+        results = {}
+
+        for camera in self.cameras:
+            try:
+                success = self.set_camera_setting(camera.id, setting, value)
+                results[camera.id] = success
+            except Exception:
+                results[camera.id] = False
+
+        return results
 
     """
     Set camera to specific slot. Only 1 slot can be occupied at a time.

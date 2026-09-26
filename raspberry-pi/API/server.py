@@ -6,6 +6,7 @@ from starlette.background import BackgroundTask
 
 from API.app_state import (
     camera_manager,
+    camera_profile_manager,
     project_manager,
     capture_controller,
     clicker
@@ -159,6 +160,13 @@ async def identify_camera(request: request_models.CameraRequest):
 
     return FileResponse(path=result.output_path, media_type="image/jpeg", filename=f"camera_{request.cameraId}_identify.jpg", background=BackgroundTask(result.output_path.unlink, missing_ok=True))
 
+def ensure_camera_configuration_available():
+    if capture_controller.capturing:
+        raise HTTPException(status_code=409, detail="A capture is currently in progress.")
+    #Unavailable if auto capturing engaged.
+    if capture_controller.automatic_running:
+        raise HTTPException(status_code=409, detail="Automatic capture is currently running.")
+
 @app.put("/api/capture/interval")
 async def set_capture_interval(request: request_models.CaptureIntervalRequest):
     try:
@@ -310,13 +318,114 @@ async def transfer_project_file(request: request_models.TransferFileRequest):
 
     return FileResponse(path=requested_file)
 
+@app.get("/api/cameras/settings/get")
+async def get_camera_settings():
+    ensure_camera_configuration_available()
+    try:
+        return {
+            "cameras": camera_manager.get_all_camera_settings()
+        }
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+@app.put("/api/cameras/settings/set")
+async def set_camera_setting(request: request_models.CameraSettingUpdateRequest):
+    ensure_camera_configuration_available()
+    try:
+        results = camera_manager.set_all_camera_settings(request.setting, request.value)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+    return {
+        "success": all(results.values()),
+        "setting": request.setting,
+        "value": request.value,
+        "cameras": results
+    }
+
+@app.get("/api/cameras/profiles/getall")
+async def get_camera_profiles():
+    try:
+        return {
+            "profiles": camera_profile_manager.get_profiles()
+        }
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+
+@app.post("/api/cameras/profiles/get")
+async def get_camera_profile(request: request_models.CameraProfileRequest):
+    try:
+        return camera_profile_manager.get_profile(request.profileName)
+    except FileNotFoundError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+
+@app.post("/api/cameras/profiles/apply")
+async def apply_camera_profile(request: request_models.CameraProfileRequest):
+    ensure_camera_configuration_available()
+
+    try:
+        results = camera_profile_manager.apply_profile(request.profileName)
+    except FileNotFoundError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+    success = all(all(camera_results.values()) for camera_results in results.values())
+
+    return {
+        "success": success,
+        "profileName": request.profileName,
+        "results": results
+    }
+
+
+@app.post("/api/cameras/profiles/save")
+async def save_camera_profile(request: request_models.CameraProfileSaveRequest):
+    ensure_camera_configuration_available()
+
+    try:
+        profile = camera_profile_manager.save_current_settings(request.name, request.description)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    except RuntimeError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+    return profile
+
+
+@app.post("/api/cameras/profiles/delete")
+async def delete_camera_profile(request: request_models.CameraProfileRequest):
+    try:
+        success = camera_profile_manager.delete_profile(request.profileName)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+    if not success:
+        raise HTTPException(status_code=404, detail=f"Camera profile '{request.profileName}' does not exist.")
+
+    return {
+        "success": True,
+        "profileName": request.profileName
+    }
+
 def build_status_snapshot():
     battery = get_battery_status()
     project = project_manager.get_current_project()
 
     return {
         "timestamp": get_timestamp(),
-
         "system": {
             "state": "READY",
             "temperatureC": get_cpu_temperature(),
