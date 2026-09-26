@@ -14,6 +14,9 @@ namespace beholder_configuration_app.Services.WebServices
         private ClientWebSocket? _socket;
         private CancellationTokenSource? _cancellationTokenSource;
 
+        private bool _intentionalDisconnect = false;
+        private bool _reconnecting = false;
+
         public event Action<string>? MessageReceived;
         public event Action<bool>? ConnectionChanged;
 
@@ -21,7 +24,7 @@ namespace beholder_configuration_app.Services.WebServices
 
         private readonly AppLogService _logService;
         private readonly BeholderConnectionSettings _connectionSettings;
-        
+
 
         //private string _wsConnectionUri = "ws://192.168.0.130:8000/ws";
         public BeholderWebSocketService(AppLogService logService, BeholderConnectionSettings connectionSettings)
@@ -36,7 +39,17 @@ namespace beholder_configuration_app.Services.WebServices
                 return;
             }
 
+            _intentionalDisconnect = false;
+            await ConnectInternalAsync();
+        }
+        private async Task ConnectInternalAsync()
+        {
+            _socket?.Dispose();
+
             _socket = new ClientWebSocket();
+            _socket.Options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+            _socket.Options.KeepAliveTimeout = TimeSpan.FromSeconds(30);
+
             _cancellationTokenSource = new CancellationTokenSource();
 
             string uri = _connectionSettings.WebSocketAddress;
@@ -44,7 +57,9 @@ namespace beholder_configuration_app.Services.WebServices
             await _socket.ConnectAsync(new Uri(uri), _cancellationTokenSource.Token);
 
             ConnectionChanged?.Invoke(true);
+
             _ = ReceiveLoopAsync(_cancellationTokenSource.Token);
+            _ = HeartbeatLoopAsync(_cancellationTokenSource.Token);
         }
 
         private async Task ReceiveLoopAsync(CancellationToken cancellationToken)
@@ -76,23 +91,95 @@ namespace beholder_configuration_app.Services.WebServices
                     MessageReceived?.Invoke(message);
                 }
             }
-            catch (OperationCanceledException ocex)
+            catch (OperationCanceledException)
             {
-                _logService.Error(ocex);
             }
-            catch (WebSocketException wsex)
+            catch (WebSocketException exception)
             {
-                _logService.Error(wsex);
+                _logService.Error(exception);
             }
             finally
             {
                 ConnectionChanged?.Invoke(false);
+
+                if (!_intentionalDisconnect && !cancellationToken.IsCancellationRequested)
+                {
+                    _ = ReconnectAsync();
+                }
+            }
+        }
+
+        private async Task HeartbeatLoopAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
+
+                    if (_socket?.State != WebSocketState.Open)
+                    {
+                        return;
+                    }
+
+                    byte[] heartbeat = Encoding.UTF8.GetBytes("heartbeat");
+
+                    await _socket.SendAsync(
+                        new ArraySegment<byte>(heartbeat),
+                        WebSocketMessageType.Text,
+                        true,
+                        cancellationToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (WebSocketException exception)
+            {
+                _logService.Error(exception);
+                _socket?.Abort();
+            }
+        }
+
+        private async Task ReconnectAsync()
+        {
+            if (_reconnecting || _intentionalDisconnect)
+            {
+                return;
             }
 
+            _reconnecting = true;
+
+            try
+            {
+                while (!_intentionalDisconnect && !IsConnected)
+                {
+                    _logService.Warning("WebSocket disconnected. Reconnecting...");
+
+                    await Task.Delay(2000);
+
+                    try
+                    {
+                        await ConnectInternalAsync();
+                        _logService.Info("WebSocket reconnected.");
+                        return;
+                    }
+                    catch (Exception exception)
+                    {
+                        _logService.Warning($"WebSocket reconnect failed: {exception.Message}");
+                    }
+                }
+            }
+            finally
+            {
+                _reconnecting = false;
+            }
         }
 
         public async Task DisconnectAsync()
         {
+            _intentionalDisconnect = true;
+
             if (_socket == null)
             {
                 return;
@@ -102,7 +189,13 @@ namespace beholder_configuration_app.Services.WebServices
 
             if (_socket.State == WebSocketState.Open)
             {
-                await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnected", CancellationToken.None);
+                try
+                {
+                    await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Client Disconnected", CancellationToken.None);
+                }
+                catch
+                {
+                }
             }
 
             _socket.Dispose();

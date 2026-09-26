@@ -13,7 +13,7 @@ namespace beholder_configuration_app
         //STRESS TEST
         private readonly Stopwatch _stressTestTimer = new();
         private bool _stressTestRunning = false;
-        private const double StressTestBatteryThreshold = 2.0;        
+        private const double StressTestBatteryThreshold = 2.0;
 
         //SERVICES
         private readonly BeholderWebSocketService _webSocketService;
@@ -25,6 +25,8 @@ namespace beholder_configuration_app
 
         private bool _automaticIntervalDirty = false;
         private bool _updatingAutomaticIntervalFromStatus = false;
+
+        private CancellationTokenSource? _statusPollingCancellationTokenSource;
 
         /// <summary>
         /// Start up the main page of the MAUI app
@@ -41,7 +43,7 @@ namespace beholder_configuration_app
             _webSocketService.MessageReceived += OnMessageReceived;
             _webSocketService.ConnectionChanged += OnConnectionChanged;
 
-           
+
         }
 
         protected override void OnAppearing()
@@ -49,6 +51,18 @@ namespace beholder_configuration_app
             base.OnAppearing();
             bool keepScreenAwake = Preferences.Default.Get("KeepScreenAwake", true);
             DeviceDisplay.Current.KeepScreenOn = keepScreenAwake;
+#if ANDROID
+            _ = StartStatusPollingAsync();
+#endif
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+#if ANDROID
+            _statusPollingCancellationTokenSource?.Cancel();
+#endif
         }
 
         private void OnMessageReceived(string message)
@@ -152,7 +166,7 @@ namespace beholder_configuration_app
             {
                 if (!_stressTestTimer.IsRunning)
                     _logService.Info($"Stress Test Start at {_status?.System?.Battery?.Percentage:F1}%");
-                    _stressTestTimer.Start();
+                _stressTestTimer.Start();
 
                 if (_status?.System?.Battery?.Percentage <= StressTestBatteryThreshold)
                 {
@@ -238,7 +252,7 @@ namespace beholder_configuration_app
                 }
                 else
                 {
-                   _ = _soundManager.PlayAsync(SoundEffect.Click);
+                    _ = _soundManager.PlayAsync(SoundEffect.Click);
                 }
             }
             catch (Exception exception)
@@ -277,9 +291,9 @@ namespace beholder_configuration_app
                     }
                     else
                     {
-                        _logService.Info($"Automatic interval requested: {seconds:F2}s");                        
+                        _logService.Info($"Automatic interval requested: {seconds:F2}s");
                         _ = _soundManager.PlayAsync(SoundEffect.Click);
-                        
+
                     }
                 }
             }
@@ -382,5 +396,52 @@ namespace beholder_configuration_app
             }
         }
 
+
+        //Attempt to fix the Android websockets bug. Polling will be used instead.
+        private async Task StartStatusPollingAsync()
+        {
+            _statusPollingCancellationTokenSource?.Cancel();
+            _statusPollingCancellationTokenSource = new CancellationTokenSource();
+
+            CancellationToken cancellationToken = _statusPollingCancellationTokenSource.Token;
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.SystemGetStatus);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        BeholderStatus? status = JsonSerializer.Deserialize<BeholderStatus>(json);
+
+                        if (status != null)
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                _status = status;
+                                UpdateDashboard();
+                            });
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    _logService.Warning($"Unable to poll BEHOLDER status: {exception.Message}");
+                }
+
+                try
+                {
+                    await Task.Delay(1000, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+            }
+        }
     }
 }
+
+
