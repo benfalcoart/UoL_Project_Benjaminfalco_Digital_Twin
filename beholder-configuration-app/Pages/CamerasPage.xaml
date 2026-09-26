@@ -279,7 +279,59 @@
                 </VerticalStackLayout>
 
             </Border>
+            <Label
+                FontAttributes="Bold"
+                FontSize="12"
+                Text="CAMERA SETTINGS"
+                TextColor="#8B949E" />
 
+            <Border
+                Padding="16"
+                BackgroundColor="#191919"
+                Stroke="#444444"
+                StrokeThickness="1">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        Text="PROFILE"
+                        TextColor="#8B949E" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+
+                        <Picker
+                            x:Name="CameraProfilePicker"
+                            Title="Select Profile"
+                            Grid.Column="0"
+                            BackgroundColor="#1A1D21"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedIndexChanged="CameraProfilePicker_SelectedIndexChanged" />
+
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="#22252B"
+                            Clicked="ApplyCameraProfileButton_Clicked"
+                            CornerRadius="8"
+                            Text="APPLY"
+                            TextColor="#3AA0FF" />
+
+                    </Grid>
+
+                    <Label
+                        x:Name="CameraProfileDescriptionLabel"
+                        FontSize="12"
+                        Text=""
+                        TextColor="#8B949E" />
+
+                </VerticalStackLayout>
+
+            </Border>
             <Label
                 FontAttributes="Bold"
                 FontSize="12"

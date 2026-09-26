@@ -92,5 +92,40 @@
   "CaptureTrigger": {
     "method": "POST",
     "path": "/api/capture/trigger"
+  },
+
+  "CameraSettingsGet": {
+    "method": "GET",
+    "path": "/api/cameras/settings/get"
+  },
+
+  "CameraSettingsSet": {
+    "method": "PUT",
+    "path": "/api/cameras/settings/set"
+  },
+
+  "CameraProfilesGetAll": {
+    "method": "GET",
+    "path": "/api/cameras/profiles/getall"
+  },
+
+  "CameraProfileGet": {
+    "method": "POST",
+    "path": "/api/cameras/profiles/get"
+  },
+
+  "CameraProfileApply": {
+    "method": "POST",
+    "path": "/api/cameras/profiles/apply"
+  },
+
+  "CameraProfileSave": {
+    "method": "POST",
+    "path": "/api/cameras/profiles/save"
+  },
+
+  "CameraProfileDelete": {
+    "method": "POST",
+    "path": "/api/cameras/profiles/delete"
   }
 }

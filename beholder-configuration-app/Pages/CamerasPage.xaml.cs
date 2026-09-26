@@ -1,4 +1,5 @@
 using beholder_configuration_app.Models;
+using beholder_configuration_app.Models.API;
 using beholder_configuration_app.Services.Audio;
 using beholder_configuration_app.Services.Logging;
 using beholder_configuration_app.Services.WebServices;
@@ -74,6 +75,81 @@ public partial class CamerasPage : ContentPage
             Color.FromArgb("#F4B400")
         };
         ;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadCameraProfilesAsync();
+    }
+
+    private async Task LoadCameraProfilesAsync()
+    {
+        try
+        {
+            HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CameraProfilesGetAll);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logService.Warning($"Unable to load camera profiles. HTTP {(int)response.StatusCode}");
+                return;
+            }
+
+            string json = await response.Content.ReadAsStringAsync();
+            CameraProfilesResponse? result = JsonSerializer.Deserialize<CameraProfilesResponse>(json);
+
+            CameraProfilePicker.ItemsSource = result?.Profiles ?? new List<CameraProfileSummary>();
+
+            if (CameraProfilePicker.ItemsSource.Count > 0 && CameraProfilePicker.SelectedIndex < 0)
+            {
+                CameraProfilePicker.SelectedIndex = 0;
+            }
+        }
+        catch (Exception exception)
+        {
+            _logService.Error(exception);
+        }
+    }
+
+    private void CameraProfilePicker_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (CameraProfilePicker.SelectedItem is CameraProfileSummary profile)
+        {
+            CameraProfileDescriptionLabel.Text = profile.Description;
+        }
+        else
+        {
+            CameraProfileDescriptionLabel.Text = "";
+        }
+    }
+
+    private async void ApplyCameraProfileButton_Clicked(object sender, EventArgs e)
+    {
+        if (CameraProfilePicker.SelectedItem is not CameraProfileSummary profile)
+        {
+            return;
+        }
+
+        try
+        {
+            HttpResponseMessage response = await _apiService.SendAsync(APIEndpoint.CameraProfileApply, body: new
+            {
+                profileName = profile.Name
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logService.Warning($"Unable to apply camera profile '{profile.Name}'. HTTP {(int)response.StatusCode}");
+                return;
+            }
+
+            _logService.Info($"Camera profile '{profile.Name}' applied.");
+            _ = _soundManager.PlayAsync(SoundEffect.Camera_Click_On);
+        }
+        catch (Exception exception)
+        {
+            _logService.Error(exception);
+        }
     }
 
     private void OnMessageReceived(string message)

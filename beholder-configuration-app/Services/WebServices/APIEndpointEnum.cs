@@ -23,6 +23,15 @@
         CaptureSetAutomaticMode,
         CaptureSetAutomaticInterval,
         CaptureGetStatus,
-        CaptureTrigger
+        CaptureTrigger,
+
+        CameraSettingsGet,
+        CameraSettingsSet,
+
+        CameraProfilesGetAll,
+        CameraProfileGet,
+        CameraProfileApply,
+        CameraProfileSave,
+        CameraProfileDelete,
     }
 }
