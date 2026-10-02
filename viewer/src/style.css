@@ -104,3 +104,6 @@ canvas {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.scene-item.selected {
+    background: rgba(77, 166, 255, 0.35);
+}

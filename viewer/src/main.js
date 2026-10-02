@@ -1,10 +1,14 @@
 import './style.css'
 import * as THREE from 'three'
+//Controls:
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import { TransformControls } from 'three/addons/controls/TransformControls.js'
 //Model Loaders:
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { PLYLoader } from 'three/addons/loaders/PLYLoader.js'
+
+
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x202020) //Nice Grey background.
@@ -42,6 +46,40 @@ document.querySelector('#app').appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 
+const transformControls = new TransformControls(camera, renderer.domElement)
+
+const transformHelper = transformControls.getHelper()
+scene.add(transformHelper)
+
+transformControls.addEventListener('dragging-changed', (event) => {
+    controls.enabled = !event.value
+});
+
+transformControls.addEventListener('mouseDown', () => {
+    if (!selectedObject) {
+        return
+    }
+
+    transformStartState = captureTransform(selectedObject)
+})
+
+transformControls.addEventListener('mouseUp', () => {
+    if (!selectedObject || !transformStartState) {
+        return
+    }
+
+    const transformEndState = captureTransform(selectedObject)
+
+    if (!transformsEqual(transformStartState, transformEndState)) {
+        undoStack.push(transformStartState)
+        redoStack.length = 0
+    }
+
+    transformStartState = null
+
+    updateVoxelGrids()
+})
+
 //Lights:
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
 ambientLight.name = 'Ambient Light'
@@ -56,6 +94,11 @@ scene.add(directionalLight);
 //const grid = new THREE.GridHelper(20, 20)
 //grid.name = 'Grid Helper'
 //scene.add(grid);
+const undoStack = []
+const redoStack = []
+
+let transformStartState = null
+let selectedObject = null
 
 //Voxel Grid visualizer idea test:
 let voxelGrids = [];
@@ -84,6 +127,23 @@ window.addEventListener('resize', () => {
 
     renderer.setSize(window.innerWidth, window.innerHeight)
 })
+
+function selectObject(object) {
+    selectedObject = object
+
+    if (selectedObject) {
+        transformControls.attach(selectedObject)
+    }
+    else {
+        transformControls.detach()
+    }
+
+    updateSceneExplorer()
+}
+
+function deselectObject() {
+    selectObject(null)
+}
 
 //Update the Voxel grids (and scene explorer) after the initial obejcts have been added:
 updateSceneExplorer();
@@ -215,6 +275,14 @@ function updateSceneExplorer() {
     sceneTree.innerHTML = ''
 
     scene.children.forEach((object) => {
+        if (object === transformControls.getHelper()) {
+            return
+        }
+
+        if (voxelGrids.includes(object)) {
+            return
+        }
+
         const item = createSceneItem(object)
         sceneTree.appendChild(item)
     })
@@ -223,6 +291,10 @@ function updateSceneExplorer() {
 function createSceneItem(object) {
     const item = document.createElement('div')
     item.classList.add('scene-item')
+
+    if (object === selectedObject) {
+        item.classList.add('selected')
+    }
 
     const visibilityCheckbox = document.createElement('input')
     visibilityCheckbox.type = 'checkbox'
@@ -236,6 +308,10 @@ function createSceneItem(object) {
     const name = document.createElement('span')
     name.classList.add('scene-item-name')
     name.textContent = object.name || object.type
+
+    item.addEventListener('click', () => {
+        selectObject(object)
+    })
 
     item.appendChild(visibilityCheckbox)
     item.appendChild(name)
@@ -318,41 +394,85 @@ function createVoxelGrid(sizeA, sizeB, cellsA, cellsB, plane, color) {
 }
 
 function updateVoxelGrids() {
-    //Remove old grids:
     voxelGrids.forEach(grid => scene.remove(grid));
-    
     voxelGrids = [];
+
     const meshes = [];
 
-    //Get all meshes in scene:
-    scene.traverse((object) => {
-        if (object.isMesh) {
-            meshes.push(object)
-        }
-    });
+    function isChildOf(object, parent) {
+        let current = object
 
-    //If no meshes, abort:
+        while (current) {
+            if (current === parent) {
+                return true
+            }
+
+            current = current.parent
+        }
+
+        return false
+    }
+
+    function isVisibleInScene(object) {
+        let current = object
+
+        while (current) {
+            if (!current.visible) {
+                return false
+            }
+
+            current = current.parent
+        }
+
+        return true
+    }
+
+    scene.traverse((object) => {
+        if (!object.isMesh) {
+            return
+        }
+
+        if (isChildOf(object, transformHelper)) {
+            return
+        }
+
+        if (!isVisibleInScene(object)) {
+            return
+        }
+
+        meshes.push(object)
+    })
+
     if (meshes.length === 0) {
+        updateSceneExplorer()
         return
     }
 
-    //Create a bounding box that will contain all meshes:
-    const bounds = new THREE.Box3();
+    const bounds = new THREE.Box3()
 
-    //Expand the bounding box to include each mesh:
     meshes.forEach((mesh) => {
         bounds.expandByObject(mesh)
-    });
+    })
 
-    //Get the bounds of all the combined meshes:
-    meshes.forEach((mesh) => {
-        bounds.expandByObject(mesh)
-    });
-    //Create both voxel resolution grids:
-    createVoxelGridBox(bounds, minVoxelSize,maxVoxelSize, maxVoxelSize *2, minVoxelColor, 'Min Voxel');
-    createVoxelGridBox(bounds, maxVoxelSize,maxVoxelSize, maxVoxelSize *2, maxVoxelColor, 'Max Voxel');
+    createVoxelGridBox(
+        bounds,
+        minVoxelSize,
+        maxVoxelSize,
+        maxVoxelSize * 2,
+        minVoxelColor,
+        'Min Voxel'
+    )
 
-    updateSceneExplorer();
+    createVoxelGridBox(
+        bounds,
+        maxVoxelSize,
+        maxVoxelSize,
+        maxVoxelSize * 2,
+        maxVoxelColor,
+        'Max Voxel'
+    )
+
+    updateSceneExplorer()
 }
 
 function createVoxelGridBox(bounds, voxelSize, maxVoxelSize, padding, color, name) {   
@@ -406,6 +526,105 @@ function createVoxelGridBox(bounds, voxelSize, maxVoxelSize, padding, color, nam
 
     voxelGrids.push(floorGrid, backGrid, sideGrid);
     scene.add(floorGrid, backGrid, sideGrid);
+}
+
+//HOTKEY Listners:
+window.addEventListener('keydown', (event) => {
+    const key = event.key.toLowerCase()
+
+    if (event.ctrlKey && key === 'z' && !event.shiftKey) {
+        event.preventDefault()
+        undo()
+        return
+    }
+
+    if (
+        (event.ctrlKey && event.shiftKey && key === 'z') ||
+        (event.ctrlKey && key === 'y')
+    ) {
+        event.preventDefault()
+        redo()
+        return
+    }
+
+    if (!selectedObject) {
+        return
+    }
+
+    switch (key) {
+        case 'w':
+            transformControls.setMode('translate')
+            break
+
+        case 'e':
+            transformControls.setMode('rotate')
+            break
+
+        case 'r':
+            transformControls.setMode('scale')
+            break
+
+        case 'escape':
+            deselectObject()
+            break
+    }
+})
+
+function captureTransform(object) {
+    return {
+        object,
+        position: object.position.clone(),
+        quaternion: object.quaternion.clone(),
+        scale: object.scale.clone()
+    }
+}
+
+function restoreTransform(state) {
+    state.object.position.copy(state.position)
+    state.object.quaternion.copy(state.quaternion)
+    state.object.scale.copy(state.scale)
+
+    state.object.updateMatrixWorld(true)
+}
+
+function transformsEqual(a, b) {
+    return (
+        a.position.equals(b.position) &&
+        a.quaternion.equals(b.quaternion) &&
+        a.scale.equals(b.scale)
+    )
+}
+
+function undo() {
+    if (undoStack.length === 0) {
+        return
+    }
+
+    const action = undoStack.pop()
+
+    const currentState = captureTransform(action.object)
+    redoStack.push(currentState)
+
+    restoreTransform(action)
+
+    selectObject(action.object)
+    updateVoxelGrids()
+}
+
+function redo() {
+    if (redoStack.length === 0) {
+        return
+    }
+
+    const action = redoStack.pop()
+
+    const currentState = captureTransform(action.object)
+    undoStack.push(currentState)
+
+    restoreTransform(action)
+
+    selectObject(action.object)
+    updateVoxelGrids()
 }
 
 //THREE.js render loop:
