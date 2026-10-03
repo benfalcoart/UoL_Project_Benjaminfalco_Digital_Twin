@@ -155,8 +155,8 @@ function updateBoundaryGridProjections() {
 
 //TODO: Write Python API for doing volume calculates. Is probably too heavy for browser.
 async function calculateApproxVolume() {
-    const meshFile = await exportVisibleSceneMeshes(scene)
-    const boundaryFile = exportVoxelBoundaries(scene)
+    const meshFile = await exportVisibleSceneMeshes(scene, transformHelper)
+    const boundaryFile = exportVoxelBoundaries(scene,settings)
 
     const formData = new FormData()
     formData.append('mesh', meshFile, 'scene.glb')

@@ -23,20 +23,19 @@
             hidden>     
         
     <div id="voxelControls">
-        <label for="minVoxelSize">
-            Min Voxel Size:
-            <span id="minVoxelValue">0.01</span>
-        </label>
-
-        <input
-            type="range" id="minVoxelSize" min="0.005" max="0.25" step="0.005" value="0.01">
         <label for="maxVoxelSize">
             Max Voxel Size:
             <span id="maxVoxelValue">0.10</span>
         </label>
-
+        
         <input
             type="range" id="maxVoxelSize" min="0.005" max="0.25" step="0.005" value="0.10">
+        <label for="subdivisionDepth">Subdivision Depth:</label>
+        <input type="number" id="subdivisionDepth" min="0" max="8" step="1" value="3">
+
+        <label>Min Voxel Size:</label>
+        <span id="minVoxelValue">0.0125</span>
+        
         <label for="voxelGridOpacity">Grid Opacity</label>
             <div class="slider-row">
                 <input type="range" id="voxelGridOpacity" min="0" max="1" step="0.01" value="0.15">

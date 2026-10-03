@@ -9,6 +9,11 @@ export function exportVoxelBoundaries(scene) {
     })
 
     const json = JSON.stringify({
+        voxelSettings: {
+            maxVoxelSize: settings.maxVoxelSize,
+            minVoxelSize: settings.minVoxelSize,
+            subdivisionDepth: settings.subdivisionDepth
+        },
         boundaries
     }, null, 2)
 

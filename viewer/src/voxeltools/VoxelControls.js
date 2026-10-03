@@ -3,7 +3,7 @@ export class VoxelControls {
     //Find the voxel UI controls and read their starting values:
     constructor(onChange, onCalculateVolume) { 
         //Grab the HTML controls:
-        this.minVoxelSlider = document.querySelector('#minVoxelSize')
+        this.subdivisionDepthInput = document.querySelector('#subdivisionDepth')
         this.maxVoxelSlider = document.querySelector('#maxVoxelSize')
 
         this.minVoxelValue = document.querySelector('#minVoxelValue')
@@ -18,8 +18,9 @@ export class VoxelControls {
 
         this.calculateVolumeButton = document.querySelector('#calculateVoxelVolumeButton')
         //Set/Store the values:
-        this.minVoxelSize = Number(this.minVoxelSlider.value)
         this.maxVoxelSize = Number(this.maxVoxelSlider.value)
+        this.subdivisionDepth = Number(this.subdivisionDepthInput.value)
+        this.minVoxelSize = this.calculateMinVoxelSize()
         this.voxelGridOpacity = Number(this.voxelGridOpacitySlider.value)
         this.voxelBoundaryColor = this.voxelBoundaryColorPicker.value
         this.minVoxelColor = this.minVoxelColorPicker.value
@@ -29,22 +30,12 @@ export class VoxelControls {
         this.onCalculateVolume = onCalculateVolume
 
         this.setupListeners()
+        this.updateMinVoxelSize()
     }
 
     //Listen for changes to the voxel controls:
     setupListeners() {
-        //Voxel sliders:
-        this.minVoxelSlider.addEventListener('input', () => {
-            this.minVoxelSize = Number(this.minVoxelSlider.value)
-
-            if (this.minVoxelSize > this.maxVoxelSize) {
-                this.minVoxelSize = this.maxVoxelSize
-                this.minVoxelSlider.value = this.maxVoxelSize
-            }
-
-            this.minVoxelValue.textContent = this.minVoxelSize.toFixed(3)
-            this.notifyChange()
-        })
+        //Voxel sliders:        
 
         this.maxVoxelSlider.addEventListener('input', () => {
             this.maxVoxelSize = Number(this.maxVoxelSlider.value)
@@ -55,8 +46,28 @@ export class VoxelControls {
             }
 
             this.maxVoxelValue.textContent = this.maxVoxelSize.toFixed(3)
+            this.updateMinVoxelSize()
             this.notifyChange()
         })
+
+        //Subdicsion Depth:
+        this.subdivisionDepthInput.addEventListener('input', () => {
+            this.subdivisionDepth = Number(this.subdivisionDepthInput.value)
+
+            if (this.subdivisionDepth < 0) {
+                this.subdivisionDepth = 0
+                this.subdivisionDepthInput.value = 0
+            }
+
+            if (this.subdivisionDepth > 8) {
+                this.subdivisionDepth = 8
+                this.subdivisionDepthInput.value = 8
+            }
+
+            this.updateMinVoxelSize()
+            this.notifyChange()
+        })
+
         //Opacity Slider:
         this.voxelGridOpacitySlider.addEventListener('input', () => {
             this.voxelGridOpacity = Number(this.voxelGridOpacitySlider.value)
@@ -104,11 +115,21 @@ export class VoxelControls {
         return {
             minVoxelSize: this.minVoxelSize,
             maxVoxelSize: this.maxVoxelSize,
+            subdivisionDepth: this.subdivisionDepth,
             voxelGridOpacity: this.voxelGridOpacity,
             voxelBoundaryColor: this.voxelBoundaryColor,
             minVoxelColor: this.minVoxelColor,
             maxVoxelColor: this.maxVoxelColor
         }
     }
+    //Calculate the smallest voxel size based on subdivision depth:
+    calculateMinVoxelSize() {
+        return this.maxVoxelSize / Math.pow(2, this.subdivisionDepth)
+    }
 
+    //Update the displayed minimum voxel size:
+    updateMinVoxelSize() {
+        this.minVoxelSize = this.calculateMinVoxelSize()
+        this.minVoxelValue.textContent = this.minVoxelSize.toFixed(4)
+    }
 }
