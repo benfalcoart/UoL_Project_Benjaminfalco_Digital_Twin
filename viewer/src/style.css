@@ -31,7 +31,7 @@ canvas {
     color: white;
 }
 
-#loadMeshButton {
+.UIButton {
     padding: 10px 16px;
     width: 100%;
     border: none;

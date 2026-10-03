@@ -7,7 +7,8 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
 import { PLYLoader } from 'three/addons/loaders/PLYLoader.js'
-
+//Voxel tools
+import { VoxelBoundary } from './VoxelBoundary.js'
 
 
 const scene = new THREE.Scene()
@@ -17,6 +18,7 @@ scene.background = new THREE.Color(0x202020) //Nice Grey background.
 //UI:
 const loadMeshButton = document.querySelector('#loadMeshButton')
 const meshFileInput = document.querySelector('#meshFileInput')
+const addVoxelBoundaryButton = document.querySelector('#addVoxelBoundaryButton')
 
 const minVoxelSlider = document.querySelector('#minVoxelSize')
 const maxVoxelSlider = document.querySelector('#maxVoxelSize')
@@ -44,7 +46,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 document.querySelector('#app').appendChild(renderer.domElement)
 //Camera controls:
 const controls = new OrbitControls(camera, renderer.domElement)
-controls.enableDamping = true
+controls.enableDamping = false
 
 const transformControls = new TransformControls(camera, renderer.domElement)
 
@@ -119,6 +121,9 @@ cube.name = 'Test Cube'
 cube.position.y = 1
 
 scene.add(cube);
+
+//Voxelation:
+let voxelBoundaryCount = 0
 
 //Keep renderer at the size of the window.
 window.addEventListener('resize', () => {
@@ -626,6 +631,25 @@ function redo() {
     selectObject(action.object)
     updateVoxelGrids()
 }
+
+
+
+addVoxelBoundaryButton.addEventListener('click', () => {
+    voxelBoundaryCount++
+
+    const boundary = new VoxelBoundary({
+        name: `Voxel Boundary ${voxelBoundaryCount}`,
+        width: 2,
+        height: 2,
+        depth: 2,
+        position: new THREE.Vector3(0, 1, 0)
+    })
+
+    scene.add(boundary)
+
+    selectObject(boundary)
+    updateSceneExplorer()
+})
 
 //THREE.js render loop:
 renderer.setAnimationLoop(animate)
