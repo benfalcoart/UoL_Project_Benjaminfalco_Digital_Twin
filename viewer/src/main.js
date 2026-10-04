@@ -1,13 +1,12 @@
 import './style.css'
 import * as THREE from 'three'
-import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js'
 
 import { createScene } from './3DviewerUI/SceneSetup.js'
 import { MeshLoader } from './3DviewerUI/MeshLoader.js'
 import { SceneExplorer } from './3DviewerUI/SceneExplorer.js'
 import { TransformHistory } from './3DviewerUI/TransformHistory.js'
 import { exportVisibleSceneMeshes } from './3DviewerUI/SceneExporter.js'
-
+import { MeshSnapper } from './3DviewerUI/MeshSnapper.js'
 
 import { VoxelBoundary } from './voxeltools/VoxelBoundary.js'
 import { WorldVoxelGrid } from './voxeltools/WorldVoxelGrid.js'
@@ -39,15 +38,12 @@ let boundaryEditor = null
 //Create the editor helper systems:
 const transformHistory = new TransformHistory()
 const voxelControls = new VoxelControls(null, calculateApproxVolume)
-const voxelSettings = voxelControls.getSettings()
+const meshSnapper = new MeshSnapper() //This will be used by the boundaries to make it easier/faster to place them.
+const initialVoxelSettings = voxelControls.getSettings()
 
 //Voxel Grid visualizer idea test:
 const voxelGridOrigin = new THREE.Vector3(0, 0, 0)
-const worldVoxelGrid = new WorldVoxelGrid(
-    voxelGridOrigin,
-    voxelSettings.minVoxelSize,
-    voxelSettings.maxVoxelSize
-)
+const worldVoxelGrid = new WorldVoxelGrid(voxelGridOrigin, initialVoxelSettings.minVoxelSize, initialVoxelSettings.maxVoxelSize)
 
 //Create the scene explorer:
 const sceneExplorer = new SceneExplorer(
@@ -58,7 +54,8 @@ const sceneExplorer = new SceneExplorer(
 )
 
 //Create the model loader:
-const meshLoader = new MeshLoader(scene, loadMeshButton, meshFileInput, () => {
+const meshLoader = new MeshLoader(scene, loadMeshButton, meshFileInput, (loadedObject) => {
+    meshSnapper.registerObject(loadedObject)
     sceneExplorer.refresh()
 })
 
@@ -69,6 +66,7 @@ boundaryEditor = new VoxelBoundaryEditor({
     transformControls,
     transformHistory,
     worldVoxelGrid,
+    meshSnapper,
     getGridSettings: () => voxelControls.getSettings(),
     onSelect: selectObject,
     onDeselect: deselectObject
@@ -80,7 +78,8 @@ voxelControls.setOnChange((settings) => {
     updateBoundaryGridProjections()
 })
 
-//Test Cube (TODO: remove later?)
+/*
+//Test Cube (remove later?)
 const geometry = new THREE.BoxGeometry(2, 2, 2)
 const material = new THREE.MeshStandardMaterial({
     color: 0x4da6ff
@@ -91,7 +90,7 @@ cube.name = 'Test Cube'
 cube.position.y = 1
 
 scene.add(cube);
-
+*/
 //Select an object and attach the transform controls:
 function selectObject(object) {
     selectedObject = object
@@ -135,13 +134,7 @@ addVoxelBoundaryButton.addEventListener('click', () => {
 function updateBoundaryGridProjection(boundary) {
     const settings = voxelControls.getSettings()
 
-    boundary.updateGridProjection(
-        worldVoxelGrid,
-        settings.voxelGridOpacity,
-        settings.voxelBoundaryColor,
-        settings.minVoxelColor,
-        settings.maxVoxelColor
-    )
+    boundary.updateGridProjection(worldVoxelGrid, settings.voxelGridOpacity, settings.voxelBoundaryColor, settings.minVoxelColor, settings.maxVoxelColor)
 }
 
 //Update the projected voxel grids for all boundaries:
@@ -156,7 +149,9 @@ function updateBoundaryGridProjections() {
 //TODO: Write Python API for doing volume calculates. Is probably too heavy for browser.
 async function calculateApproxVolume() {
     const meshFile = await exportVisibleSceneMeshes(scene, transformHelper)
-    const boundaryFile = exportVoxelBoundaries(scene,settings)
+    const boundaryFile = exportVoxelBoundaries(scene,voxelControls.getSettings())
+
+    //console.log(voxelSettings)
 
     const formData = new FormData()
     formData.append('mesh', meshFile, 'scene.glb')

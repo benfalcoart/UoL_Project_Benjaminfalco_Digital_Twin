@@ -1,5 +1,5 @@
 //Exports all visible voxel boundaries into a JSON file:
-export function exportVoxelBoundaries(scene) {
+export function exportVoxelBoundaries(scene, settings) {
     const boundaries = []
 
     scene.children.forEach(object => {

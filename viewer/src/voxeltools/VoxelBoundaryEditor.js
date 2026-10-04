@@ -3,11 +3,12 @@ import * as THREE from 'three'
 //Handles selecting and editing voxel boundaries:
 export class VoxelBoundaryEditor {
     //Store the editor references and setup the controls:
-    constructor({ camera, renderer, transformControls, transformHistory, worldVoxelGrid, getGridSettings, onSelect, onDeselect }) {
+    constructor({ camera, renderer, transformControls, transformHistory, meshSnapper, worldVoxelGrid, getGridSettings, onSelect, onDeselect }) {
         this.camera = camera
         this.renderer = renderer
         this.transformControls = transformControls
         this.transformHistory = transformHistory
+        this.meshSnapper = meshSnapper
         this.worldVoxelGrid = worldVoxelGrid
         this.getGridSettings = getGridSettings
         this.onSelect = onSelect
@@ -26,6 +27,8 @@ export class VoxelBoundaryEditor {
         this.setupTransformControls()
         this.setupPointerControls()
         this.setupHotkeys()
+        //Needed for outside of keyevents
+        this.controlHeld = false
     }
 
     //Track the currently selected object:
@@ -72,11 +75,22 @@ export class VoxelBoundaryEditor {
                 this.editingBoundary.min.copy(this.faceStartBounds.min)
                 this.editingBoundary.max.copy(this.faceStartBounds.max)
 
+                let faceValue = side === 'min' ? this.faceStartBounds.min[axis] + delta : this.faceStartBounds.max[axis] + delta
+
+                //Snap the face to a mesh surface while Ctrl is held:
+                if (this.controlHeld) {
+                    const snappedValue = this.getSnappedFaceValue(axis, side, delta)
+
+                    if (snappedValue !== null) {
+                        faceValue = snappedValue
+                    }
+                }
+
                 if (side === 'min') {
-                    this.editingBoundary.min[axis] += delta
+                    this.editingBoundary.min[axis] = faceValue
                 }
                 else {
-                    this.editingBoundary.max[axis] += delta
+                    this.editingBoundary.max[axis] = faceValue
                 }
 
                 this.editingBoundary.updateBoundaryVisuals()
@@ -130,18 +144,19 @@ export class VoxelBoundaryEditor {
     //HOTKEY Listners:
     setupHotkeys() {
         window.addEventListener('keydown', (event) => {
+            if (event.key === 'Control') {
+                this.controlHeld = true
+            }
+            
             const key = event.key.toLowerCase()
-
+            
             if (event.ctrlKey && key === 'z' && !event.shiftKey) {
                 event.preventDefault()
                 this.undo()
                 return
             }
 
-            if (
-                (event.ctrlKey && event.shiftKey && key === 'z') ||
-                (event.ctrlKey && key === 'y')
-            ) {
+            if ((event.ctrlKey && event.shiftKey && key === 'z') || (event.ctrlKey && key === 'y')) {
                 event.preventDefault()
                 this.redo()
                 return
@@ -193,7 +208,19 @@ export class VoxelBoundaryEditor {
                     break
             }
         })
+        window.addEventListener('keyup', (event) => {
+            if (event.key === 'Control') {
+                this.controlHeld = false
+            }
+        })
+        //Prevents controlHeld from being stuck when tabbing out of the window:
+        //https://stackoverflow.com/questions/61713458/ignore-blur-focusout-events-when-switching-tabs-windows
+        window.addEventListener('blur', () => {
+            this.controlHeld = false
+        })
     }
+
+
 
     //Begin dragging one boundary face (like blender's edit mode):
     beginFaceTransform(face) {
@@ -213,6 +240,59 @@ export class VoxelBoundaryEditor {
             min: this.editingBoundary.min.clone(),
             max: this.editingBoundary.max.clone()
         }
+    }
+
+    //Get the local-space centre of an editable boundary face:
+    getFaceCenter(bounds, axis, side) {
+        const center = bounds.min.clone().add(bounds.max).multiplyScalar(0.5)
+        
+        center[axis] = side === 'min' ? bounds.min[axis] : bounds.max[axis]
+        return center
+    }
+
+    //Try to snap the currently dragged face to a mesh surface:
+    getSnappedFaceValue(axis, side, delta) {
+        const epsilon = 0.000001
+        if (!this.meshSnapper || Math.abs(delta) < epsilon) {
+            return null
+        }
+
+        const localStart = this.getFaceCenter(this.faceStartBounds, axis, side)
+        const localEnd = localStart.clone()
+        localEnd[axis] += delta
+
+        this.editingBoundary.updateWorldMatrix(true, false)
+
+        const worldStart = this.editingBoundary.localToWorld(localStart.clone())
+        const worldEnd = this.editingBoundary.localToWorld(localEnd.clone())
+
+        const movement = worldEnd.clone().sub(worldStart)
+        const maxDistance = movement.length()
+
+        if (maxDistance < epsilon) {
+            return null
+        }
+
+        const direction = movement.normalize()
+        const hit = this.meshSnapper.findSurface(worldStart, direction, maxDistance)
+
+        if (!hit) {
+            return null
+        }
+
+        const localHit = this.editingBoundary.worldToLocal(hit.point.clone())
+        const snappedValue = localHit[axis]
+
+        //Do not allow the boundary to turn inside-out:
+        if (side === 'min' && snappedValue >= this.faceStartBounds.max[axis]) {
+            return null
+        }
+
+        if (side === 'max' && snappedValue <= this.faceStartBounds.min[axis]) {
+            return null
+        }
+
+        return snappedValue
     }
 
     //Exit face editing and restore object transforms:
