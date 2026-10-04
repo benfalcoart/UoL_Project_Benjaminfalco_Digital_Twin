@@ -13,6 +13,7 @@ import { WorldVoxelGrid } from './voxeltools/WorldVoxelGrid.js'
 import { VoxelBoundaryEditor } from './voxeltools/VoxelBoundaryEditor.js'
 import { VoxelControls } from './voxeltools/VoxelControls.js'
 import { exportVoxelBoundaries } from './voxeltools/VoxelBoundaryExporter.js'
+import { VoxelResultMesh } from './voxeltools/VoxelResultMesh.js'
 
 //Create the main Three.js scene:
 const {
@@ -40,8 +41,9 @@ const transformHistory = new TransformHistory()
 const voxelControls = new VoxelControls(null, calculateApproxVolume)
 const meshSnapper = new MeshSnapper() //This will be used by the boundaries to make it easier/faster to place them.
 const initialVoxelSettings = voxelControls.getSettings()
+const voxelResultMesh = new VoxelResultMesh()
 
-//Voxel Grid visualizer idea test:
+//Voxel Grid visualizer:
 const voxelGridOrigin = new THREE.Vector3(0, 0, 0)
 const worldVoxelGrid = new WorldVoxelGrid(voxelGridOrigin, initialVoxelSettings.minVoxelSize, initialVoxelSettings.maxVoxelSize)
 
@@ -170,6 +172,16 @@ async function calculateApproxVolume() {
     const result = await response.json()
 
     console.log(result)
+
+    if (result.mesh) {
+        const resultMesh = voxelResultMesh.create(result.mesh)
+        scene.add(resultMesh)
+        sceneExplorer.refresh()
+
+        console.log(`Voxel volume: ${result.volume}`)
+        console.log(`Filled voxels: ${result.voxelCount}`)
+        console.log(`Rendered triangles: ${result.mesh.triangleCount}`)
+    }
 }
 
 //Update the Voxel grids (and scene explorer) after the initial obejcts have been added:

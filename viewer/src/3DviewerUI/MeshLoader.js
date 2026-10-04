@@ -51,6 +51,7 @@ export class MeshLoader {
 
         loader.load(url, (gltf) => {
             gltf.scene.name = file.name
+            this.toggleDoubleSided(gltf.scene,true)
             this.scene.add(gltf.scene)
             this.objectAdded(gltf.scene)
             URL.revokeObjectURL(url)
@@ -63,6 +64,7 @@ export class MeshLoader {
 
         loader.load(url, (object) => {
             object.name = file.name
+            this.toggleDoubleSided(object,true)
             this.scene.add(object)
             this.objectAdded(object)
             URL.revokeObjectURL(url)
@@ -86,6 +88,8 @@ export class MeshLoader {
             this.scene.add(mesh)
             this.objectAdded(mesh)
 
+            this.toggleDoubleSided(mesh,true)
+
             URL.revokeObjectURL(url)
         }, undefined, this.handleLoadError)
     }
@@ -101,5 +105,20 @@ export class MeshLoader {
     //Print model loading errors:
     handleLoadError(error) {
         console.error('Failed to load model:', error)
+    }
+    //Toggle all mesh materials render on both sides:
+    toggleDoubleSided(object,isDoubleSided) {
+        object.traverse(child => {
+            if (!child.isMesh || !child.material) {
+                return
+            }
+
+            const materials = Array.isArray(child.material) ? child.material : [child.material]
+
+            materials.forEach(material => {
+                material.side =isDoubleSided ? THREE.DoubleSide : THREE.FrontSide
+                material.needsUpdate = true
+            })
+        })
     }
 }

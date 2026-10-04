@@ -53,6 +53,10 @@ export async function exportVisibleSceneMeshes(scene, transformHelper) {
         if (isChildOf(object, transformHelper)) {
             return
         }
+        //Exclude the voxel mesh visualization from future volume calculations.
+        if (object.userData.excludeFromExport) {
+            return
+        }
 
         console.log('Exporting mesh:', object.name)
 
