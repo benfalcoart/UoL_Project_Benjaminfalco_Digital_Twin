@@ -99,7 +99,7 @@ and coherent-region merging to be evaluated as separate stages of the classifica
 """
 
 import os
-
+import json
 import cv2
 import numpy as np
 import torch
@@ -107,6 +107,7 @@ import torch.nn as nn
 import argparse
 from torchvision import transforms
 from material_classifier import MaterialClassifier
+
 
 from PIL import Image
 from skimage.segmentation import slic, mark_boundaries
@@ -1269,6 +1270,7 @@ def main():
     parser.add_argument("--models", nargs="+", choices=["minc", "matsynth", "dms", "minc_legacy"], default=["minc"])
     parser.add_argument("--method", choices=["soft", "hard"], default="soft")
     parser.add_argument("--tie-tolerance", type=float, default=0.005)
+    parser.add_argument("--reconstruction", default="test")
     parser.add_argument("--diffuse", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_diff_4k.jpg"))
     parser.add_argument("--mask", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_uv_mask.png"))
     parser.add_argument("--cache", default=os.path.join(base_dir, "outputs", "prediction_cache.sqlite"))
@@ -1292,8 +1294,11 @@ def main():
 
     diffuse_path = args.diffuse
     mask_path = args.mask
-    atlas_name = os.path.splitext(os.path.basename(diffuse_path))[0]
-    output_dir = os.path.join(base_dir, "outputs", "superpixel", atlas_name, "_".join(sorted(model_paths)) + "_" + args.method)
+
+    chunk_name = os.path.splitext(os.path.basename(diffuse_path))[0]
+    configuration_name = "_".join(sorted(model_paths)) + "_" + args.method
+
+    output_dir = os.path.join(base_dir, "outputs", "superpixel", args.reconstruction, configuration_name, chunk_name)
     debug_dir = os.path.join(output_dir, "crops")
 
 
@@ -1358,24 +1363,30 @@ def main():
         island_mask = island["mask"]
 
         parent_classification = classify_region(island_image, island_mask, model, classes, transform, device)
-
         n_segments = determine_superpixel_count(island["area"])
-
         segments = create_superpixels(island_image, island_mask, n_segments)
 
         segment_ids = np.unique(segments)
         segment_ids = segment_ids[segment_ids > 0]
 
         remapped_segments = np.zeros_like(segments, dtype=np.int32)
+        segment_mapping = {}
 
         for local_index, segment_id in enumerate(segment_ids, start=1):
-            remapped_segments[segments == segment_id] = (global_segment_offset + local_index)
+            global_id = global_segment_offset + local_index
+            remapped_segments[segments == segment_id] = global_id
+            segment_mapping[int(segment_id)] = global_id
 
         full_segment_map[y:y + height, x:x + width] = np.where(remapped_segments > 0, remapped_segments, full_segment_map[y:y + height, x:x + width])
         global_segment_offset += len(segment_ids)
 
         regions = build_superpixel_regions(island, island_image, segments)
+
+        for region in regions:
+            region["global_segment_id"] = segment_mapping[region["segment_id"]]
+
         classify_superpixel_regions(regions, parent_classification, model, classes, transform, device)
+        
         smooth_low_confidence_regions(regions, segments)
         verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device)
 
@@ -1446,6 +1457,27 @@ def main():
     generate_material_id_map(diffuse.size, all_merged_regions, material_id_path)
     generate_superpixel_preview(diffuse, full_segment_map, mask, superpixel_preview_path)
     generate_superpixel_preview(diffuse, full_merged_label_map, mask, merged_preview_path)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    np.savez_compressed(os.path.join(output_dir, "topology_segments.npz"), segments=full_segment_map)
+
+    topology_metadata = {
+        "chunk_name": chunk_name,
+        "regions": [],
+        "colors": {name: list(color) for name, color in MATERIAL_COLORS.items()}
+    }
+
+    for region in all_regions:
+        topology_metadata["regions"].append({
+            "id": int(region["global_segment_id"]),
+            "material": region["resolved_material"],
+            "confidence": float(region["resolved_confidence"]),
+            "results": [[name, float(score)] for name, score in region.get("results", [])]
+        })
+
+    with open(os.path.join(output_dir, "topology_regions.json"), "w", encoding="utf-8") as file:
+        json.dump(topology_metadata, file, indent=2)
 
     print()
     print(f"Merged material regions: {len(all_merged_regions)}")
