@@ -104,10 +104,15 @@ import cv2
 import numpy as np
 import torch
 import torch.nn as nn
+import argparse
+from torchvision import transforms
+from material_classifier import MaterialClassifier
 
 from PIL import Image
 from skimage.segmentation import slic, mark_boundaries
 from torchvision.models import resnet18, ResNet18_Weights
+
+
 
 #Settings:
 MIN_COMPONENT_AREA = 500
@@ -171,21 +176,90 @@ MATERIAL_COLORS = {
     "tile": (230, 210, 100),
     "wallpaper": (200, 140, 90),
     "water": (40, 100, 220),
-    "wood": (130, 80, 35)
+    "wood": (130, 80, 35),
+    #New Materials added from the new datasets not present in MINC:
+    "concrete": (160, 160, 150),    
+    "ground": (100, 85, 60),
+    "marble": (210, 195, 220),
+    "misc": (90, 90, 90),
+    "plaster": (245, 225, 180),
+    "terracotta": (190, 95, 60),
+    "brickwork": (175, 55, 35),
+    "cork": (170, 115, 70),
+    "engineered_stone": (160, 155, 190),
+    "paint_plaster": (90, 135, 225),
+    "rubber": (65, 65, 75),
+    "sand": (220, 190, 130),
+    "soil": (105, 75, 45)
 }
 
+"""
+class MaterialClassifier:
+    def __init__(self, model_paths, device):
+        self.device = device
+        self.models = []
+
+        for name, model_path in model_paths.items():
+            model, classes = load_model(model_path, device)
+
+            if name == "minc_legacy":
+                transform = ResNet18_Weights.DEFAULT.transforms()
+            else:
+                transform = transforms.Compose([
+                    transforms.Resize((224, 224)),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                ])
+
+            self.models.append({
+                "name": name,
+                "model": model,
+                "classes": classes,
+                "transform": transform
+            })
+
+        if len(self.models) == 1:
+            self.classes = list(self.models[0]["classes"])
+        else:
+            class_sets = [set(item["classes"]) for item in self.models]
+            self.classes = sorted(set.intersection(*class_sets))
+
+            if len(self.classes) < 2:
+                raise ValueError("Models do not share enough material classes for ensemble classification.")
+
+        for item in self.models:
+            item["indices"] = [item["classes"].index(name) for name in self.classes]
+
+    def predict(self, image):
+        predictions = []
+
+        with torch.inference_mode():
+            for item in self.models:
+                tensor = item["transform"](image.convert("RGB")).unsqueeze(0).to(self.device)
+
+                output = item["model"](tensor)
+                probabilities = torch.softmax(output, dim=1)[0]
+
+                probabilities = probabilities[item["indices"]]
+
+                if len(self.models) > 1:
+                    probabilities = probabilities / probabilities.sum().clamp_min(1e-12)
+
+                predictions.append(probabilities)
+
+        return torch.stack(predictions).mean(dim=0)
+"""
+
 #Loads the trained material classification model and restores its class labels.
+#TODO: Remove this? Responsiblity shifted to material classifer.
 def load_model(model_path, device):
-    checkpoint = torch.load(model_path, map_location=device)
+    checkpoint = torch.load(model_path, map_location=device, weights_only=True)
 
     classes = checkpoint["classes"]
 
     model = resnet18(weights=None)
-
     model.fc = nn.Linear(model.fc.in_features, len(classes))
-
     model.load_state_dict(checkpoint["model_state_dict"])
-
     model = model.to(device)
     model.eval()
 
@@ -397,17 +471,13 @@ def prepare_classification_image(image, mask):
 
 #Classifies a prepared image using the trained material model and returns the highest probability 
 #material predictions in descending order.
-def classify_prepared_image(image, model, classes, transform, device, top_k=5):
-    tensor = transform(image.convert("RGB")).unsqueeze(0).to(device)
+def classify_prepared_image(image, model, classes, transform, device, top_k=None):
+    results, tied_materials = model.predict(image)
 
-    with torch.no_grad():
-        output = model(tensor)
+    if top_k is not None:
+        results = results[:top_k]
 
-        probabilities = torch.softmax(output, dim=1)[0]
-
-    values, indices = torch.topk(probabilities, min(top_k, len(classes)))
-
-    return [(classes[index.item()], probability.item()) for probability, index in zip(values, indices)]
+    return results, tied_materials
 
 #Prepares and classifies a masked UV region and returns both the material predictions and 
 #information about the classification sample that was used.
@@ -417,10 +487,12 @@ def classify_region(image, mask, model, classes, transform, device):
     if prepared["image"] is None:
         return None
 
-    results = classify_prepared_image(prepared["image"], model, classes, transform, device)
+    #Get the results of the classification and any tied materials (for ensemble)
+    results, tied_materials = classify_prepared_image(prepared["image"], model, classes, transform, device)
 
     return {
         "results": results,
+        "tied_materials": tied_materials,
         "classification_image": prepared["image"],
         "classification_area": prepared["area"],
         "rotation_used": prepared["rotation_used"],
@@ -483,7 +555,8 @@ def build_superpixel_regions(island, island_image, segments):
                 "resolved_confidence": 0.0,
                 "fallback_used": False,
                 "rotation_used": False,
-                "rotation_angle": 0.0
+                "rotation_angle": 0.0,
+                "tied_materials": [],
             }
         )
 
@@ -498,22 +571,25 @@ def classify_superpixel_regions(regions, parent_classification, model, classes, 
         classification = None
 
         if region["area"] >= MIN_SUPERPIXEL_AREA:
-            classification = classify_region(region["image"], region["mask"], model, classes, transform, device)
+            classification = classify_region(region["image"], region["mask"],  model, classes, transform, device)
 
         if classification is None:
             if parent_results is None:
                 region["resolved_material"] = "other"
                 region["resolved_confidence"] = 0.0
                 region["results"] = [("other", 0.0)]
+                region["tied_materials"] = []
             else:
                 region["resolved_material"] = (parent_results[0][0])
                 region["resolved_confidence"] = (parent_results[0][1])
                 region["results"] = parent_results
+                region["tied_materials"] = parent_classification.get("tied_materials", [])
 
             region["fallback_used"] = True
             continue
 
         region["results"] = classification["results"]
+        region["tied_materials"] = classification["tied_materials"]
         region["resolved_material"] = (classification["results"][0][0])
         region["resolved_confidence"] = (classification["results"][0][1])
         region["classification_image"] = (classification["classification_image"])
@@ -596,15 +672,18 @@ def smooth_low_confidence_regions(regions, segments):
 
         for material in neighbor_materials:
             counts[material] = (counts.get(material, 0) + 1)
-
+        
         material = max(counts,key=counts.get)
-
+        
         consensus = (counts[material]/ len(neighbor_materials))
 
         if consensus >= NEIGHBOR_CONSENSUS_THRESHOLD:
             updates.append((region, material, consensus))
 
     for region, material, consensus in updates:
+        if region["resolved_material"] != material:
+            region["tied_materials"] = []
+
         region["resolved_material"] = material
         region["neighbor_smoothed"] = True
         region["neighbor_consensus"] = consensus
@@ -856,14 +935,12 @@ def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_
             continue
 
         surrounding_contact_ratio = (neighbor_contacts[surrounding_material] / total_external_contact)
-
         should_verify = (cluster["area"] <= SLIDING_VERIFY_AREA_THRESHOLD or cluster["confidence"] < SLIDING_VERIFY_CONFIDENCE_THRESHOLD or surrounding_contact_ratio >= SLIDING_VERIFY_CONTACT_THRESHOLD)
 
         if not should_verify:
             continue
 
         cluster_mask = get_cluster_mask(cluster, segments)
-
         centers = get_window_centers_for_cluster(cluster_mask, island_mask)
 
         if not centers:
@@ -881,22 +958,16 @@ def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_
                 continue
 
             probabilities = results_to_probability_dict(results)
-
             cluster_scores.append(probabilities.get(cluster["material"], 0.0))
-
             surrounding_scores.append(probabilities.get(surrounding_material, 0.0))
-
             used_windows += 1
 
         if used_windows == 0:
             continue
 
         cluster_support = (sum(cluster_scores) / used_windows)
-
         surrounding_support = (sum(surrounding_scores) / used_windows)
-
         support_margin = (surrounding_support - cluster_support)
-
         verified_material = (cluster["material"])
 
         if support_margin >= SLIDING_RECLASSIFY_MARGIN:
@@ -909,6 +980,7 @@ def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_
             member["sliding_surrounding_support"] = surrounding_support
 
             if verified_material != cluster["material"]:
+                member["tied_materials"] = []
                 member["resolved_material"] = verified_material
                 member["sliding_reclassified"] = True
 
@@ -963,7 +1035,6 @@ def merge_small_material_clusters(regions, segments):
                 continue
 
             target_material = max(neighbor_contacts, key=neighbor_contacts.get)
-
             contact_ratio = (neighbor_contacts[target_material] / total_external_contact)
 
             if contact_ratio < MERGE_CONTACT_THRESHOLD:
@@ -985,6 +1056,7 @@ def merge_small_material_clusters(regions, segments):
                     continue
 
                 member["resolved_material"] = target_material
+                member["tied_materials"] = []
                 member["cluster_merged"] = True
                 member["merge_contact_ratio"] = contact_ratio
                 changed = True
@@ -1116,12 +1188,42 @@ def generate_material_id_map(image_size, regions, output_path):
 
     for region in regions:
         material = region["resolved_material"]
-
         color = MATERIAL_COLORS.get(material,(255, 255, 255))
-
         paint_region(output, region, color)
 
     Image.fromarray(output, mode="RGBA").save(output_path)
+
+#Use a pixel dithering design to display potential material ties when using ensembling.
+def generate_tie_preview(regions, material_id_path, output_path):
+    output = np.array(Image.open(material_id_path).convert("RGBA"), copy=True)
+
+    for region in regions:
+        tied = region.get("tied_materials", [])
+
+        if len(tied) < 2 or region["resolved_material"] not in tied:
+            continue
+
+        x = int(region["x"])
+        y = int(region["y"])
+        width = int(region["width"])
+        height = int(region["height"])
+
+        destination = output[y:y + height, x:x + width]
+        mask = region["mask"] > 0
+
+        yy, xx = np.indices((height, width))
+        pattern = (xx + x + yy + y) % len(tied)
+
+        for index, material in enumerate(tied):
+            selected = mask & (pattern == index)
+            color = MATERIAL_COLORS.get(material, (255, 255, 255))
+
+            destination[selected, :3] = color
+            destination[selected, 3] = 255
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    Image.fromarray(output).save(output_path)
+
 
 #Generates an RGBA preview showing region boundaries over the diffuse UV texture while keeping pixels outside the UV mask transparent.
 def generate_superpixel_preview(diffuse, full_segment_map, full_mask, output_path):
@@ -1160,17 +1262,44 @@ def save_debug_crop(region, output_dir, index):
 # loads the model and textures, generates and classifies SLIC superpixels,
 # applies neighbour smoothing and sliding-window verification, merges coherent
 # material regions, saves debug crops, and generates the final output maps.
-def main():
+def main():    
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
-    model_path = os.path.join(base_dir, "models", "minc_resnet18.pth")
-    diffuse_path = os.path.join(base_dir,"test_images","UVMaps","Sofa_01_diff_4k.jpg")
-    mask_path = os.path.join(base_dir,"test_images","UVMaps","Sofa_01_uv_mask.png")
-    output_dir = os.path.join(base_dir, "outputs", "superpixel")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--models", nargs="+", choices=["minc", "matsynth", "dms", "minc_legacy"], default=["minc"])
+    parser.add_argument("--method", choices=["soft", "hard"], default="soft")
+    parser.add_argument("--tie-tolerance", type=float, default=0.005)
+    parser.add_argument("--diffuse", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_diff_4k.jpg"))
+    parser.add_argument("--mask", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_uv_mask.png"))
+    parser.add_argument("--cache", default=os.path.join(base_dir, "outputs", "prediction_cache.sqlite"))
+    args = parser.parse_args()
+
+    model_files = {
+        "minc": "minc_resnet18/minc_resnet18.pth",
+        "minc_legacy": "minc_resnet18/minc_resnet18_old.pth",
+        "matsynth": "matsynth_resnet18/matsynth_resnet18.pth",
+        "dms": "ml-dms_resnet18/ml-dms_resnet18.pth"
+    }
+
+    model_paths = {
+        name: os.path.join(base_dir, "models", model_files[name])
+        for name in dict.fromkeys(args.models)
+    }
+
+    for model_path in model_paths.values():
+        if not os.path.isfile(model_path):
+            raise FileNotFoundError(model_path)
+
+    diffuse_path = args.diffuse
+    mask_path = args.mask
+    atlas_name = os.path.splitext(os.path.basename(diffuse_path))[0]
+    output_dir = os.path.join(base_dir, "outputs", "superpixel", atlas_name, "_".join(sorted(model_paths)) + "_" + args.method)
     debug_dir = os.path.join(output_dir, "crops")
+
 
     raw_material_id_path = os.path.join(output_dir, "material_id_superpixel_raw.png")
     material_id_path = os.path.join(output_dir, "material_id_superpixel_merged.png")
+    tie_preview_path = os.path.join(output_dir, "material_id_tie_preview_raw.png")
     superpixel_preview_path = os.path.join(output_dir, "superpixel_boundaries.png")
     merged_preview_path = os.path.join(output_dir, "merged_material_boundaries.png")
 
@@ -1181,20 +1310,26 @@ def main():
     if device.type == "cuda":
         print("GPU:", torch.cuda.get_device_name(0))
 
-    model, classes = load_model(model_path, device)
+    model = MaterialClassifier(model_paths, device, method=args.method, cache_path=args.cache, tie_tolerance=args.tie_tolerance)
+    classes = model.classes
+    transform = None
 
-    weights = ResNet18_Weights.DEFAULT
-    transform = weights.transforms()
+    print("Models:", ", ".join(args.models))
+    print("Method:", args.method)
+    print("Available material classes:", classes)
+
+    missing_colors = sorted(set(classes) - set(MATERIAL_COLORS))
+
+    if missing_colors:
+        print("Materials missing ID-map colours:", missing_colors)
 
     diffuse = Image.open(diffuse_path).convert("RGB")
-
     mask_image = Image.open(mask_path).convert("L")
 
     if diffuse.size != mask_image.size:
         raise ValueError("Diffuse and mask dimensions do not match.")
 
     mask = np.array(mask_image)
-
     islands = get_connected_islands(mask)
 
     print()
@@ -1240,15 +1375,11 @@ def main():
         global_segment_offset += len(segment_ids)
 
         regions = build_superpixel_regions(island, island_image, segments)
-
         classify_superpixel_regions(regions, parent_classification, model, classes, transform, device)
-
         smooth_low_confidence_regions(regions, segments)
-
         verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device)
 
         merge_small_material_clusters(regions, segments)
-
         merged_regions = build_merged_regions(regions, segments, island)
 
         global_merged_label = add_merged_regions_to_label_map(merged_regions, full_merged_label_map, global_merged_label)
@@ -1311,11 +1442,9 @@ def main():
         save_debug_crop(region,debug_dir,index)
 
     generate_material_id_map(diffuse.size, all_regions, raw_material_id_path)
-
+    generate_tie_preview(all_regions, raw_material_id_path, tie_preview_path)
     generate_material_id_map(diffuse.size, all_merged_regions, material_id_path)
-
     generate_superpixel_preview(diffuse, full_segment_map, mask, superpixel_preview_path)
-
     generate_superpixel_preview(diffuse, full_merged_label_map, mask, merged_preview_path)
 
     print()
@@ -1336,6 +1465,10 @@ def main():
     print()
     print("Merged material boundary preview saved to:")
     print(merged_preview_path)
+
+    print("Tie preview saved to:", tie_preview_path)
+    print(f"Prediction cache: {model.hits} hits, {model.misses} misses")
+    model.close()
 
 
 if __name__ == "__main__":
