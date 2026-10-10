@@ -107,7 +107,7 @@ import torch.nn as nn
 import argparse
 from torchvision import transforms
 from material_classifier import MaterialClassifier
-
+from concurrent.futures import ThreadPoolExecutor
 
 from PIL import Image
 from skimage.segmentation import slic, mark_boundaries
@@ -121,6 +121,10 @@ MIN_COMPONENT_AREA = 500
 TARGET_SUPERPIXEL_AREA = 20000
 MIN_SUPERPIXELS_PER_ISLAND = 4
 MAX_SUPERPIXELS_PER_ISLAND = 160
+
+CPU_WORKERS = 8
+MIN_SLIC_ISLAND_AREA = 6000
+
 SLIC_COMPACTNESS = 10.0
 SLIC_SIGMA = 1.0
 
@@ -151,7 +155,7 @@ SLIDING_VERIFY_CONTACT_THRESHOLD = 0.45
 SLIDING_RECLASSIFY_MARGIN = 0.12
 MIN_SLIDING_VALID_RATIO = 0.55
 
-SAVE_DEBUG_CROPS = True
+SAVE_DEBUG_CROPS = False
 
 
 MATERIAL_COLORS = {
@@ -350,7 +354,7 @@ def largest_valid_rectangle(mask):
 
     return best_bounds
 
-# Rotates an image and its corresponding UV mask by the same angle, expands the output bounds, 
+#Rotates an image and its corresponding UV mask by the same angle, expands the output bounds, 
 #and trims unused space around the result.
 def rotate_image_and_mask(image, mask, angle):
     rgb = np.array(image.convert("RGB"))
@@ -387,7 +391,7 @@ def rotate_image_and_mask(image, mask, angle):
 
     return (Image.fromarray(rotated_image), rotated_mask)
 
-# Estimates the rotation angle that best aligns the UV region with an axis-aligned rectangular crop.
+#Estimates the rotation angle that best aligns the UV region with an axis-aligned rectangular crop.
 def get_best_rotation_angle(mask):
     binary = (mask > 0).astype(np.uint8)
 
@@ -598,7 +602,7 @@ def classify_superpixel_regions(regions, parent_classification, model, classes, 
         region["rotation_used"] = (classification["rotation_used"])
         region["rotation_angle"] = (classification["rotation_angle"])
 
-# Builds an adjacency map describing which SLIC superpixels share horizontal or vertical boundaries with one another.
+#Builds a adjacency map describing which SLIC superpixels share horizontal or vertical boundaries with one another.
 def get_segment_adjacency(segments):
     adjacency = {}
 
@@ -777,14 +781,14 @@ def build_material_clusters(regions, segments):
     return clusters
 
 
-# Converts a ranked list of material predictions into a dictionary that allows probability values to be retrieved by material name.
+#Converts a ranked list of material predictions into a dictionary that allows probability values to be retrieved by material name.
 def results_to_probability_dict(results):
     return {
         material: probability
         for material, probability in results
     }
 
-# Measures how much of a material cluster's external boundary contacts each neighbouring material and returns the total external contact.
+#Measures how much of a material cluster's external boundary contacts each neighbouring material and returns the total external contact.
 def get_cluster_external_contacts(cluster, segment_to_cluster, clusters, contacts):
     neighbor_contacts = {}
     total_external_contact = 0
@@ -1147,7 +1151,7 @@ def build_merged_regions(regions, segments, island):
 
     return merged_regions
 
-# Writes merged material regions into a label map using a unique integer label for each coherent region.
+#Writes merged material regions into a label map using a unique integer label for each coherent region.
 def add_merged_regions_to_label_map(merged_regions, full_label_map, next_label):
     for region in merged_regions:
         x = region["x"]
@@ -1259,10 +1263,42 @@ def save_debug_crop(region, output_dir, index):
 
     region["classification_image"].save(path)
 
-# Runs the complete superpixel-based UV material classification pipeline:
-# loads the model and textures, generates and classifies SLIC superpixels,
-# applies neighbour smoothing and sliding-window verification, merges coherent
-# material regions, saves debug crops, and generates the final output maps.
+#Prepares one UV island using CPU operations only.
+def prepare_island_for_ml(task):
+    island, diffuse = task
+
+    x = island["x"]
+    y = island["y"]
+    width = island["width"]
+    height = island["height"]
+
+    island_image = diffuse.crop((x, y, x + width, y + height))
+    island_mask = island["mask"]
+
+    if island["area"] < MIN_SLIC_ISLAND_AREA:
+        segments = (island_mask > 0).astype(np.int32)
+    else:
+        n_segments = determine_superpixel_count(island["area"])
+        segments = create_superpixels(island_image, island_mask, n_segments)
+
+    segment_ids = np.unique(segments)
+    segment_ids = segment_ids[segment_ids > 0]
+
+    regions = build_superpixel_regions(island, island_image, segments)
+
+    return island_image, island_mask, segments, segment_ids, regions
+
+
+#Keeps a small number of upcoming UV islands prepared in parallel.
+def prepared_islands(islands, diffuse):
+    with ThreadPoolExecutor(max_workers=CPU_WORKERS) as executor:
+        jobs = ((island, diffuse) for island in islands)
+        yield from executor.map(prepare_island_for_ml, jobs, buffersize=CPU_WORKERS)
+
+#Runs the complete superpixel-based UV material classification pipeline:
+#loads the model and textures, generates and classifies SLIC superpixels,
+#applies neighbour smoothing and sliding-window verification, merges coherent
+#material regions, saves debug crops, and generates the final output maps.
 def main():    
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -1353,21 +1389,19 @@ def main():
 
     full_merged_label_map = np.zeros((full_height, full_width), dtype=np.int32)
 
-    for island_index, island in enumerate(islands, start=1):
+    full_merged_label_map = np.zeros((full_height, full_width), dtype=np.int32)
+
+    for island_index, prepared in enumerate(prepared_islands(islands, diffuse), start=1):
+        island = islands[island_index - 1]
+
         x = island["x"]
         y = island["y"]
         width = island["width"]
         height = island["height"]
 
-        island_image = diffuse.crop((x, y, x + width, y + height))
-        island_mask = island["mask"]
+        island_image, island_mask, segments, segment_ids, regions = prepared
 
         parent_classification = classify_region(island_image, island_mask, model, classes, transform, device)
-        n_segments = determine_superpixel_count(island["area"])
-        segments = create_superpixels(island_image, island_mask, n_segments)
-
-        segment_ids = np.unique(segments)
-        segment_ids = segment_ids[segment_ids > 0]
 
         remapped_segments = np.zeros_like(segments, dtype=np.int32)
         segment_mapping = {}
@@ -1380,7 +1414,7 @@ def main():
         full_segment_map[y:y + height, x:x + width] = np.where(remapped_segments > 0, remapped_segments, full_segment_map[y:y + height, x:x + width])
         global_segment_offset += len(segment_ids)
 
-        regions = build_superpixel_regions(island, island_image, segments)
+        #regions = build_superpixel_regions(island, island_image, segments)
 
         for region in regions:
             region["global_segment_id"] = segment_mapping[region["segment_id"]]
