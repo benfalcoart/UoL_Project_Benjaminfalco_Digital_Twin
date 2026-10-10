@@ -40,8 +40,8 @@ datasets/
 data/raw/
 data/processed/
 
-# MINC-2500 dataset
-/machine-learning/data/minc-2500/
+# Machine Learning datasets
+/machine-learning/data/
 /machine-learning/outputs/
 /machine-learning/test_images/
 

@@ -59,10 +59,14 @@ export async function exportVisibleSceneMeshes(scene, transformHelper) {
         }
 
         console.log('Exporting mesh:', object.name)
+        //Properly send all transformations to the server.
+        const geometry = object.geometry.clone()
+        geometry.applyMatrix4(object.matrixWorld)
 
-        const clone = object.clone()
-        clone.applyMatrix4(object.matrixWorld)
+        const material = Array.isArray(object.material) ? object.material.map(material => material.clone()) : object.material.clone()
 
+        const clone = new THREE.Mesh(geometry, material)
+        clone.name = object.name
         exportScene.add(clone)
     })
 

@@ -1,10 +1,12 @@
 import os
+import random
 import time
 from PIL import Image
 
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms
 from torchvision.models import resnet18, ResNet18_Weights
 
 """
@@ -17,16 +19,11 @@ class MINCDataset(Dataset):
         self.transform = transform
 
         with open(split_file, "r") as file:
-            self.paths = [
-                line.strip()
-                for line in file
-                if line.strip()
-            ]
+            self.paths = [line.strip() for line in file if line.strip()]
 
         if classes is None:
             self.classes = sorted({
-                path.split("/")[1]
-                for path in self.paths
+                path.split("/")[1] for path in self.paths
             })
         else:
             self.classes = classes
@@ -63,7 +60,7 @@ Runs one complete training or validation epoch.When an optimizer is provided, gr
 calculated and the model weights are updated. Otherwise, the model is evaluated without training!
 Returns the average loss, classification accuracy, and execution time.
 """
-def run_epoch(model, loader, criterion, device, optimizer=None):
+def run_epoch(model, loader, criterion, device, optimizer=None, scaler=None):
     training = optimizer is not None
 
     if training:
@@ -79,34 +76,30 @@ def run_epoch(model, loader, criterion, device, optimizer=None):
 
     for batch_index, (images, labels) in enumerate(loader):
         images = images.to(device, non_blocking=True)
-
         labels = labels.to(device, non_blocking=True)
 
         if training:
-            optimizer.zero_grad()
+            optimizer.zero_grad(set_to_none=True)
 
         with torch.set_grad_enabled(training):
-            outputs = model(images)
-            loss = criterion(outputs, labels)
+            #Added Cuda
+            with torch.autocast(device_type=device.type, enabled=device.type == "cuda"):
+                outputs = model(images)
+                loss = criterion(outputs, labels)
 
             if training:
-                loss.backward()
-                optimizer.step()
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
 
         total_loss += loss.item() * images.size(0)
 
         predictions = outputs.argmax(dim=1)
-
-        total_correct += (
-            predictions == labels
-        ).sum().item()
-
+        total_correct += (predictions == labels).sum().item()
         total_samples += images.size(0)
 
         if training and (batch_index + 1) % 100 == 0:
-            print(
-                f"Batch {batch_index + 1}/{len(loader)}"
-            )
+            print(f"Batch {batch_index + 1}/{len(loader)}")
 
     if device.type == "cuda":
         torch.cuda.synchronize()
@@ -127,10 +120,11 @@ def main():
 
     train_split = os.path.join(dataset_dir, "labels", "train1.txt")
     validation_split = os.path.join(dataset_dir, "labels", "validate1.txt")
+    test_split = os.path.join(dataset_dir, "labels", "test1.txt")
 
     model_dir = os.path.join(base_dir, "models")
     os.makedirs(model_dir, exist_ok=True)
-    model_path = os.path.join(model_dir, "minc_resnet18.pth")
+    model_path = os.path.join(model_dir, "minc_resnet18_full.pth")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -140,41 +134,45 @@ def main():
     if device.type == "cuda":
         print("GPU:", torch.cuda.get_device_name(0))
 
-    #Load the ImageNet pretrained ResNet-18 architecture and preprocessing pipeline.
-    weights = ResNet18_Weights.DEFAULT
-    transform = weights.transforms()
+    random.seed(42)
+    torch.manual_seed(42)
+    if device.type == "cuda":
+        torch.cuda.manual_seed_all(42)
 
-    train_dataset = MINCDataset(root=dataset_dir, split_file=train_split, transform=transform)
+    weights = ResNet18_Weights.DEFAULT
+    train_transform = transforms.Compose([
+        transforms.RandomResizedCrop(224, scale=(0.75, 1.0)),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.RandomRotation(180),
+        transforms.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.1),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+
+    train_dataset = MINCDataset(root=dataset_dir, split_file=train_split, transform=train_transform)
 
     validation_dataset = MINCDataset(root=dataset_dir, split_file=validation_split, transform=transform, classes=train_dataset.classes)
+    test_dataset = MINCDataset(root=dataset_dir, split_file=test_split, transform=transform, classes=train_dataset.classes)
 
     print()
     print("Classes:", len(train_dataset.classes))
     print("Training images:", len(train_dataset))
     print("Validation images:", len(validation_dataset))
+    print("Test images:", len(test_dataset))
 
-    batch_size = 64
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True,
-        num_workers=4,
-        pin_memory=device.type == "cuda",
-        persistent_workers=True
-    )
+    batch_size = 32
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=device.type == "cuda", persistent_workers=True)
 
-    validation_loader = DataLoader(validation_dataset, batch_size=batch_size,shuffle=False,
-        num_workers=4,
-        pin_memory=device.type == "cuda",
-        persistent_workers=True
-    )
+    validation_loader = DataLoader(validation_dataset, batch_size=batch_size,shuffle=False, num_workers=4, pin_memory=device.type == "cuda", persistent_workers=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=device.type == "cuda", persistent_workers=True)
 
     model = resnet18(weights=weights)
-
-    #Freezes the pretrained feature extractor, then fine-tune the final
-    #residual block and a new classification layer for the MINC classes.
-    for parameter in model.parameters():
-        parameter.requires_grad = False
-
-    for parameter in model.layer4.parameters():
-        parameter.requires_grad = True
 
     model.fc = nn.Linear(model.fc.in_features, len(train_dataset.classes))
 
@@ -182,14 +180,11 @@ def main():
 
     criterion = nn.CrossEntropyLoss()
 
-    optimizer = torch.optim.Adam(filter(lambda parameter: parameter.requires_grad, model.parameters()), lr=0.0001)
-    #Load the previously trained model parameters before continuing fine-tuning for the configured number of epochs.
-    checkpoint = torch.load(model_path, map_location=device)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.0001, weight_decay=0.0001)
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
+    epochs = 10
 
-    model.load_state_dict(checkpoint["model_state_dict"])
-    epochs = 5
-
-    best_validation_accuracy = 0.0
+    best_validation_accuracy = -1.0
 
     print()
     print("Starting training")
@@ -199,7 +194,7 @@ def main():
         print()
         print(f"Epoch {epoch + 1}/{epochs}")
 
-        train_loss, train_accuracy, train_time = run_epoch( model=model, loader=train_loader, criterion=criterion, device=device, optimizer=optimizer)
+        train_loss, train_accuracy, train_time = run_epoch( model=model, loader=train_loader, criterion=criterion, device=device, optimizer=optimizer, scaler=scaler)
         validation_loss, validation_accuracy, validation_time = run_epoch( model=model, loader=validation_loader, criterion=criterion, device=device)
 
         print(f"Train Loss: {train_loss:.4f}")
@@ -232,11 +227,18 @@ def main():
 
             print("Saved new best model:", model_path)
 
+    checkpoint = torch.load(model_path, map_location=device, weights_only=True)
+    model.load_state_dict(checkpoint["model_state_dict"])
+    test_loss, test_accuracy, test_time = run_epoch(model=model, loader=test_loader, criterion=criterion, device=device)
+
     print()
     print("======================")
     print("Training complete")
 
     print(f"Best validation accuracy: {best_validation_accuracy * 100:.2f}%")
+    print(f"Test Loss: {test_loss:.4f}")
+    print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
+    print(f"Test Time: {test_time / 60:.2f} min")
 
     print("Best model saved to:", model_path)
 

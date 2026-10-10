@@ -4,6 +4,7 @@ import trimesh
 from services.voxel import Voxel
 from services.mesh_collision import MeshCollision
 from services.greedy_mesher import GreedyMesher
+from collections import deque
 
 
 class VolumeCalculator:
@@ -19,12 +20,18 @@ class VolumeCalculator:
         resultVoxels = []
 
         for boundary in boundaries:
-            print(f"Processing boundary: {boundary['name']}")
-            leaves = self.buildAdaptiveVoxels(boundary, collision, maxVoxelSize, subdivisionDepth)
+            print(f"Processing the boundary: {boundary['name']}")
 
-            for voxel in leaves:
-                if not voxel.blocked:
-                    resultVoxels.append(voxel)
+            leaves = self.buildAdaptiveVoxels(boundary, collision, maxVoxelSize, subdivisionDepth)
+            freeVoxels = [voxel for voxel in leaves if not voxel.blocked]
+
+            print(f"Free voxels before flooding: {len(freeVoxels)}")
+
+            floodedVoxels = self.floodFillVoxels(freeVoxels, boundary, maxVoxelSize)
+
+            print(f"Flooded voxels: {len(floodedVoxels)}")
+
+            resultVoxels.extend(floodedVoxels)
 
         volume = sum(voxel.getVolume() for voxel in resultVoxels)
 
@@ -242,3 +249,194 @@ class VolumeCalculator:
                 return True
 
         return False
+
+    #Create a hierarchical grid key for an adaptive voxel:
+    def getVoxelTreeKey(self, voxel):
+        size = voxel.size
+        halfSize = size / 2
+
+        x = int(round((voxel.center[0] - halfSize) / size))
+        y = int(round((voxel.center[1] - halfSize) / size))
+        z = int(round((voxel.center[2] - halfSize) / size))
+
+        return (voxel.depth, x, y, z)
+
+    #Build lookup tables for the adaptive voxel hierarchy:
+    def buildVoxelLookup(self, voxels):
+        leafLookup = {}
+        nodeKeys = set()
+
+        for voxel in voxels:
+            depth, x, y, z = self.getVoxelTreeKey(voxel)
+            leafLookup[(depth, x, y, z)] = voxel
+
+            currentDepth = depth
+            currentX = x
+            currentY = y
+            currentZ = z
+
+            while True:
+                nodeKeys.add((currentDepth, currentX, currentY, currentZ))
+
+                if currentDepth == 0:
+                    break
+
+                currentX //= 2
+                currentY //= 2
+                currentZ //= 2
+                currentDepth -= 1
+
+        return leafLookup, nodeKeys
+
+    #Find a leaf voxel that contains a given hierarchical cell:
+    def findCoveringLeaf(self, depth, x, y, z, leafLookup):
+        currentDepth = depth
+        currentX = x
+        currentY = y
+        currentZ = z
+
+        while True:
+            key = (currentDepth, currentX, currentY, currentZ)
+
+            if key in leafLookup:
+                return leafLookup[key]
+
+            if currentDepth == 0:
+                break
+
+            currentX //= 2
+            currentY //= 2
+            currentZ //= 2
+            currentDepth -= 1
+
+        return None
+
+    #Collect smaller leaf voxels touching one face of a hierarchical cell:
+    def collectFaceLeaves(self, depth, x, y, z, axis, direction, leafLookup, nodeKeys):
+        key = (depth, x, y, z)
+
+        if key in leafLookup:
+            return [leafLookup[key]]
+
+        if key not in nodeKeys:
+            return []
+
+        touchingSide = 0 if direction > 0 else 1
+        neighbors = []
+
+        for a in [0, 1]:
+            for b in [0, 1]:
+                if axis == 0:
+                    childX = x * 2 + touchingSide
+                    childY = y * 2 + a
+                    childZ = z * 2 + b
+                elif axis == 1:
+                    childX = x * 2 + a
+                    childY = y * 2 + touchingSide
+                    childZ = z * 2 + b
+                else:
+                    childX = x * 2 + a
+                    childY = y * 2 + b
+                    childZ = z * 2 + touchingSide
+
+                neighbors.extend(self.collectFaceLeaves(depth + 1, childX, childY, childZ, axis, direction, leafLookup, nodeKeys))
+
+        return neighbors
+
+    #Find all free voxels sharing a face with a voxel:
+    def getVoxelNeighbors(self, voxel, leafLookup, nodeKeys):
+        depth, x, y, z = self.getVoxelTreeKey(voxel)
+
+        directions = [
+            (0, 1),
+            (0, -1),
+            (1, 1),
+            (1, -1),
+            (2, 1),
+            (2, -1)
+        ]
+
+        for axis, direction in directions:
+            neighborX = x
+            neighborY = y
+            neighborZ = z
+
+            if axis == 0:
+                neighborX += direction
+            elif axis == 1:
+                neighborY += direction
+            else:
+                neighborZ += direction
+
+            #Check for a same-size or larger neighboring leaf:
+            neighbor = self.findCoveringLeaf(depth, neighborX, neighborY, neighborZ, leafLookup)
+
+            if neighbor is not None:
+                yield neighbor
+                continue
+
+            #Check for smaller neighboring leaves:
+            smallerNeighbors = self.collectFaceLeaves(depth, neighborX, neighborY, neighborZ, axis, direction, leafLookup, nodeKeys)
+
+            for smallerNeighbor in smallerNeighbors:
+                yield smallerNeighbor
+
+    #Find the free voxel containing or nearest to the boundary centre:
+    def findFloodSeed(self, voxels, boundary, maxVoxelSize, leafLookup):
+        center = self.getBoundaryCenter(boundary)
+
+        depths = sorted({voxel.depth for voxel in voxels})
+
+        #First try to find the leaf that directly contains the centre:
+        for depth in depths:
+            size = maxVoxelSize / (2 ** depth)
+
+            x = int(np.floor(center[0] / size))
+            y = int(np.floor(center[1] / size))
+            z = int(np.floor(center[2] / size))
+
+            voxel = leafLookup.get((depth, x, y, z))
+
+            if voxel is not None:
+                return voxel
+
+        #If the centre lies inside a blocked surface voxel, use the nearest free voxel:
+        centers = np.asarray([voxel.center for voxel in voxels], dtype=np.float32)
+        center = np.asarray(center, dtype=np.float32)
+
+        distances = np.sum((centers - center) ** 2, axis=1)
+        nearestIndex = int(np.argmin(distances))
+
+        return voxels[nearestIndex]
+
+    #Flood through all free voxels connected to the boundary centre:
+    def floodFillVoxels(self, voxels, boundary, maxVoxelSize):
+        if not voxels:
+            return []
+
+        print("Building adaptive voxel lookup...")
+        leafLookup, nodeKeys = self.buildVoxelLookup(voxels)
+        print("Finding flood seed...")
+        seed = self.findFloodSeed(voxels, boundary, maxVoxelSize, leafLookup)
+        print(f"Flood seed: {seed.center}, depth {seed.depth}, size {seed.size}")
+
+        queue = deque([seed])
+        visited = {self.getVoxelTreeKey(seed)}
+        flooded = []
+
+        while queue:
+            voxel = queue.popleft()
+            flooded.append(voxel)
+
+            for neighbor in self.getVoxelNeighbors(voxel, leafLookup, nodeKeys):
+                key = self.getVoxelTreeKey(neighbor)
+                if key in visited:
+                    continue
+
+                visited.add(key)
+                queue.append(neighbor)
+
+            if len(flooded) % 100000 == 0:
+                print(f"Flooded {len(flooded)} voxels...")
+
+        return flooded
