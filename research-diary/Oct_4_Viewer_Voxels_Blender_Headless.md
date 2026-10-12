@@ -1,0 +1,19 @@
+# October 4, 2026
+
+I started work very early today after waking up at around 4:00 AM and ended up working across essentially the entire day. In total I spent roughly 22 hours on the project, with various breaks in between. The timeline is getting extremely tight, but I am very happy with the progress and results from today.
+
+I continued improving the voxelisation side of the project, including CUDA-based mesh collision testing on the RTX 2070 SUPER, refactoring the collision code, keeping a CPU fallback, and resolving a CUDA-related crash. The adaptive voxelisation results were beginning to follow the scanned cave and wall geometry reasonably well. I also spent some time researching academic references for Bounding Volume Hierarchies (BVHs) for use in the final report.
+
+A large portion of the day was spent developing and testing the new headless Blender texture-processing pipeline using `st_olaves_church_crypt.glb` as a test model. I experimented with spatially chunking large photogrammetry meshes so they could be processed and textured in more manageable sections. Early baking attempts produced black or otherwise unusable textures, which led to changes in how the original materials and UV coordinates were preserved and how the source textures were baked onto the newly generated UV maps.
+
+I tested several approaches to improving the automatic UV layout, including Blender Smart UV, vertex welding, xatlas, and voxel remeshing/shrinkwrapping. Welding and remeshing either produced little useful improvement or risked damaging the original geometry, so these approaches were abandoned. xatlas produced more reliable automatic UV charts, although the photogrammetry meshes still created many small fragmented UV islands.
+
+I then worked on integrating UVPackmaster 4 into the headless Blender workflow so that xatlas could generate the UV charts while UVPackmaster handled efficient packing. This required a significant amount of debugging in Blender 5.2, including GPU initialization in background mode, manually enabling the extension, identifying the correct internal API, and dealing with misleading engine return codes. By the end of the day the integration was finally beginning to work, and the resulting texture atlases were using the available image space far more efficiently than the earlier attempts.
+
+I also had significant trouble with the Scenic Caves mesh on the secondary workstation during the texturing phase. The texturing process did not complete cleanly, but I was able to salvage the model. It still contains a number of large holes, but the reconstructed rock surfaces that were captured successfully look excellent, particularly the surface texture and fine rocky detail. Although the mesh is incomplete, I am happy that there is still a usable result from the scan.
+
+The third and weakest workstation completed two of the smaller scans successfully. After those finished, I started the approximately 17,000-photo dataset on that machine. This is the largest photogrammetry dataset I have attempted so far, and at the moment it is the only computer I can spare to process it. I do not expect that reconstruction to finish before the project due date, but if the workstation is able to produce even a usable mesh from the dataset, it will still be a valuable result.
+
+Finally, I began planning a glossary/reference section for the final report so that technical terminology such as UVs, texels, BVHs, CNNs, voxels, mesh decimation, and related terms can be defined clearly for markers who may not be familiar with all of the terminology used throughout the project.
+
+Overall, today was an extremely long work session, but it produced some of the strongest progress on the project so far. The remaining timeline is very tight, but the improvements to the texture pipeline, the salvaged cave reconstruction, and the additional scans now processing have left me much more confident about the quality of the final results.
