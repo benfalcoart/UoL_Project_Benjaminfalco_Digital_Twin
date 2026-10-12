@@ -125,3 +125,5 @@ BEHOLDER_camera_offloads/
 
 #Photogrammetry Final Results
 photogrammetry-scans
+
+*.pdf
