@@ -168,7 +168,10 @@ export class VoxelBoundaryEditor {
 
             if (event.key === 'Tab') {
                 event.preventDefault()
-
+                
+                if (this.selectedObject?.userData.locked === true) {
+                    return
+                }
                 if (!this.selectedObject?.isVoxelBoundary) {
                     return
                 }

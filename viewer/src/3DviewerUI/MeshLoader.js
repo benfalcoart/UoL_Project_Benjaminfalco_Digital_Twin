@@ -34,6 +34,8 @@ export class MeshLoader {
         const extension = file.name.split('.').pop().toLowerCase()
         const url = URL.createObjectURL(file)
 
+        this.fileInput.value = ''
+
         if (extension === 'glb' || extension === 'gltf') {
             this.loadGLTF(file, url)
         }
@@ -55,7 +57,10 @@ export class MeshLoader {
             this.scene.add(gltf.scene)
             this.objectAdded(gltf.scene)
             URL.revokeObjectURL(url)
-        }, undefined, this.handleLoadError)
+        }, undefined, error => {
+            URL.revokeObjectURL(url)
+            this.handleLoadError(error)
+        })
     }
 
     //Load an OBJ model:
@@ -68,7 +73,10 @@ export class MeshLoader {
             this.scene.add(object)
             this.objectAdded(object)
             URL.revokeObjectURL(url)
-        }, undefined, this.handleLoadError)
+        }, undefined, error => {
+            URL.revokeObjectURL(url)
+            this.handleLoadError(error)
+        })
     }
 
     //Load a PLY model:
@@ -91,7 +99,10 @@ export class MeshLoader {
             this.toggleDoubleSided(mesh,true)
 
             URL.revokeObjectURL(url)
-        }, undefined, this.handleLoadError)
+        }, undefined, error => {
+            URL.revokeObjectURL(url)
+            this.handleLoadError(error)
+        })
     }
 
     //Notify the viewer that a new object was added:

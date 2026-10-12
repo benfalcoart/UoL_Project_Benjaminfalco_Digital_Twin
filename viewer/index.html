@@ -22,7 +22,13 @@
             accept=".glb,.gltf,.obj,.ply"
             hidden>     
         
-    <div id="voxelControls">
+    <!-- Select the set of tools to display -->
+    <div class="tools-tabs" role="tablist" aria-label="Tools">
+        <button id="voxelTabButton" class="tools-tab active" type="button" aria-selected="true">Voxels</button>
+        <button id="mlTabButton" class="tools-tab" type="button" aria-selected="false">Machine Learning</button>
+    </div>
+
+    <div id="voxelControls" class="tool-pane">
         <label for="maxVoxelSize">
             Max Voxel Size:
             <span id="maxVoxelValue">0.10</span>
@@ -53,7 +59,80 @@
             <button id="calculateVoxelVolumeButton" class="UIButton">
                 Calculate Approx. Volume with Voxels
             </button>
-    </div>    
+            
+            <h3>Voxel Calculation</h3>
+            <p id="voxelCalculationStatus" class="stat-hint">No volume calculation yet.</p>
+
+            <div class="result-row">
+                <span>Approx. volume</span>
+                <strong id="voxelVolume">--</strong>
+            </div>
+            <div class="result-row">
+                <span>Inverse volume</span>
+                <strong id="voxelInverseVolume">—</strong>
+            </div>
+            <div class="result-row">
+                <span>Sampled boundary volume</span>
+                <strong id="voxelBoundaryVolume">—</strong>
+            </div>
+            <p id="voxelUnits" class="stat-hint">
+                Uncalibrated: model units³
+            </p>
+            <div class="result-row">
+                <span>Filled voxels</span>
+                <strong id="voxelCount">--</strong>
+            </div>
+
+            <div class="result-row">
+                <span>Result triangles</span>
+                <strong id="voxelTriangles">--</strong>
+            </div>
+        </section>
+    </div> <!-- End voxelControls -->
+    <!-- Machine Learning tab -->
+    <div id="mlControls" class="tool-pane" hidden>
+        <label for="reconstructionSelect">Reconstruction</label>
+        <select id="reconstructionSelect">
+            <option value="">Loading available reconstructions...</option>
+        </select>
+
+        <label>Processed ML Results</label>
+        <button id="chooseMapsButton" class="UIButton" type="button">
+            Select ML Output Folder
+        </button>
+        <input type="file" id="mlOutputFolderInput" webkitdirectory directory multiple hidden>
+
+        <label for="materialMapSelect">Material-ID Map</label>
+        <select id="materialMapSelect" disabled>
+            <option value="original">Original diffuse texture</option>
+        </select>
+
+        <label for="materialOpacity">
+            Overlay Opacity:
+            <span id="materialOpacityValue">65%</span>
+        </label>
+        <input type="range" id="materialOpacity" min="0" max="1" step="0.01" value="0.65">
+
+        <button id="runMLButton" class="UIButton" type="button">
+            Run Material Classification
+        </button>
+        <p id="mlStatus" class="stat-hint" role="status">
+             Loading available reconstructions...
+        </p>
+
+        <section class="info-section">
+            <h3>Material Composition</h3>
+            <p class="stat-hint">
+                Approximate UV texel coverage, not physical 3D surface-area percentage.
+            </p>
+            <div id="materialStatistics"></div>
+        </section>
+
+    </div> <!-- End mlControls -->
+
+    </div> <!-- End toolbar -->
+
+    <div id="sceneExplorer">
     </div>
     <div id="sceneExplorer">
         <div id="sceneExplorerHeader" class="UIHeader">

@@ -17,7 +17,9 @@ class VolumeCalculator:
         boundaries = boundaryData.get("boundaries", [])
         collision = MeshCollision(mesh)
 
-        resultVoxels = []
+        sampledVoxelsByKey = {}
+        floodedVoxelsByKey = {}
+        perBoundary = []
 
         for boundary in boundaries:
             print(f"Processing the boundary: {boundary['name']}")
@@ -28,15 +30,49 @@ class VolumeCalculator:
             print(f"Free voxels before flooding: {len(freeVoxels)}")
 
             floodedVoxels = self.floodFillVoxels(freeVoxels, boundary, maxVoxelSize)
+            floodedKeys = {self.getVoxelTreeKey(voxel) for voxel in floodedVoxels}
+
+            #Use the exact same discretized voxel domain as the flood-fill calculation.
+            #The remainder includes blocked surface voxels and disconnected free cells.
+            boundaryGridVolume = sum(voxel.getVolume() for voxel in leaves)
+            floodedVolume = sum(voxel.getVolume() for voxel in floodedVoxels)
+            boundaryBlockedVolume = sum(voxel.getVolume() for voxel in leaves if voxel.blocked)
+            boundaryDisconnectedVolume = sum(voxel.getVolume() for voxel in freeVoxels if self.getVoxelTreeKey(voxel) not in floodedKeys)
+
+            for voxel in leaves:
+                sampledVoxelsByKey[self.getVoxelTreeKey(voxel)] = voxel
+
+            for voxel in floodedVoxels:
+                floodedVoxelsByKey[self.getVoxelTreeKey(voxel)] = voxel
+
+            perBoundary.append({
+                "name": boundary.get("name", "Unnamed boundary"),
+                "volume": floodedVolume,
+                "inverseVolume": boundaryGridVolume - floodedVolume,
+                "sampledBoundaryVolume": boundaryGridVolume,
+                "blockedVolume": boundaryBlockedVolume,
+                "disconnectedFreeVolume": boundaryDisconnectedVolume,
+                "voxelCount": len(floodedVoxels)
+            })
 
             print(f"Flooded voxels: {len(floodedVoxels)}")
+            print(f"Inverse volume: {boundaryGridVolume - floodedVolume}")
 
-            resultVoxels.extend(floodedVoxels)
-
+        resultVoxels = list(floodedVoxelsByKey.values())
+        sampledBoundaryVolume = sum(voxel.getVolume() for voxel in sampledVoxelsByKey.values())
+        blockedVolume = sum(voxel.getVolume() for voxel in sampledVoxelsByKey.values() if voxel.blocked)
+        disconnectedFreeVolume = sum(
+            voxel.getVolume()
+            for key, voxel in sampledVoxelsByKey.items()
+            if not voxel.blocked and key not in floodedVoxelsByKey
+        )
         volume = sum(voxel.getVolume() for voxel in resultVoxels)
+        inverseVolume = sampledBoundaryVolume - volume
 
         print(f"Generated voxels: {len(resultVoxels)}")
         print(f"Preliminary volume: {volume}")
+        print(f"Sampled boundary volume: {sampledBoundaryVolume}")
+        print(f"Inverse volume: {inverseVolume}")
 
         mesher = GreedyMesher()
         meshData = mesher.build(resultVoxels)
@@ -47,6 +83,12 @@ class VolumeCalculator:
         return {
             "status": "voxelized",
             "volume": volume,
+            "inverseVolume": inverseVolume,
+            "sampledBoundaryVolume": sampledBoundaryVolume,
+            "blockedVolume": blockedVolume,
+            "disconnectedFreeVolume": disconnectedFreeVolume,
+            "units": "model_units^3",
+            "perBoundary": perBoundary,
             "voxelCount": len(resultVoxels),
             "mesh": meshData
         }

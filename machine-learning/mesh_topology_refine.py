@@ -12,6 +12,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from material_colors import MATERIAL_COLORS
 
 
 def mapped_array(npz_path, name, cache_dir):
@@ -255,7 +256,7 @@ def refine(labels, confidence, graph, agreement=0.80, protect_confidence=0.85):
 
 def write_results(chunk_data, labels, corrected, changes, results_dir):
     for name, segments, manifest, offset in chunk_data:
-        colors = manifest["colors"]
+        colors = MATERIAL_COLORS
         palette = np.zeros((int(segments.max()) + 1, 4), dtype=np.uint8)
 
         for region in manifest["regions"]:

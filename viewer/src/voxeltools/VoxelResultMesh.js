@@ -24,6 +24,7 @@ export class VoxelResultMesh {
             roughness: 0.8,
             metalness: 0,
             opacity: 0.65,
+            transparent: true,
             side: THREE.DoubleSide
         })
 

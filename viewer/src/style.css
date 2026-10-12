@@ -113,10 +113,185 @@ input[type="color"] {
 }
 
 .scene-item-name {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.scene-item input[type="checkbox"] {
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.scene-delete-button {
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 3px 7px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: #aaa;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.scene-delete-button:hover {
+    color: white;
+    background: #9e3030;
+}
+
+.scene-delete-button:focus-visible {
+    outline: 2px solid #e0a0a0;
+}
 .scene-item.selected {
     background: rgba(77, 166, 255, 0.35);
+}
+/* Allow the Tools panel to grow without going off-screen. */
+#toolbar {
+    width: 270px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+
+#sceneExplorer {
+    max-width: calc(100vw - 40px);
+}
+
+/* Override existing #voxelControls display:flex when the tab is hidden. */
+#voxelControls[hidden],
+#mlControls[hidden] {
+    display: none;
+}
+
+/* Tools tab buttons */
+.tools-tabs {
+    display: flex;
+    gap: 4px;
+}
+
+.tools-tab {
+    flex: 1;
+    padding: 9px 4px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #343434;
+    color: white;
+    cursor: pointer;
+}
+
+.tools-tab.active {
+    background: #346e9a;
+    border-color: #69a4d3;
+}
+
+/* Shared layout for Voxel and ML tabs */
+.tool-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.tool-pane[hidden] {
+    display: none;
+}
+
+.tool-pane > label {
+    font-size: 13px;
+}
+
+.tool-pane select,
+.tool-pane input[type="number"] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #666;
+    background: #292929;
+    color: white;
+}
+
+.tool-pane > input[type="range"] {
+    width: 100%;
+    margin: 1px 0 7px;
+}
+
+/* Voxel and material statistics */
+.UIButton:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+.info-section {
+    border-top: 1px solid #555;
+    padding-top: 10px;
+}
+
+.info-section h3 {
+    font-size: 14px;
+    margin: 0 0 8px;
+}
+
+.stat-hint {
+    color: #c6c6c6;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 3px 0 8px;
+    overflow-wrap: anywhere;
+}
+
+.stat-hint.error {
+    color: #ff9999;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 13px;
+}
+
+.material-stat {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    gap: 9px;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 12px;
+}
+
+.material-swatch {
+    width: 13px;
+    height: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+}
+
+.material-stat strong {
+    font-variant-numeric: tabular-nums;
+}
+
+.scene-lock-button {
+    flex-shrink: 0;
+    padding: 3px 5px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: #ddd;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.scene-lock-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.scene-item.locked .scene-item-name {
+    color: #bbb;
 }

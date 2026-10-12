@@ -61,3 +61,7 @@ async def calculate_volume(
     finally:
         if meshPath.exists():
             meshPath.unlink()
+
+@app.get("/api/health")
+async def health():
+    return {"status": "ok"}

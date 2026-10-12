@@ -1,11 +1,13 @@
 //Controls the scene explorer UI:
 export class SceneExplorer {
     //Store the scene explorer references:
-    constructor(scene, container, transformHelper, onSelect) {
+    constructor(scene, container, transformHelper, onSelect,  onDelete = null, onLockChange = null) {
         this.scene = scene
         this.container = container
         this.transformHelper = transformHelper
         this.onSelect = onSelect
+        this.onDelete = onDelete
+        this.onLockChange = onLockChange
         this.selectedObject = null
     }
 
@@ -43,6 +45,10 @@ export class SceneExplorer {
         visibilityCheckbox.type = 'checkbox'
         visibilityCheckbox.checked = object.visible
 
+        visibilityCheckbox.addEventListener('click', event => {
+            event.stopPropagation()
+        })
+
         visibilityCheckbox.addEventListener('change', event => {
             event.stopPropagation()
             object.visible = visibilityCheckbox.checked
@@ -57,6 +63,49 @@ export class SceneExplorer {
 
         if (object.isVoxelBoundary) {
             this.addVoxelBoundaryControls(item, object)
+        }
+
+        //Allows meshes, groups, and voxel boundaries to be removed.
+        if (!object.isLight) {
+            const lockButton = document.createElement('button')
+            lockButton.type = 'button'
+            lockButton.classList.add('scene-lock-button')
+
+            const updateLockButton = () => {
+                const locked = object.userData.locked === true
+
+                lockButton.textContent = locked ? '🔒' : '🔓'
+                lockButton.title = `${locked ? 'Unlock' : 'Lock'} ${object.name || object.type}`
+                lockButton.setAttribute('aria-label', lockButton.title)
+                lockButton.setAttribute('aria-pressed', String(locked))
+                item.classList.toggle('locked', locked)
+            }
+
+            updateLockButton()
+
+            lockButton.addEventListener('click', event => {
+                event.stopPropagation()
+                object.userData.locked = !object.userData.locked
+                updateLockButton()
+                this.onLockChange?.(object)
+            })
+
+            item.appendChild(lockButton)
+
+
+            const deleteButton = document.createElement('button')
+            deleteButton.type = 'button'
+            deleteButton.classList.add('scene-delete-button')
+            deleteButton.textContent = '×'
+            deleteButton.title = `Remove ${object.name || object.type} from scene`
+            deleteButton.setAttribute('aria-label', deleteButton.title)
+
+            deleteButton.addEventListener('click', event => {
+                event.stopPropagation()
+                this.onDelete?.(object)
+            })
+
+            item.appendChild(deleteButton)
         }
 
         item.addEventListener('click', () => {

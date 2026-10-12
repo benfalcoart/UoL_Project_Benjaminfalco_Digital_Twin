@@ -105,8 +105,16 @@ import numpy as np
 import torch
 import torch.nn as nn
 import argparse
+import sys
+import skimage
+import hashlib
+import sqlite3
+import threading
+import zlib
+from pathlib import Path
 from torchvision import transforms
 from material_classifier import MaterialClassifier
+from material_colors import MATERIAL_COLORS
 from concurrent.futures import ThreadPoolExecutor
 
 from PIL import Image
@@ -157,103 +165,173 @@ MIN_SLIDING_VALID_RATIO = 0.55
 
 SAVE_DEBUG_CROPS = False
 
+UV_CACHE_FORMAT_VERSION = 1
 
-MATERIAL_COLORS = {
-    "brick": (180, 60, 40),
-    "carpet": (150, 90, 180),
-    "ceramic": (240, 180, 80),
-    "fabric": (220, 100, 160),
-    "foliage": (60, 160, 70),
-    "food": (240, 130, 60),
-    "glass": (80, 200, 230),
-    "hair": (100, 70, 50),
-    "leather": (120, 80, 45),
-    "metal": (130, 140, 150),
-    "mirror": (180, 220, 240),
-    "other": (100, 100, 100),
-    "painted": (80, 120, 230),
-    "paper": (240, 240, 200),
-    "plastic": (230, 80, 220),
-    "polishedstone": (180, 180, 210),
-    "skin": (220, 170, 140),
-    "sky": (80, 150, 240),
-    "stone": (110, 110, 110),
-    "tile": (230, 210, 100),
-    "wallpaper": (200, 140, 90),
-    "water": (40, 100, 220),
-    "wood": (130, 80, 35),
-    #New Materials added from the new datasets not present in MINC:
-    "concrete": (160, 160, 150),    
-    "ground": (100, 85, 60),
-    "marble": (210, 195, 220),
-    "misc": (90, 90, 90),
-    "plaster": (245, 225, 180),
-    "terracotta": (190, 95, 60),
-    "brickwork": (175, 55, 35),
-    "cork": (170, 115, 70),
-    "engineered_stone": (160, 155, 190),
-    "paint_plaster": (90, 135, 225),
-    "rubber": (65, 65, 75),
-    "sand": (220, 190, 130),
-    "soil": (105, 75, 45)
-}
 
-"""
-class MaterialClassifier:
-    def __init__(self, model_paths, device):
-        self.device = device
-        self.models = []
+#Persistent, configuration-independent UV preprocessing cache.
+#One SQLite database per chunk, shared by MINC/MatSynth/DMS and all voting modes.
+class UVPreprocessCache:
+    def __init__(self, path, diffuse_path, mask_path):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._local = threading.local()
+        self._stats_lock = threading.Lock()
+        self.stats = {"island_hits": 0, "island_misses": 0, "segmentation_hits": 0,
+                      "segmentation_misses": 0, "crop_hits": 0, "crop_misses": 0}
 
-        for name, model_path in model_paths.items():
-            model, classes = load_model(model_path, device)
+        parameters = {
+            "format": UV_CACHE_FORMAT_VERSION,
+            "min_component_area": MIN_COMPONENT_AREA,
+            "target_superpixel_area": TARGET_SUPERPIXEL_AREA,
+            "min_superpixels": MIN_SUPERPIXELS_PER_ISLAND,
+            "max_superpixels": MAX_SUPERPIXELS_PER_ISLAND,
+            "min_slic_area": MIN_SLIC_ISLAND_AREA,
+            "slic_compactness": SLIC_COMPACTNESS,
+            "slic_sigma": SLIC_SIGMA,
+            "min_width": MIN_CLASSIFICATION_WIDTH,
+            "min_height": MIN_CLASSIFICATION_HEIGHT,
+            "rotation_enabled": ENABLE_ROTATION,
+            "rotation_improvement_threshold": ROTATION_IMPROVEMENT_THRESHOLD,
+            "cv2": cv2.__version__,
+            "skimage": skimage.__version__,
+        }
+        signature = hashlib.sha256(json.dumps(parameters, sort_keys=True).encode("utf-8"))
+        for input_path in (diffuse_path, mask_path):
+            # Hash actual bytes, not timestamps: this rejects stale caches after any edit.
+            with open(input_path, "rb") as stream:
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    signature.update(block)
+        self.signature = signature.hexdigest()
 
-            if name == "minc_legacy":
-                transform = ResNet18_Weights.DEFAULT.transforms()
-            else:
-                transform = transforms.Compose([
-                    transforms.Resize((224, 224)),
-                    transforms.ToTensor(),
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                ])
-
-            self.models.append({
-                "name": name,
-                "model": model,
-                "classes": classes,
-                "transform": transform
-            })
-
-        if len(self.models) == 1:
-            self.classes = list(self.models[0]["classes"])
+        db = self._connection()
+        db.execute("CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
+        previous = db.execute("SELECT value FROM metadata WHERE key = 'signature'").fetchone()
+        if previous is None or previous[0] != self.signature:
+            # All rows and crop samples were derived from an older texture, mask or algorithm.
+            db.execute("DROP TABLE IF EXISTS islands")
+            db.execute("DROP TABLE IF EXISTS crops")
+            db.execute("DELETE FROM metadata")
+            db.execute("INSERT INTO metadata (key, value) VALUES ('signature', ?)", (self.signature,))
+            self.rebuilt = True
         else:
-            class_sets = [set(item["classes"]) for item in self.models]
-            self.classes = sorted(set.intersection(*class_sets))
+            self.rebuilt = False
+        db.execute("CREATE TABLE IF NOT EXISTS islands (id INTEGER PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, width INTEGER NOT NULL, height INTEGER NOT NULL, area INTEGER NOT NULL, mask BLOB NOT NULL, segments BLOB)")
+        db.execute("CREATE TABLE IF NOT EXISTS crops (key TEXT PRIMARY KEY, width INTEGER NOT NULL, height INTEGER NOT NULL, area INTEGER NOT NULL, rotated INTEGER NOT NULL, angle REAL NOT NULL, pixels BLOB)")
+        db.commit()
 
-            if len(self.classes) < 2:
-                raise ValueError("Models do not share enough material classes for ensemble classification.")
+    def _connection(self):
+        db = getattr(self._local, "db", None)
+        if db is None:
+            db = sqlite3.connect(str(self.path), timeout=60)
+            db.execute("PRAGMA journal_mode=WAL")
+            db.execute("PRAGMA busy_timeout=60000")
+            db.execute("PRAGMA synchronous=NORMAL")
+            self._local.db = db
+        return db
 
-        for item in self.models:
-            item["indices"] = [item["classes"].index(name) for name in self.classes]
+    def _count(self, name, number=1):
+        with self._stats_lock:
+            self.stats[name] += number
 
-    def predict(self, image):
-        predictions = []
+    @staticmethod
+    def _pack(array):
+        return zlib.compress(np.ascontiguousarray(array).tobytes(), level=1)
 
-        with torch.inference_mode():
-            for item in self.models:
-                tensor = item["transform"](image.convert("RGB")).unsqueeze(0).to(self.device)
+    @staticmethod
+    def _unpack(blob, dtype, shape):
+        data = np.frombuffer(zlib.decompress(blob), dtype=dtype)
+        if data.size != int(np.prod(shape)):
+            raise ValueError("Cached UV array has unexpected dimensions")
+        return data.reshape(shape).copy()
 
-                output = item["model"](tensor)
-                probabilities = torch.softmax(output, dim=1)[0]
+    def load_islands(self):
+        db = self._connection()
+        complete = db.execute("SELECT value FROM metadata WHERE key = 'islands_complete'").fetchone()
+        if complete is None:
+            return None
+        rows = db.execute("SELECT id, x, y, width, height, area, mask FROM islands ORDER BY id").fetchall()
+        if len(rows) != int(complete[0]) or any(row[0] != index for index, row in enumerate(rows)):
+            return None
+        try:
+            islands = [{"x": x, "y": y, "width": w, "height": h, "area": area,
+                        "mask": self._unpack(blob, np.uint8, (h, w))}
+                       for _, x, y, w, h, area, blob in rows]
+        except (ValueError, zlib.error):
+            return None
+        self._count("island_hits", len(islands))
+        return islands
 
-                probabilities = probabilities[item["indices"]]
+    def store_islands(self, islands):
+        db = self._connection()
+        # A transaction makes interrupted island discovery safely restartable.
+        with db:
+            db.execute("DELETE FROM islands")
+            db.execute("DELETE FROM metadata WHERE key = 'islands_complete'")
+            db.executemany("INSERT INTO islands (id,x,y,width,height,area,mask) VALUES (?,?,?,?,?,?,?)",
+                           ((index, item["x"], item["y"], item["width"], item["height"], item["area"], self._pack(item["mask"]))
+                            for index, item in enumerate(islands)))
+            db.execute("INSERT INTO metadata (key,value) VALUES ('islands_complete',?)", (str(len(islands)),))
+        self._count("island_misses", len(islands))
 
-                if len(self.models) > 1:
-                    probabilities = probabilities / probabilities.sum().clamp_min(1e-12)
+    def load_segments(self, index, island):
+        row = self._connection().execute("SELECT segments FROM islands WHERE id=? AND x=? AND y=? AND width=? AND height=? AND area=?",
+                                         (index, island["x"], island["y"], island["width"], island["height"], island["area"])).fetchone()
+        if row is not None and row[0] is not None:
+            try:
+                segments = self._unpack(row[0], np.int32, (island["height"], island["width"]))
+                self._count("segmentation_hits")
+                return segments
+            except (ValueError, zlib.error):
+                pass
+        self._count("segmentation_misses")
+        return None
 
-                predictions.append(probabilities)
+    def store_segments(self, index, segments):
+        db = self._connection()
+        with db:
+            db.execute("UPDATE islands SET segments=? WHERE id=?", (self._pack(segments), index))
 
-        return torch.stack(predictions).mean(dim=0)
-"""
+    def crop_key(self, image, mask):
+        # Include the exact RGB crop and region mask to prevent false hits.
+        digest = hashlib.sha256()
+        digest.update(bytes(np.asarray(image.size, dtype=np.int32)))
+        digest.update(image.convert("RGB").tobytes())
+        digest.update(np.ascontiguousarray(mask, dtype=np.uint8).tobytes())
+        return digest.hexdigest()
+
+    def load_crop(self, key):
+        row = self._connection().execute("SELECT width,height,area,rotated,angle,pixels FROM crops WHERE key=?", (key,)).fetchone()
+        if row is None:
+            self._count("crop_misses")
+            return None
+        w, h, area, rotated, angle, pixels = row
+        try:
+            image = Image.fromarray(self._unpack(pixels, np.uint8, (h, w, 3)), mode="RGB") if pixels is not None else None
+        except (ValueError, zlib.error):
+            self._count("crop_misses")
+            return None
+        self._count("crop_hits")
+        return {"image": image, "area": int(area), "rotation_used": bool(rotated), "rotation_angle": float(angle)}
+
+    def store_crop(self, key, prepared):
+        image = prepared["image"]
+        w, h = image.size if image is not None else (0, 0)
+        pixels = self._pack(np.asarray(image.convert("RGB"), dtype=np.uint8)) if image is not None else None
+        db = self._connection()
+        with db:
+            db.execute("INSERT OR REPLACE INTO crops (key,width,height,area,rotated,angle,pixels) VALUES (?,?,?,?,?,?,?)",
+                       (key, int(w), int(h), int(prepared["area"]), int(prepared["rotation_used"]), float(prepared["rotation_angle"]), pixels))
+
+    def print_summary(self):
+        print("UV preprocessing cache:", self.path, flush=True)
+        for name, count in self.stats.items():
+            print(f"  {name}: {count}", flush=True)
+
+    def close(self):
+        db = getattr(self._local, "db", None)
+        if db is not None:
+            db.close()
+            self._local.db = None
 
 #Loads the trained material classification model and restores its class labels.
 #TODO: Remove this? Responsiblity shifted to material classifer.
@@ -486,8 +564,13 @@ def classify_prepared_image(image, model, classes, transform, device, top_k=None
 
 #Prepares and classifies a masked UV region and returns both the material predictions and 
 #information about the classification sample that was used.
-def classify_region(image, mask, model, classes, transform, device):
-    prepared = prepare_classification_image(image, mask)
+def classify_region(image, mask, model, classes, transform, device, uv_cache=None):
+    cache_key = uv_cache.crop_key(image, mask) if uv_cache is not None else None
+    prepared = uv_cache.load_crop(cache_key) if uv_cache is not None else None
+    if prepared is None:
+        prepared = prepare_classification_image(image, mask)
+        if uv_cache is not None:
+            uv_cache.store_crop(cache_key, prepared)
 
     if prepared["image"] is None:
         return None
@@ -569,14 +652,14 @@ def build_superpixel_regions(island, island_image, segments):
 
 #Classifies each superpixel region using the trained material model. Regions that cannot provide a valid classification sample fall back
 #to the parent UV-island prediction when one is available.
-def classify_superpixel_regions(regions, parent_classification, model, classes, transform, device):
+def classify_superpixel_regions(regions, parent_classification, model, classes, transform, device, uv_cache=None):
     parent_results = (parent_classification["results"] if parent_classification is not None else None)
 
     for region in regions:
         classification = None
 
         if region["area"] >= MIN_SUPERPIXEL_AREA:
-            classification = classify_region(region["image"], region["mask"],  model, classes, transform, device)
+            classification = classify_region(region["image"], region["mask"], model, classes, transform, device, uv_cache=uv_cache)
 
         if classification is None:
             if parent_results is None:
@@ -875,7 +958,7 @@ def get_window_centers_for_cluster(cluster_mask, island_mask):
     return unique
 
 #Extracts and classifies a sliding window centered on the requested UV position. Windows with insufficient valid UV coverage are rejected.
-def classify_sliding_window(island_image, island_mask, center_x, center_y, model, classes, transform, device):
+def classify_sliding_window(island_image, island_mask, center_x, center_y, model, classes, transform, device, uv_cache=None):
     half = (SLIDING_WINDOW_SIZE // 2)
 
     width, height = (island_image.size)
@@ -904,7 +987,7 @@ def classify_sliding_window(island_image, island_mask, center_x, center_y, model
 
     window_image = island_image.crop((x1, y1, x2, y2))
 
-    classification = classify_region(window_image, window_mask, model, classes, transform, device)
+    classification = classify_region(window_image, window_mask, model, classes, transform, device, uv_cache=uv_cache)
 
     if classification is None:
         return None
@@ -914,7 +997,7 @@ def classify_sliding_window(island_image, island_mask, center_x, center_y, model
 # Verifies material clusters that disagree with their surrounding regions by comparing classification 
 #support across multiple sliding windows. A cluster is reclassified only when the surrounding material 
 #exceeds the current material by the configured support margin.
-def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device):
+def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device, uv_cache=None):
     if not ENABLE_SLIDING_WINDOW_VERIFICATION:
         return
 
@@ -957,7 +1040,7 @@ def verify_disagreement_clusters_with_sliding_windows(regions, segments, island_
         used_windows = 0
 
         for center_x, center_y in centers:
-            results = classify_sliding_window(island_image, island_mask, center_x, center_y, model, classes, transform, device)
+            results = classify_sliding_window(island_image, island_mask, center_x, center_y, model, classes, transform, device, uv_cache=uv_cache)
 
             if results is None:
                 continue
@@ -1265,7 +1348,7 @@ def save_debug_crop(region, output_dir, index):
 
 #Prepares one UV island using CPU operations only.
 def prepare_island_for_ml(task):
-    island, diffuse = task
+    index, island, diffuse, uv_cache = task
 
     x = island["x"]
     y = island["y"]
@@ -1275,11 +1358,15 @@ def prepare_island_for_ml(task):
     island_image = diffuse.crop((x, y, x + width, y + height))
     island_mask = island["mask"]
 
-    if island["area"] < MIN_SLIC_ISLAND_AREA:
-        segments = (island_mask > 0).astype(np.int32)
-    else:
-        n_segments = determine_superpixel_count(island["area"])
-        segments = create_superpixels(island_image, island_mask, n_segments)
+    segments = uv_cache.load_segments(index, island) if uv_cache is not None else None
+    if segments is None:
+        if island["area"] < MIN_SLIC_ISLAND_AREA:
+            segments = (island_mask > 0).astype(np.int32)
+        else:
+            n_segments = determine_superpixel_count(island["area"])
+            segments = create_superpixels(island_image, island_mask, n_segments)
+        if uv_cache is not None:
+            uv_cache.store_segments(index, segments)
 
     segment_ids = np.unique(segments)
     segment_ids = segment_ids[segment_ids > 0]
@@ -1290,10 +1377,25 @@ def prepare_island_for_ml(task):
 
 
 #Keeps a small number of upcoming UV islands prepared in parallel.
-def prepared_islands(islands, diffuse):
+def prepared_islands(islands, diffuse, uv_cache=None):
     with ThreadPoolExecutor(max_workers=CPU_WORKERS) as executor:
-        jobs = ((island, diffuse) for island in islands)
-        yield from executor.map(prepare_island_for_ml, jobs, buffersize=CPU_WORKERS)
+        jobs = ((index, island, diffuse, uv_cache) for index, island in enumerate(islands))
+        if sys.version_info >= (3, 14):
+            yield from executor.map(prepare_island_for_ml, jobs, buffersize=CPU_WORKERS)
+        else:
+            # Backport bounded mapping: don't queue thousands of large islands at once.
+            from collections import deque
+            pending = deque()
+            for _ in range(CPU_WORKERS):
+                task = next(jobs, None)
+                if task is not None:
+                    pending.append(executor.submit(prepare_island_for_ml, task))
+            while pending:
+                result = pending.popleft().result()
+                task = next(jobs, None)
+                if task is not None:
+                    pending.append(executor.submit(prepare_island_for_ml, task))
+                yield result
 
 #Runs the complete superpixel-based UV material classification pipeline:
 #loads the model and textures, generates and classifies SLIC superpixels,
@@ -1310,6 +1412,7 @@ def main():
     parser.add_argument("--diffuse", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_diff_4k.jpg"))
     parser.add_argument("--mask", default=os.path.join(base_dir, "test_images", "UVMaps", "Sofa_01_uv_mask.png"))
     parser.add_argument("--cache", default=os.path.join(base_dir, "outputs", "prediction_cache.sqlite"))
+    parser.add_argument("--no-uv-cache", action="store_true", help="Disable reusable island, SLIC and classification-crop caches")
     args = parser.parse_args()
 
     model_files = {
@@ -1371,7 +1474,16 @@ def main():
         raise ValueError("Diffuse and mask dimensions do not match.")
 
     mask = np.array(mask_image)
-    islands = get_connected_islands(mask)
+    uv_cache = None
+    if not args.no_uv_cache:
+        uv_cache_path = os.path.join(base_dir, "outputs", "superpixel", args.reconstruction, "_uv_cache", chunk_name + ".sqlite")
+        uv_cache = UVPreprocessCache(uv_cache_path, diffuse_path, mask_path)
+        print("UV cache:", "new or invalidated" if uv_cache.rebuilt else "reusing", uv_cache_path, flush=True)
+    islands = uv_cache.load_islands() if uv_cache is not None else None
+    if islands is None:
+        islands = get_connected_islands(mask)
+        if uv_cache is not None:
+            uv_cache.store_islands(islands)
 
     print()
     print(f"Found {len(islands)} UV islands")
@@ -1391,7 +1503,7 @@ def main():
 
     full_merged_label_map = np.zeros((full_height, full_width), dtype=np.int32)
 
-    for island_index, prepared in enumerate(prepared_islands(islands, diffuse), start=1):
+    for island_index, prepared in enumerate(prepared_islands(islands, diffuse, uv_cache), start=1):
         island = islands[island_index - 1]
 
         x = island["x"]
@@ -1401,7 +1513,7 @@ def main():
 
         island_image, island_mask, segments, segment_ids, regions = prepared
 
-        parent_classification = classify_region(island_image, island_mask, model, classes, transform, device)
+        parent_classification = classify_region(island_image, island_mask, model, classes, transform, device, uv_cache=uv_cache)
 
         remapped_segments = np.zeros_like(segments, dtype=np.int32)
         segment_mapping = {}
@@ -1419,10 +1531,10 @@ def main():
         for region in regions:
             region["global_segment_id"] = segment_mapping[region["segment_id"]]
 
-        classify_superpixel_regions(regions, parent_classification, model, classes, transform, device)
+        classify_superpixel_regions(regions, parent_classification, model, classes, transform, device, uv_cache=uv_cache)
         
         smooth_low_confidence_regions(regions, segments)
-        verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device)
+        verify_disagreement_clusters_with_sliding_windows(regions, segments, island_image, island_mask, model, classes, transform, device, uv_cache=uv_cache)
 
         merge_small_material_clusters(regions, segments)
         merged_regions = build_merged_regions(regions, segments, island)
@@ -1534,6 +1646,9 @@ def main():
 
     print("Tie preview saved to:", tie_preview_path)
     print(f"Prediction cache: {model.hits} hits, {model.misses} misses")
+    if uv_cache is not None:
+        uv_cache.print_summary()
+        uv_cache.close()
     model.close()
 
 

@@ -1,0 +1,18 @@
+enabled,input_path,output_folder,chunk_size,texture_size,margin,weld_distance,projection_distance,auto_texture_size,min_texture_size,max_texture_size,texture_step,analysis_heuristic_time,uvpm_heuristic_time,uvpm_precision,target_texel_density,density_safety,remove_large_triangles,large_triangle_area_factor,large_triangle_edge_ratio,large_triangle_max_face_fraction
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\st_olaves_church_crypt.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\Odessa\atacombs_cleaned.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\gothic_cloister_corner.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_-_carrefour_de_port_royal.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_-_fallout_shelter_abri_faco.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_-_salle_z_3dscannerapp.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_-_the_german_bunker.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_-_very_tight_passage.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\paris_catacombs_fontaine_des_chartreux_1.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\the_grange_dining_room.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\the_king_s_hall.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\My Scans\Basement_unmasked\basement.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,true,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\My Scans\Birch_Log\Birch_log_decimated025.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\My Scans\Blue_Car\Blue_Car_decimated01.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\My Scans\RailCarInside\RailCarInside_Decimated015.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
+0,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\My Scans\Tree\Tree_Cleaned.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
+1,C:\Users\Ben\Documents\UniversityOfLondon\Project\Models\Downloaded Models\Odessa\Odesa_catacombs-20260907T160856Z-1-002\Odessa_catacombs_Archaic_Decimated08.glb,,10,4096,8,0.000001,0.01,true,2048,8192,512,1,5,500,0,0.95,false,100,0.1,0.02
